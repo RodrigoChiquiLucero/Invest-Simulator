@@ -1,0 +1,5 @@
+
+#ignorar mi virtual environment
+venv
+#ignorar la carpeta generada por jetbrains
+.idea
