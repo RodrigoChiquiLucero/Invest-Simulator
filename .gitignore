@@ -1,5 +1,8 @@
-
 #ignorar mi virtual environment
 venv
 #ignorar la carpeta generada por jetbrains
 .idea
+#ejecutables de python
+*.pyc
+#base de datos
+*.sqlite3
