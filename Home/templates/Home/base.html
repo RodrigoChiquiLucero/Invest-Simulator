@@ -1,0 +1,16 @@
+{% load static from staticfiles %}
+<body>
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
+    <link rel="stylesheet" href="{% static 'Home/base.css' %}">
+	<nav class="navbar navbar-light bg-white">
+	    <div class="container-fulid">
+	        <div class="navbar-header">
+	            <a class="navbar-brand" href="/"> Home </a>
+                <a class="navbar-brand" href="/user/signup"> Sign Up </a>
+                <a class="navbar-brand" href="/user/login"> Log In </a>
+            </div>
+	    </div>
+	</nav>
+{% block body %}
+{% endblock %}
+</body>
