@@ -1,0 +1,29 @@
+.container {
+    display: flex;
+    width: 1000px;
+    height: 600px;
+    margin: 5% auto auto auto;
+    background-color: white;
+    border-radius: 2px;
+    align-items: flex-start;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.4);
+
+}
+
+.column1{
+    margin-top: 5%;
+    margin-left: 5%;
+    flex: 1;
+}
+
+.sub-container {
+    text-align: justify;
+    font-size: 14px;
+}
+.colorin{
+    margin-top: 10%;
+}
+
+.title{
+    text-align: center;
+}
