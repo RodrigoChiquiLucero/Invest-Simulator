@@ -1,18 +1,19 @@
 {% load static from staticfiles %}
-<body>
+<head>
+    <title> Invest Simulator </title>
+    <link rel="shortcut icon" href="{% static "Home/images/dollar.jpg" %}" />
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'Home/base.css' %}">
 	<nav class="navbar navbar-light bg-white">
 	    <div class="container-fulid">
 	        <div class="navbar-header">
 
-                <img class="shortcuticon" src="{% static "Home/images/dollar.jpg" %}"/>
-	            <a class="navbar-brand" href="/"> Home </a>
+	            <a class="navbar-brand" href="/"> <img class="shortcuticon" src="{% static "Home/images/dollar.jpg" %}"/> Home </a>
                 <a class="navbar-brand" href="/user/signup"> Sign Up </a>
                 <a class="navbar-brand" href="/user/login"> Log In </a>
             </div>
 	    </div>
 	</nav>
+</head>
 {% block body %}
 {% endblock %}
-</body>
