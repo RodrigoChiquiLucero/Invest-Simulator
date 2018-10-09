@@ -29,12 +29,12 @@ ALLOWED_HOSTS = ['*']
 
 # Redireccion de log in/out.
 LOGOUT_REDIRECT_URL = '/'
-LOGIN_REDIRECT_URL = '/lobby/'
+LOGIN_REDIRECT_URL = '/game/'
 
 # Application definition
 
 INSTALLED_APPS = [
-    'Lobby.apps.LobbyConfig',
+    'Game.apps.GameConfig',
     'User.apps.UserConfig',
     'Home.apps.HomeConfig',
     'django.contrib.admin',

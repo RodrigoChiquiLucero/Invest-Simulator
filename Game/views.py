@@ -1,8 +1,8 @@
 from django.shortcuts import render, redirect
 
 
-def lobby(request):
+def game(request):
     if not request.user.is_authenticated:
         return redirect('/user/login')
     else:
-        return render(request, 'Lobby/lobby.html')
+        return render(request, 'Game/game.html')

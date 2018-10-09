@@ -5,7 +5,7 @@ from django.shortcuts import render, redirect
 
 def signup(request):
     if request.user.is_authenticated:
-        return redirect('/lobby/')
+        return redirect('/game/')
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
         if form.is_valid():
