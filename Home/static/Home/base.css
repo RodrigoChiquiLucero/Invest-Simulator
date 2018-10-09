@@ -14,3 +14,9 @@ h1 {
   font-weight: 300;
   font-size: 28px;
 }
+.shortcuticon{
+  margin-right: 18px;
+  margin-bottom: 2px;
+  height: 40px;
+  width: 40px;
+}

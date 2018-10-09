@@ -15,8 +15,13 @@
 }
 
 .sub-container {
+    text-align: justify;
     font-size: 14px;
 }
 .colorin{
     margin-top: 10%;
+}
+
+.title{
+    text-align: center;
 }
