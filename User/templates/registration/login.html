@@ -2,7 +2,7 @@
 {% load static from staticfiles %}
 
 {% block body %}
-<link rel="stylesheet" href="{% static 'User/signup.css' %}">
+  <link rel="stylesheet" href="{% static 'User/signup.css' %}">
   <form method="POST">
  {% csrf_token %}
     <div id="login-box">
