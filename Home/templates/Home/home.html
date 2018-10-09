@@ -2,7 +2,8 @@
 {% load static from staticfiles %}
 
 {% block body %}
-    <link rel="stylesheet" href="{% static 'Home/home.css' %}">
+    {% block logoutalert %}
+    {%  endblock %}
     <div class="container">
         <div class="column1">
             <h1 class ="title">Welcome to Invest Simulator</h1>
@@ -20,4 +21,5 @@
         </div>
         <img class="colorin" src="{% static 'Home/images/Colorete.gif' %}">
     </div>
+    <link rel="stylesheet" href="{% static 'Home/home.css' %}">
 {% endblock %}
