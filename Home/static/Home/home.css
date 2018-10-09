@@ -1,0 +1,22 @@
+.container {
+    display: flex;
+    width: 1000px;
+    height: 600px;
+    margin: 5% auto auto auto;
+    background-color: white;
+    border-radius: 2px;
+    align-items: flex-start;
+}
+
+.column1{
+    margin-top: 5%;
+    margin-left: 5%;
+    flex: 1;
+}
+
+.sub-container {
+    font-size: 14px;
+}
+.colorin{
+    margin-top: 10%;
+}

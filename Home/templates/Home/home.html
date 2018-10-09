@@ -1,12 +1,24 @@
 {% extends 'Home/base.html' %}
-<body>
-    <div>
+{% load static from staticfiles %}
 
-Invest Simulator (“IS”) es una aplicación web destinada a brindar al público la posibilidad de realizar simulaciones de operaciones propias del mercado financiero - inversiones  - (“Operaciones”).
-Para poder comenzar a utilizar IS, y por lo tanto a hacer uso de las funciones que la misma ofrece (comprar y vender inversiones, por ejemplo), las personas deben registrarse previamente. Aquellas personas que realizan el mencionado registro son consideradas usuarios de IS.
-Los usuarios pueden realizar Operaciones utilizando Pesos Argentinos, de manera excluyente. Al concretar el registro en IS, los usuarios reciben un monto fijo de Pesos Argentinos para comenzar a realizar sus Operaciones.
-IS permite a los usuarios realizar diferentes tipos Operaciones, como ser compra y venta de acciones, las cuales tienen stock limitado; consultar el valor de sus activos (precios actuales o históricos); configurar alertas sobre activos superando un determinado umbral; revisar su historial de compras y ventas; y revisar el historial de valores propio de los capitales en los que desee invertir. Como contrapartida, IS no permite a los usuarios interactuar entre sí para realizar Operaciones coordinadamente.
-IS elabora un ranking ascendente en tiempo real, de los usuarios que acumulen más cantidad de inversiones, teniendo en cuenta los siguientes criterios: valor del dinero en poder y cotización de los activos que posea.
+{% block body %}
+    <link rel="stylesheet" href="{% static 'Home/home.css' %}">
 
+    <div class="container">
+        <div class="column1">
+            <h1 class ="title">Wellcome to Invest Simulator</h1>
+            <div class="sub-container">
+                <p> Invest Simulator (“IS”) es una aplicación web destinada a brindar al público la posibilidad de realizar simulaciones de operaciones propias del mercado financiero - inversiones  - (“Operaciones”).
+                    Para poder comenzar a utilizar IS, y por lo tanto a hacer uso de las funciones que la misma ofrece (comprar y vender inversiones, por ejemplo), las personas deben registrarse previamente.
+                    Aquellas personas que realizan el mencionado registro son consideradas usuarios de IS.
+                    Los usuarios pueden realizar Operaciones utilizando Pesos Argentinos, de manera excluyente. Al concretar el registro en IS, los usuarios reciben un monto fijo de Pesos Argentinos para comenzar a realizar sus Operaciones.
+                    IS permite a los usuarios realizar diferentes tipos Operaciones, como ser compra y venta de acciones, las cuales tienen stock limitado; consultar el valor de sus activos (precios actuales o históricos);
+                    configurar alertas sobre activos superando un determinado umbral; revisar su historial de compras y ventas; y revisar el historial de valores propio de los capitales en los que desee invertir.
+                    Como contrapartida, IS no permite a los usuarios interactuar entre sí para realizar Operaciones coordinadamente.
+                    IS elabora un ranking ascendente en tiempo real, de los usuarios que acumulen más cantidad de inversiones, teniendo en cuenta los siguientes criterios: valor del dinero en poder y cotización de los activos que posea.
+                </p>
+            </div>
+        </div>
+        <img class="colorin" src="{% static 'Home/images/Colorete.gif' %}">
     </div>
-</body>
+{% endblock %}
