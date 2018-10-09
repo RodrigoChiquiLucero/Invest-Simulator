@@ -1,0 +1,27 @@
+
+[
+  {
+    "id": 0,
+    "name": "APPLE",
+    "sell": 23,
+    "buy": 46
+  },
+  {
+    "id": 1,
+    "name": "ADIDAS",
+    "sell": 27,
+    "buy": 90
+  },
+  {
+    "id": 3,
+    "name": "LXA",
+    "sell": 190,
+    "buy": 23
+  },
+  {
+    "id": 80,
+    "name": "IMAGINACION",
+    "sell": 190,
+    "buy": 23
+  }
+]
