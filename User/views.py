@@ -4,6 +4,7 @@ from django.shortcuts import render, redirect
 
 
 def signup(request):
+    # TODO: al crear el usuario, crear tambien su Wallet
     if request.user.is_authenticated:
         return redirect('/game/')
     if request.method == 'POST':

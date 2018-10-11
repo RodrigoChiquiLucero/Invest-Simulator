@@ -1,0 +1,33 @@
+{% extends 'Game/base.html' %}
+{% load static from staticfiles %}
+
+{% block body %}
+
+    <link rel="stylesheet" href="{% static 'Game/assets.css' %}">
+    <div class = "assets" align="center">
+    {% if assets %}
+        <table>
+        <tr>
+            <th> Asset Name</th>
+            <th> Buy</th>
+            <th> Sell</th>
+            <th> Type</th>
+            <th>Valor Histórico </th>
+        </tr>
+        {% for a in assets %}
+            <tr>
+                <td>{{ a.name }}</td>
+                <td>{{ a.buy }}</td>
+                <td>{{ a.sell }}</td>
+                <td>{{ a.type }}</td>
+                <td><a href="#">Ver</a></td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% else %}
+        <h1> There are no avilable assets </h1>
+    {% endif %}
+        <ul>
+        </ul>
+    </div>
+{% endblock %}
