@@ -1,5 +1,5 @@
 from django.shortcuts import render, redirect
-import Game.AssetInterfaceControl.interface_control as interface_control
+import Game.interface_control as interface_control
 
 
 def game(request):
