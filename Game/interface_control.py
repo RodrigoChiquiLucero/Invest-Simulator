@@ -7,7 +7,7 @@ GET_ASSETS = "getAvailableAssets/"
 GET_QUOTE = "getAssetMarketPrice/?name="
 
 
-def api_call_as_json(url):
+def url_to_json(url):
     urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
     http = urllib3.PoolManager()
     res = http.request('GET', url)
@@ -19,7 +19,7 @@ def api_call_as_json(url):
 
 def get_asset_names():
     url = API_URL + GET_ASSETS
-    json_assets = api_call_as_json(url)
+    json_assets = url_to_json(url)
     if json_assets != 0:
         asset_list = []
         for a in json_assets:
@@ -31,7 +31,7 @@ def get_asset_names():
 
 def get_asset_quote(asset):
     url = API_URL + GET_QUOTE + asset.name
-    asset_quote = api_call_as_json(url)
+    asset_quote = url_to_json(url)
     if asset_quote != 0:
         asset.buy = asset_quote['buy']
         asset.sell = asset_quote['sell']
