@@ -15,5 +15,4 @@ def assets(request):
     else:
         asset_list = interface_control.get_assets()
         context = {'assets': asset_list}
-
         return render(request, 'Game/assets.html', context)
