@@ -15,7 +15,7 @@ Aplicación web orientada al público general que simula inversiones en tiempo r
 Para poder correr el proyecto se deberán cumplir los siguientes requisitos:
 
 - Python 3.6/ 3.7
-- Django 2.1.2
+- **Django 2.1.2**
 - **urllib3 1.23** 
 
 Aquellos marcados en **negrita** pueden ser instalados usando
