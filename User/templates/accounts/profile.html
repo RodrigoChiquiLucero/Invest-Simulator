@@ -1,0 +1,15 @@
+{% extends 'base.html' %}
+{% load static from staticfiles %}
+
+{% block body %}
+    <link rel="stylesheet" href="{% static 'User/signup.css' %}">
+    <form method="POST">
+    {% csrf_token %}
+        <div id="login-box">
+            <div class="left">
+                <h1>Username: {{ user }}</h1>
+                <h1>Email: {{ user.email }}</h1>
+            </div>
+        </div>
+  </form>
+{% endblock %}
