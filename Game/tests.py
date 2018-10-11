@@ -6,8 +6,7 @@ from Game.models import AssetStruct
 class InterfaceControlTest(TestCase):
 
     def setUp(self):
-        return
-        # ic.API_URL = 'http://localhost:8000/tests/'
+        ic.API_URL = 'http://localhost:8000/tests/'
 
     def test_sanity(self):
         # search for the names
