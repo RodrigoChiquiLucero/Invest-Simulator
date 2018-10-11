@@ -26,14 +26,12 @@ class InterfaceControlTest(TestCase):
         # ask for a quote of unexistent asset
         asset = AssetStruct(name="NONE", asset_type="NONE")
         quote = ic.get_asset_quote(asset)
-        self.assertEqual(quote, asset)
         self.assertEqual(quote.buy, -1)
         self.assertEqual(quote.sell, -1)
 
         # ask for a quote of existent asset
         asset = AssetStruct(name="MARSHALL", asset_type="currency")
         quote = ic.get_asset_quote(asset)
-        self.assertNotEqual(asset, quote)
         self.assertNotEqual(quote.buy, -1)
         self.assertNotEqual(quote.sell, -1)
 
