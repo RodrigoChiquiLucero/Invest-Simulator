@@ -1,0 +1,21 @@
+{% extends 'Game/base.html' %}
+
+{% block body %}
+    <div style="background: white">
+    {% if assets %}
+        <table>
+        {% for a in assets %}
+            <tr>
+                <td>{{ a.name }}</td>
+                <td>compra: {{ a.buy }}</td>
+                <td>venta: {{ a.sell }}</td>
+            </tr>
+        {% endfor %}
+        </table>
+    {% else %}
+        <h1> There are no avilable assets </h1>
+    {% endif %}
+        <ul>
+        </ul>
+    </div>
+{% endblock %}

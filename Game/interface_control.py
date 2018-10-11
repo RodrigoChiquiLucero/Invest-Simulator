@@ -38,6 +38,10 @@ def get_asset_quote(asset):
     return asset
 
 
+def has_quote(asset):
+    return asset.buy != -1 and asset.sell != -1
+
+
 def get_assets():
     assets = get_asset_names()
-    return [get_asset_quote(a) for a in assets]
+    return [get_asset_quote(a) for a in assets if has_quote(get_asset_quote(a))]

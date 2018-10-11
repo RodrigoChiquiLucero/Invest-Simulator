@@ -1,14 +1,1 @@
 {% extends 'Game/base.html' %}
-
-{% block body %}
-    <!-- TODO: hacer una tabla y agregar estilo -->
-    <div style="background: white">
-        <ul>
-        {% for a in assets %}
-            <li>
-                {{ a.name }} compra: {{ a.buy }} venta: {{ a.sell }}
-            </li>
-        {% endfor %}
-        </ul>
-    </div>
-{% endblock %}

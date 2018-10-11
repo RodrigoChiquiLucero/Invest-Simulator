@@ -6,7 +6,14 @@ def game(request):
     if not request.user.is_authenticated:
         return redirect('/user/login')
     else:
-        assets = interface_control.get_assets()
-        context = {'assets': assets}
+        return render(request, 'Game/game.html')
 
-        return render(request, 'Game/game.html', context)
+
+def assets(request):
+    if not request.user.is_authenticated:
+        return redirect('/user/login')
+    else:
+        asset_list = interface_control.get_assets()
+        context = {'assets': asset_list}
+
+        return render(request, 'Game/assets.html', context)
