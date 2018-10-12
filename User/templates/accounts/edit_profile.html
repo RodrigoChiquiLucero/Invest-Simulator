@@ -1,13 +1,15 @@
+{% extends 'base.html' %}
 {% load static from staticfiles %}
 
 {% block body %}
-    <div class="container">
     <link rel="stylesheet" href="{% static 'User/signup.css' %}">
-        <form method="POST">
-            {% csrf_token %}
-            {{ form }}
-            <button type="submit"> Submit </button>
-        </form>
-       <br>
-    </div>
+    <form method="POST">
+    {% csrf_token %}
+        <div id="login-box">
+            <div class="left">
+                {{ form.as_p }}
+                <button type="submit"> Submit </button>
+            </div>
+        </div>
+  </form>
 {% endblock %}

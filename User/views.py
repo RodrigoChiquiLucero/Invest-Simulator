@@ -23,16 +23,18 @@ def signup(request):
         form = RegistrationForm()
     return render(request, 'registration/signup.html', {'form': form})
 
+
 def view_profile(request):
     return render(request, 'accounts/profile.html')
 
+
 def change_password(request):
     if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
+        form = PasswordChangeForm(request.POST, request.user)
         if form.is_valid():
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
-            messages.success(request, 'Your password was successfully updated!')
+            messages.success(request, 'Your password was updated!')
             return redirect('/user/profile')
         else:
             messages.error(request, 'Please correct the error below.')
@@ -41,18 +43,17 @@ def change_password(request):
         args = {'form': form}
         return render(request, 'accounts/change_password.html', args)
 
+
 def edit_profile(request):
     if request.method == 'POST':
-        form = UserChangeForm(request.user, request.POST)
+        form = UserChangeForm(request.POST, instance=request.user)
         if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)
-            messages.success(request, 'Your user data was successfully updated!')
+            form.save()
             return redirect('/user/profile')
         else:
             messages.error(request, 'Please correct the error below.')
 
     else:
-        form = UserChangeForm(request.user)
-        args = {'from': form}
+        form = UserChangeForm(instance=request.user)
+        args = {'form': form}
         return render(request, 'accounts/edit_profile.html', args)
