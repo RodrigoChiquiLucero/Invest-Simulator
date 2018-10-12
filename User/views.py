@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm
+from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm
 from User.form import RegistrationForm
 from django.shortcuts import render, redirect
 
@@ -23,6 +23,9 @@ def signup(request):
         form = RegistrationForm()
     return render(request, 'registration/signup.html', {'form': form})
 
+def view_profile(request):
+    return render(request, 'accounts/profile.html')
+
 def change_password(request):
     if request.method == 'POST':
         form = PasswordChangeForm(request.user, request.POST)
@@ -30,14 +33,26 @@ def change_password(request):
             user = form.save()
             update_session_auth_hash(request, user)  # Important!
             messages.success(request, 'Your password was successfully updated!')
-            return redirect('change_password')
+            return redirect('/user/profile')
         else:
             messages.error(request, 'Please correct the error below.')
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, 'accounts/change_password.html', {
-        'form': form
-    })
+        args = {'form': form}
+        return render(request, 'accounts/change_password.html', args)
 
-def profile(request):
-    return render(request, 'accounts/profile.html')
+def edit_profile(request):
+    if request.method == 'POST':
+        form = UserChangeForm(request.user, request.POST)
+        if form.is_valid():
+            user = form.save()
+            update_session_auth_hash(request, user)
+            messages.success(request, 'Your user data was successfully updated!')
+            return redirect('/user/profile')
+        else:
+            messages.error(request, 'Please correct the error below.')
+
+    else:
+        form = UserChangeForm(request.user)
+        args = {'from': form}
+        return render(request, 'accounts/edit_profile.html', args)

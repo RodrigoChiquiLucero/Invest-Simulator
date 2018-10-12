@@ -1,0 +1,13 @@
+{% load static from staticfiles %}
+
+{% block body %}
+    <div class="container">
+    <link rel="stylesheet" href="{% static 'User/signup.css' %}">
+        <form method="POST">
+            {% csrf_token %}
+            {{ form }}
+            <button type="submit"> Submit </button>
+        </form>
+       <br>
+    </div>
+{% endblock %}
