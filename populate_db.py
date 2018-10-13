@@ -2,7 +2,7 @@ import os
 import sys
 
 
-def create_transactions(username):
+def create_ownerships(username):
     # crear assets
     a1 = Asset(name="MARSHALL", type="currency")
     a2 = Asset(name="ADIDAS", type="stock")
@@ -14,10 +14,10 @@ def create_transactions(username):
     wallet = Wallet.objects.get(user=user)
 
     # crear transacciones
-    transaction_1 = Transaction(asset=a1, wallet=wallet, quantity=2, asset_price=23, is_purchase=True)
-    transaction_2 = Transaction(asset=a2, wallet=wallet, quantity=5, asset_price=46, is_purchase=True)
-    transaction_1.save()
-    transaction_2.save()
+    ownership_1 = Ownership(asset=a1, wallet=wallet, quantity=2)
+    ownership_2 = Ownership(asset=a2, wallet=wallet, quantity=5)
+    ownership_1.save()
+    ownership_2.save()
 
 
 if __name__ == '__main__':
@@ -34,6 +34,6 @@ if __name__ == '__main__':
     try:
         username = sys.argv[1]
         print(username)
-        create_transactions(username)
+        create_ownerships(username)
     except IntegrityError:
         pass
