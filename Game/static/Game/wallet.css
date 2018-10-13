@@ -1,0 +1,35 @@
+.liquid {
+    width: 98%;
+    height: 80px;
+    position: fixed;
+    top:-10%; right:-100%; left:-100%; bottom:-100%;
+    margin:auto;
+    background-color: limegreen;
+    align-content: center;
+    align-items: center;
+    color: white;
+    animation: liquid_animation 5s infinite;
+    animation-name: liquid_animation;
+    animation-duration: 10s;
+    animation-delay: 2s;
+}
+
+@keyframes liquid_animation {
+    from{
+        fill-opacity: 0;
+    }
+    to{
+        fill-opacity: 1;
+    }
+}
+
+@keyframes liquid_animation {
+    0%   {background-color:mediumseagreen}
+    25%  {background-color:green}
+    50%  {background-color:limegreen}
+    75%  {background-color:forestgreen}
+    100% {background-color:limegreen}
+}
+
+
+
