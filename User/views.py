@@ -1,6 +1,6 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, update_session_auth_hash
-from django.contrib.auth.forms import PasswordChangeForm, UserChangeForm
+from django.contrib.auth.forms import PasswordChangeForm
 from User.form import RegistrationForm, EditProfileForm
 from django.shortcuts import render, redirect
 
@@ -40,9 +40,8 @@ def change_password(request):
             messages.error(request, 'Please correct the error below.')
     else:
         form = PasswordChangeForm(request.user)
-    return render(request, 'accounts/change_password.html', {
-        'form': form
-    })
+        args = {'form': form}
+        return render(request, 'accounts/change_password.html', args)
 
 
 def edit_profile(request):
@@ -50,6 +49,7 @@ def edit_profile(request):
         form = EditProfileForm(request.POST, instance=request.user)
         if form.is_valid():
             form.save()
+            messages.success(request, 'Your password was successfully updated!')
             return redirect('/user/profile')
         else:
             messages.error(request, 'Please correct the error below.')
