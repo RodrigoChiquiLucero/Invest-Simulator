@@ -25,36 +25,45 @@ def signup(request):
 
 
 def view_profile(request):
-    return render(request, 'accounts/profile.html')
+    if not request.user.is_authenticated:
+        return redirect('/user/login')
+    else:
+        return render(request, 'accounts/profile.html')
 
 
 def change_password(request):
-    if request.method == 'POST':
-        form = PasswordChangeForm(request.user, request.POST)
-        if form.is_valid():
-            user = form.save()
-            update_session_auth_hash(request, user)  # Important!
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect('/user/profile')
-        else:
-            messages.error(request, 'Please correct the error below.')
+    if not request.user.is_authenticated:
+        return redirect('/user/login')
     else:
-        form = PasswordChangeForm(request.user)
-        args = {'form': form}
-        return render(request, 'accounts/change_password.html', args)
+        if request.method == 'POST':
+            form = PasswordChangeForm(request.user, request.POST)
+            if form.is_valid():
+                user = form.save()
+                update_session_auth_hash(request, user)  # Important!
+                messages.success(request, 'Your password was successfully updated!')
+                return redirect('/user/profile')
+            else:
+                messages.error(request, 'Please correct the error below.')
+        else:
+            form = PasswordChangeForm(request.user)
+            args = {'form': form}
+            return render(request, 'accounts/change_password.html', args)
 
 
 def edit_profile(request):
-    if request.method == 'POST':
-        form = EditProfileForm(request.POST, instance=request.user)
-        if form.is_valid():
-            form.save()
-            messages.success(request, 'Your password was successfully updated!')
-            return redirect('/user/profile')
-        else:
-            messages.error(request, 'Please correct the error below.')
-
+    if not request.user.is_authenticated:
+        return redirect('/user/login')
     else:
-        form = EditProfileForm(instance=request.user)
-        args = {'form': form}
-        return render(request, 'accounts/edit_profile.html', args)
+        if request.method == 'POST':
+            form = EditProfileForm(request.POST, instance=request.user)
+            if form.is_valid():
+                form.save()
+                messages.success(request, 'Your password was successfully updated!')
+                return redirect('/user/profile')
+            else:
+                messages.error(request, 'Please correct the error below.')
+
+        else:
+            form = EditProfileForm(instance=request.user)
+            args = {'form': form}
+            return render(request, 'accounts/edit_profile.html', args)
