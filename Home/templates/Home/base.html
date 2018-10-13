@@ -2,6 +2,7 @@
 <head>
     <title> Invest Simulator </title>
     <link rel="shortcut icon" href="{% static "Home/images/dollar.jpg" %}" />
+    <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
     <link rel="stylesheet" href="{% static 'Home/base.css' %}">
 </head>
@@ -10,12 +11,16 @@
 	<nav class="navbar navbar-light bg-white">
 	    <div class="container-fulid">
 	        <div class="navbar-header">
-	            <a class="navbar-brand" href="/">
+                <a class="navbar-brand" href="/">
                     <img class="shortcuticon" src="{% static "Home/images/dollar.jpg" %}"/>
+                    <i class="fas fa-home"></i> Home
                 </a>
-                <a class="navbar-brand" href="/"> Home </a>
-                <a class="navbar-brand" href="/user/signup"> Sign Up </a>
-                <a class="navbar-brand" href="/user/login"> Log In </a>
+                <a class="navbar-brand" href="/user/signup">
+                    <i class="fas fa-user"></i> Sign Up
+                </a>
+                <a class="navbar-brand" href="/user/login">
+                    <i class="fas fa-sign-in-alt"></i> Log In
+                </a>
             </div>
 	    </div>
 	</nav>
