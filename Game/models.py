@@ -36,9 +36,9 @@ class Wallet(models.Model):
                 asset.quantity = t.quantity
                 value_wallet += t.quantity * asset.sell
                 assets.append(asset)
-                response['assets'] = assets
-                response['value_wallet'] = value_wallet
-                response['error'] = False
+            response['assets'] = assets
+            response['value_wallet'] = value_wallet
+            response['error'] = False
         except IndexError:
             response['error'] = True
         return response
