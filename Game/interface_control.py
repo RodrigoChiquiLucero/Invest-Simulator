@@ -1,10 +1,17 @@
 import urllib3.request
 import json
-from Game.models import AssetStruct
 
 API_URL = "http://localhost:8000/tests/"
 GET_ASSETS = "getAvailableAssets/"
 GET_QUOTE = "getAssetMarketPrice/"
+
+
+class AssetStruct:
+    def __init__(self, name, asset_type, sell=-1, buy=-1):
+        self.name = name
+        self.type = asset_type
+        self.sell = sell
+        self.buy = buy
 
 
 def url_to_json(url):
@@ -55,6 +62,10 @@ def has_quote(asset):
     return asset.buy != -1 and asset.sell != -1
 
 
+def quote_for_assets(assets):
+    return [get_asset_quote(a) for a in assets if has_quote(get_asset_quote(a))]
+
+
 def get_assets():
     assets = get_asset_names()
-    return [get_asset_quote(a) for a in assets if has_quote(get_asset_quote(a))]
+    return quote_for_assets(assets)
