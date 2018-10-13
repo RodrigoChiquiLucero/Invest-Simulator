@@ -10,10 +10,8 @@
                 Our team is having an internal server error we are very sorry
             {% else %}
                 Welcome to your wallet, your liquid money is: {{ liquid }}
-                El valor total de la cartera es: {{ value_wallet }}
             {% endif %}
         </h2>
-
     </div>
     <div align="center" class="assets">
         {% if assets %}
@@ -39,6 +37,11 @@
             <h1> You have no avilable assets </h1>
         {% endif %}
     </div>
-
+    <div align="center" style="background: white">
+        <h2>
+            {% if not error %}
+               You wallet cotization value is {{ value_wallet }}
+            {% endif %}
+        </h2>
     </div>
 {% endblock %}

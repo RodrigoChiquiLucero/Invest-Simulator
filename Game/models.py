@@ -25,18 +25,22 @@ class Wallet(models.Model):
     @staticmethod
     def get_info(user):
         response = {}
-        wallet = Wallet.objects.filter(user=user)[0]
-        response['liquid'] = wallet.liquid
-        value_wallet = wallet.liquid
-        transactions = Transaction.objects.filter(wallet=wallet, is_purchase=True)
-        assets = []
-        for t in transactions:
-            asset = ic.get_asset_quote(t.asset.as_struct())
-            asset.quantity = t.quantity
-            value_wallet += t.quantity * asset.sell
-            assets.append(asset)
-        response['assets'] = assets
-        response['value_wallet'] = value_wallet
+        try:
+            wallet = Wallet.objects.filter(user=user)[0]
+            response['liquid'] = wallet.liquid
+            value_wallet = wallet.liquid
+            transactions = Transaction.objects.filter(wallet=wallet, is_purchase=True)
+            assets = []
+            for t in transactions:
+                asset = ic.get_asset_quote(t.asset.as_struct())
+                asset.quantity = t.quantity
+                value_wallet += t.quantity * asset.sell
+                assets.append(asset)
+                response['assets'] = assets
+                response['value_wallet'] = value_wallet
+                response['error'] = False
+        except IndexError:
+            response['error'] = True
         return response
 
 
