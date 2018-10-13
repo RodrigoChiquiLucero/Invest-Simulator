@@ -2,22 +2,26 @@
 {% load static from staticfiles %}
 
 {% block body %}
-  <link rel="stylesheet" href="{% static 'User/signup.css' %}">
-  <form method="POST">
- {% csrf_token %}
-    <div id="login-box">
-      <div class="left">
-        <h1>Sign up</h1>
-        <input type="text" name="username" placeholder="Username" />
-          {{ form.username.errors }}
-        <input type="email" name="email" placeholder="E-mail" />
-          {{ form.email.errors }}
-        <input type="password" name="password1" placeholder="Password" />
-          {{ form.password1.errors }}
-        <input type="password" name="password2" placeholder="Retype password" />
-          {{ form.password2.errors }}
-        <input type="submit" name="signup_submit" value="Sign me up" />
-      </div>
-    </div>
-  </form>
+    <link rel="stylesheet" href="{% static 'User/signup.css' %}">
+    <form method="POST">
+        {% csrf_token %}
+        <div id="login-box">
+            <div class="left">
+                <h1>Sign up</h1>
+                <input type="text" name="username" placeholder="Username"/>
+                {{ form.username.errors }}
+                <input type="email" name="email" placeholder="E-mail"/>
+                {% if form.email_error %}
+                <ul><li>{{ form.email_error }}</li></ul>
+                {% endif %}
+                <input type="password" name="password1" placeholder="Password"/>
+                {{ form.password1.errors }}
+                <input type="password" name="password2" placeholder="Retype password"/>
+                {{ form.password2.errors }}
+                <input type="submit" name="signup_submit" value="Sign me up"/>
+                <br>
+                <br>
+            </div>
+        </div>
+    </form>
 {% endblock %}

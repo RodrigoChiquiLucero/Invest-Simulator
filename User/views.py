@@ -3,14 +3,17 @@ from django.contrib.auth import login, authenticate, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from User.form import RegistrationForm, EditProfileForm
 from django.shortcuts import render, redirect
+from django.contrib.auth.models import User
 
 
 def signup(request):
     if request.user.is_authenticated:
         return redirect('/game/')
+    else:
+        messages.warning(request, 'Invalid Login or password')
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
-        if form.is_valid():
+        if form.is_valid() and not User.objects.filter(email=form.cleaned_data.get('email')):
             form.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
@@ -18,8 +21,8 @@ def signup(request):
             login(request, user)
             return redirect('/')
         else:
-            messages.warning(request, 'Please correct the error above.')
-            render(request, 'registration/signup.html', {'form': form})
+            mensajemail = 'MODIFICA EL MAIL'
+            render(request, 'registration/signup.html', {'form': form, 'mensajemail': mensajemail})
     else:
         form = RegistrationForm()
     return render(request, 'registration/signup.html', {'form': form})
@@ -59,16 +62,19 @@ def edit_profile(request):
     if not request.user.is_authenticated:
         return redirect('/user/login')
     else:
+        old_user = request.user
         if request.method == 'POST':
             form = EditProfileForm(request.POST, instance=request.user)
             if form.is_valid():
-                form.save()
-                messages.success(request, 'Your password was successfully updated!')
+                user = form.save()
+                update_session_auth_hash(request, user)  # Important!
+                messages.success(request, 'Your profile was successfully updated!')
                 return redirect('/user/profile')
             else:
                 messages.error(request, 'Please correct the error below.')
-
+                args = {'email': old_user.email, 'first': old_user.first_name, 'last': old_user.last_name, 'form': form}
+                return render(request, 'accounts/edit_profile.html', args)
         else:
             form = EditProfileForm(instance=request.user)
-            args = {'form': form}
+            args = {'email': old_user.email, 'first': old_user.first_name, 'last': old_user.last_name, 'form': form}
             return render(request, 'accounts/edit_profile.html', args)
