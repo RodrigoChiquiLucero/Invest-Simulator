@@ -3,15 +3,19 @@
 
 {% block body %}
 
+    <link rel="stylesheet" href="{% static 'Game/assets.css' %}">
     <div align="center" style="background: white">
         <h2>
             {% if error %}
                 Our team is having an internal server error we are very sorry
             {% else %}
                 Welcome to your wallet, your liquid money is: {{ liquid }}
+                El valor total de la cartera es: {{ value_wallet }}
             {% endif %}
         </h2>
 
+    </div>
+    <div align="center" class="assets">
         {% if assets %}
             <table>
                 <tr>
@@ -19,7 +23,7 @@
                     <th> Buy</th>
                     <th> Sell</th>
                     <th> Type</th>
-                    <th>Valor Histórico </th>
+                    <th> Quantity</th>
                 </tr>
                 {% for a in assets %}
                     <tr>
@@ -27,13 +31,14 @@
                         <td>{{ a.buy }}</td>
                         <td>{{ a.sell }}</td>
                         <td>{{ a.type }}</td>
-                        <td><a href="#">Ver</a></td>
+                        <td>{{ a.quantity }}</td>
                     </tr>
                 {% endfor %}
             </table>
         {% else %}
             <h1> You have no avilable assets </h1>
         {% endif %}
+    </div>
 
     </div>
 {% endblock %}

@@ -1,6 +1,7 @@
 from django.db import models
 from django.contrib.auth.models import User
 from Game import interface_control as ic
+import datetime
 
 
 # /*
@@ -19,23 +20,24 @@ class Asset(models.Model):
 class Wallet(models.Model):
     id = models.IntegerField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
-    assets = models.ManyToManyField(Asset)
     liquid = models.FloatField(null=False)
 
     @staticmethod
     def get_info(user):
-        info = {}
-        wallets = Wallet.objects.filter(user=user)
-        wa = wallets[0] if wallets else None
-        if wa:
-            info['liquid'] = wa.liquid
-            asset_list = [a.as_struct() for a in wa.assets.all()]
-            asset_list = ic.quote_for_assets(asset_list)
-            info['assets'] = asset_list
-            info['error'] = False
-        else:
-            info['error'] = True
-        return info
+        response = {}
+        wallet = Wallet.objects.filter(user=user)[0]
+        response['liquid'] = wallet.liquid
+        value_wallet = wallet.liquid
+        transactions = Transaction.objects.filter(wallet=wallet, is_purchase=True)
+        assets = []
+        for t in transactions:
+            asset = ic.get_asset_quote(t.asset.as_struct())
+            asset.quantity = t.quantity
+            value_wallet += t.quantity * asset.sell
+            assets.append(asset)
+        response['assets'] = assets
+        response['value_wallet'] = value_wallet
+        return response
 
 
 class Transaction(models.Model):
@@ -43,6 +45,6 @@ class Transaction(models.Model):
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
     asset = models.ForeignKey(Asset, on_delete=models.DO_NOTHING)
     asset_price = models.FloatField(null=False)
-    date = models.DateField()
+    date = models.DateField(default=datetime.date.today)
     quantity = models.IntegerField()
     is_purchase = models.BooleanField(null=False)

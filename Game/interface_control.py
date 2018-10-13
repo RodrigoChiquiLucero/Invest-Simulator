@@ -7,11 +7,12 @@ GET_QUOTE = "getAssetMarketPrice/"
 
 
 class AssetStruct:
-    def __init__(self, name, asset_type, sell=-1, buy=-1):
+    def __init__(self, name, asset_type, sell=-1, buy=-1, quantity=1):
         self.name = name
         self.type = asset_type
         self.sell = sell
         self.buy = buy
+        self.quantity = quantity
 
 
 def url_to_json(url):
