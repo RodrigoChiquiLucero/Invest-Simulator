@@ -18,6 +18,7 @@ def signup(request):
             login(request, user)
             return redirect('/')
         else:
+            messages.warning(request, 'Please correct the error above.')
             render(request, 'registration/signup.html', {'form': form})
     else:
         form = RegistrationForm()
@@ -41,9 +42,13 @@ def change_password(request):
                 user = form.save()
                 update_session_auth_hash(request, user)  # Important!
                 messages.success(request, 'Your password was successfully updated!')
-                return redirect('/user/profile')
+                return redirect('/user/profile/password')
             else:
-                messages.error(request, 'Please correct the error below.')
+                messages.warning(request, 'Please correct the error above.')
+                form = PasswordChangeForm(request.user)
+                args = {'form': form}
+                return render(request, 'accounts/change_password.html', args)
+
         else:
             form = PasswordChangeForm(request.user)
             args = {'form': form}
