@@ -1,6 +1,5 @@
 from django.test import TestCase
 from Game import interface_control as ic
-from Game.models import AssetStruct
 
 
 class InterfaceControlTest(TestCase):
@@ -23,13 +22,13 @@ class InterfaceControlTest(TestCase):
 
     def test_border(self):
         # ask for a quote of unexistent asset
-        asset = AssetStruct(name="NONE", asset_type="NONE")
+        asset = ic.AssetStruct(name="NONE", asset_type="NONE")
         quote = ic.get_asset_quote(asset)
         self.assertEqual(quote.buy, -1)
         self.assertEqual(quote.sell, -1)
 
         # ask for a quote of existent asset
-        asset = AssetStruct(name="MARSHALL", asset_type="currency")
+        asset = ic.AssetStruct(name="MARSHALL", asset_type="currency")
         quote = ic.get_asset_quote(asset)
         self.assertNotEqual(quote.buy, -1)
         self.assertNotEqual(quote.sell, -1)
