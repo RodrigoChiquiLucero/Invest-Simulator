@@ -10,8 +10,8 @@ def create_transactions(username):
     a2.save()
 
     # tomar usuario y wallet
-    user = User.objects.filter(username=username)[0]
-    wallet = Wallet.objects.filter(user=user)[0]
+    user = User.objects.get(username=username)
+    wallet = Wallet.objects.get(user=user)
 
     # crear transacciones
     transaction_1 = Transaction(asset=a1, wallet=wallet, quantity=2, asset_price=23, is_purchase=True)

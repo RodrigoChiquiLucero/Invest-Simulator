@@ -15,8 +15,8 @@ def signup(request):
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
             # asign a wallet
-            new_user = User.objects.filter(username=username)[0]
-            wallet = Wallet(user=new_user, liquid=10000)
+            new_user = User.objects.get(username=username)
+            wallet = Wallet(user=new_user)
             wallet.save()
             # authenticate
             user = authenticate(username=username, password=raw_password)
