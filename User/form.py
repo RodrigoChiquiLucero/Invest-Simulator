@@ -36,7 +36,7 @@ class RegistrationForm(UserCreationForm):
             )
         if len(first_name) > 20:
             raise forms.ValidationError(
-                'Name must contain 20 characters or less.'
+                'First name must contain 20 characters or less.'
             )
         return first_name
 
@@ -48,7 +48,7 @@ class RegistrationForm(UserCreationForm):
             )
         if len(last_name) > 20:
             raise forms.ValidationError(
-                'Name must contain 20 characters or less.'
+                'Last name must contain 20 characters or less.'
             )
         return last_name
 
