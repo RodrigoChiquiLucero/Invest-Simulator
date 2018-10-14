@@ -7,14 +7,13 @@
     <link rel="stylesheet" href="{% static 'Game/base.css' %}">
 </head>
 <body>
-    <audio autoplay preload="auto" src="{% static "Home/music/bgMusic.mp3"%}" loop="-1" ></audio>
 	<nav class="navbar navbar-light bg-white">
 	    <div class="container-fulid">
                 <a class="navbar-brand " href="/game">
                     <img class="shortcuticon" src="{% static "Home/images/dollar.jpg" %}"/>
                     <i class="fas fa-home"></i> Home
                 </a>
-                <a class="navbar-brand" href="/wallet/">
+                <a class="navbar-brand" href="">
                     <i class="fas fa-wallet"></i> Wallet
                 </a>
                 <a class="navbar-brand" href="/game/assets">
@@ -30,6 +29,67 @@
             </a>
         </div>
 	</nav>
+
+    <audio preload="auto" src="{% static "Home/music/bgMusic.mp3"%}" loop="true" autobuffer>
+    Audio unsupported
+    </audio>
+    <i id="volumen" class="fas fa-volume-up" style="float: right; margin-right:3%;" onclick="Mute()"></i>
+
+<script>
+
+
+    var volumen = document.getElementById("volumen");
+    function Mute() {
+        if (song.muted) {
+            song.play();
+            song.muted = false;
+            volumen.className = "fas fa-volume-up";
+        } else {
+            song.muted = true;
+            volumen.className = "fas fa-volume-mute";
+        }
+    }
+
+    function setCookie(c_name, value, exdays){
+        var exdate=new Date();
+        exdate.setDate(exdate.getDate() + exdays);
+        var c_value=escape(value) + ((exdays==null) ? "" : "; expires="+exdate.toUTCString());
+        document.cookie=c_name + "=" + c_value;
+    }
+
+    function getCookie(c_name){
+        var i, x, y, ARRcookies=document.cookie.split(";");
+        for (i=0;i<ARRcookies.length;i++){
+          x=ARRcookies[i].substr(0,ARRcookies[i].indexOf("="));
+          y=ARRcookies[i].substr(ARRcookies[i].indexOf("=")+1);
+          x=x.replace(/^\s+|\s+$/g, "");
+          if (x==c_name){
+            return unescape(y);
+            }
+          }
+    }
+
+    var song = document.getElementsByTagName('audio')[0];
+    var played = false;
+    var tillPlayed = getCookie('timePlayed');
+    function update(){
+        if(!played){
+            if(tillPlayed){
+            song.currentTime = tillPlayed;
+            song.play();
+            played = true;
+            } else {
+                song.play();
+                played = true;
+            }
+        } else {
+        setCookie('timePlayed', song.currentTime);
+        }
+    }
+    setInterval(update,10);
+
+</script>
+
 {% block body %}
 {% endblock %}
 </body>
