@@ -4,7 +4,7 @@
 {% block body %}
 
     <link rel="stylesheet" href="{% static 'Game/assets.css' %}">
-    <div align="center" class="assets">
+    <div align="center" class="assets" >
         {% if assets %}
             <table>
                 <tr>
@@ -25,7 +25,9 @@
                 {% endfor %}
             </table>
         {% else %}
-            <h1> You have no available assets </h1>
+            <div style="background: whitesmoke;">
+                <h1> You have no available assets </h1>
+            </div>
         {% endif %}
     </div>
     <link rel="stylesheet" href="{% static 'Game/wallet.css' %}">
