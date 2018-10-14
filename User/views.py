@@ -65,16 +65,21 @@ def edit_profile(request):
         old_user = request.user
         if request.method == 'POST':
             form = EditProfileForm(request.POST, instance=request.user)
-            if form.is_valid():
+            if form.is_valid(request.user):
                 user = form.save()
                 update_session_auth_hash(request, user)  # Important!
                 messages.success(request, 'Your profile was successfully updated!')
                 return redirect('/user/profile')
             else:
-                messages.error(request, 'Please correct the error below.')
-                args = {'email': old_user.email, 'first': old_user.first_name, 'last': old_user.last_name, 'form': form}
+                args = {'email': old_user.email,
+                        'first': old_user.first_name,
+                        'last': old_user.last_name,
+                        'form': form}
                 return render(request, 'accounts/edit_profile.html', args)
         else:
             form = EditProfileForm(instance=request.user)
-            args = {'email': old_user.email, 'first': old_user.first_name, 'last': old_user.last_name, 'form': form}
+            args = {'email': old_user.email,
+                    'first': old_user.first_name,
+                    'last': old_user.last_name,
+                    'form': form}
             return render(request, 'accounts/edit_profile.html', args)

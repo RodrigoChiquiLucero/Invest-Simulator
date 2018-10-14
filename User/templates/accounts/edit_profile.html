@@ -7,13 +7,16 @@
     {% csrf_token %}
         <div id="login-box">
             <div class="left">
-                <input value={{ email }} type="email" name="email" placeholder="Email" />
+                <label for="email">Email:</label>
+                <input value="{{ email }}" type="email" id="email" name="email" placeholder="Email" />
                 {% if form.email_error %}
                 <ul><li>{{ form.email_error }}</li></ul>
                 {% endif %}
-                <input value={{ first }} type="text" id="id_first_name" name="first_name" placeholder="First Name"/>
-                <input value={{ last }} type="text" id="id_last_name" name="last_name" placeholder="Last Name" />
-                <button type="submit"> Submit </button>
+                <label for="id_first_name">First Name:</label>
+                <input value="{{ first }}" type="text" id="id_first_name" name="first_name" placeholder="First Name"/>
+                <label for="id_last_name">Last Name:</label>
+                <input value="{{ last }}" type="text" id="id_last_name" name="last_name" placeholder="Last Name" />
+                <input type="submit" name="signup_submit" value="Submit"/>
             </div>
         </div>
   </form>
