@@ -1,5 +1,5 @@
 .liquid {
-    width: 98%;
+    width: auto;
     height: 80px;
     position: fixed;
     top:-10%; right:-100%; left:-100%; bottom:-100%;
@@ -7,8 +7,7 @@
     background-color: limegreen;
     align-content: center;
     align-items: center;
-    border-style :solid;
-    border-color: green;
+    border: solid green;
     text-shadow: 1px 1px 2px black, 0 0 25px greenyellow, 0 0 5px greenyellow;
     color: white;
     animation: liquid_animation 5s infinite;
