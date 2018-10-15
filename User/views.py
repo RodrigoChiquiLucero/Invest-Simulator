@@ -3,27 +3,22 @@ from django.contrib.auth import login, authenticate, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from User.form import RegistrationForm, EditProfileForm
 from django.shortcuts import render, redirect
-from django.contrib.auth.models import User
 
 
 def signup(request):
-    # TODO: al crear el usuario, crear tambien su Wallet
     if request.user.is_authenticated:
         return redirect('/game/')
-    else:
-        messages.warning(request, 'Invalid Login or password')
     if request.method == 'POST':
         form = RegistrationForm(request.POST)
-        if form.is_valid() and not User.objects.filter(email=form.cleaned_data.get('email')):
+        if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
             user = authenticate(username=username, password=raw_password)
             login(request, user)
-            return redirect('/')
+            return render(request, 'registration/signedup.html')
         else:
-            mensajemail = 'MODIFICA EL MAIL'
-            render(request, 'registration/signup.html', {'form': form, 'mensajemail': mensajemail})
+            return render(request, 'registration/signup.html', {'form': form})
     else:
         form = RegistrationForm()
     return render(request, 'registration/signup.html', {'form': form})

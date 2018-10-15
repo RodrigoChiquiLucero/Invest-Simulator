@@ -2,7 +2,9 @@
 {% load static from staticfiles %}
 
 {% block body %}
-<body>
-    <img style="float: right;"  src="{% static 'Home/images/Colorete.gif' %}">
-</body>
+    {% block alert %}
+    {% endblock %}
+    <body>
+    <img style="float: right;" src="{% static 'Home/images/Colorete.gif' %}">
+    </body>
 {% endblock %}
