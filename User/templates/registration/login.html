@@ -2,18 +2,30 @@
 {% load static from staticfiles %}
 
 {% block body %}
-  <link rel="stylesheet" href="{% static 'User/signup.css' %}">
-  <form method="POST">
- {% csrf_token %}
+  <link rel="stylesheet" href="{% static 'User/signupin.css' %}">
     <div id="login-box">
-      <div class="left">
+
+      <form method="POST">
+        {% csrf_token %}
+
         <h1>Log in</h1>
-        <input type="text" name="username" placeholder="Username" />
-          {{ form.username.errors }}
-        <input type="password" name="password" placeholder="Password" />
-          {{ form.password.errors }}
-        <input type="submit" name="signup_submit" value="Log in" />
-      </div>
+
+        <div class = "username_div">
+          <input type="text" name="username" placeholder="Username" />
+          <div class = "username_error">
+              {{ form.username.errors }}
+          </div>
+        </div>
+
+        <div class = "password_div">
+          <input type="password" name="password" placeholder="Password" />
+          <div class = "password_error">
+              {{ form.password.errors }}
+          </div>
+        </div>
+
+        <input type="submit" name="signup_submit" value="Log in"/>
+
+      </form>
     </div>
-  </form>
 {% endblock %}

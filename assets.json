@@ -1,27 +1,42 @@
-
-[
-  {
-    "id": 0,
-    "name": "APPLE",
-    "sell": 23,
-    "buy": 46
-  },
-  {
-    "id": 1,
-    "name": "ADIDAS",
-    "sell": 27,
-    "buy": 90
-  },
-  {
-    "id": 3,
-    "name": "LXA",
-    "sell": 190,
-    "buy": 23
-  },
-  {
-    "id": 80,
-    "name": "IMAGINACION",
-    "sell": 190,
-    "buy": 23
-  }
-]
+{
+  "assets": [
+    {
+      "name": "DOLAR",
+      "type": "currency"
+    },
+    {
+      "name": "ADIDAS",
+      "type": "stock"
+    },
+    {
+      "name": "LXA",
+      "type": "stock",
+    },
+    {
+      "name": "MARSHALL",
+      "type": "currency",
+    }
+  ],
+  "prices": [
+    {
+      "sell": 23,
+      "buy": 54
+    },
+    {
+      "sell": 150,
+      "buy": 560
+    },
+    {
+      "sell": 4545,
+      "buy": 0.5
+    },
+    {
+      "sell": 5000,
+      "buy": 23423
+    },
+    {
+      "sell": 90,
+      "buy": 23
+    }
+  ]
+}
