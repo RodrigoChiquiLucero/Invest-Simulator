@@ -35,7 +35,9 @@ def view_profile(request):
     if not request.user.is_authenticated:
         return redirect('/user/login')
     else:
-        return render(request, 'accounts/profile.html')
+        wallet = Wallet.objects.get(user=request.user)
+        context = {'image_url': wallet.image.url}
+        return render(request, 'accounts/profile.html', context)
 
 
 def change_password(request):
@@ -67,7 +69,7 @@ def edit_profile(request):
     else:
         old_user = request.user
         if request.method == 'POST':
-            form = EditProfileForm(request.POST, instance=request.user)
+            form = EditProfileForm(request.POST, request.FILES, instance=request.user)
             if form.is_valid(request.user):
                 user = form.save()
                 update_session_auth_hash(request, user)  # Important!

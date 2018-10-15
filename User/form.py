@@ -1,6 +1,7 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
+from Game.models import Wallet
 from django.core.files.images import get_image_dimensions
 
 
@@ -73,14 +74,14 @@ class RegistrationForm(UserCreationForm):
 
 class EditProfileForm(UserChangeForm):
     email = forms.EmailField(required=True)
-    image = forms.ImageField(required=True)
+    avatar = forms.ImageField(required=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     class Meta:
         model = User
-        fields = ("email", "first_name", "last_name", "image")
+        fields = ("email", "first_name", "last_name", "avatar")
 
     def is_valid(self, user):
         isvalid = super(EditProfileForm, self).is_valid()
@@ -127,3 +128,9 @@ class EditProfileForm(UserChangeForm):
             pass
 
         return avatar
+
+    def save(self, commit=True):
+        user = super(EditProfileForm, self).save(commit=True)
+        wallet = Wallet.objects.get(user=user)
+        wallet.image = self.cleaned_data['avatar']
+        wallet.save()

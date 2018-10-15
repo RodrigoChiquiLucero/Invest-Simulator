@@ -26,7 +26,7 @@ class Wallet(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     liquid = models.FloatField(null=False, default=10000)
     assets = models.ManyToManyField(Asset, through='Ownership')
-    image = models.ImageField(upload_to='profile_image', blank=True)
+    image = models.ImageField(upload_to='profile_image', default='profile_image/no_image.jpg')
 
     @staticmethod
     def get_info(user):
