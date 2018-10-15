@@ -3,6 +3,18 @@ from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
 
 
+def clean_name(name):
+    if not (all(x.isalpha() or x.isspace() for x in name)):
+        raise forms.ValidationError(
+            'Enter alphabetical characters and spaces only.'
+        )
+    if len(name) > 20:
+        raise forms.ValidationError(
+            'First name must contain 20 characters or less.'
+        )
+    return name
+
+
 class RegistrationForm(UserCreationForm):
     first_name = forms.CharField(required=True)
     last_name = forms.CharField(required=True)
@@ -30,27 +42,11 @@ class RegistrationForm(UserCreationForm):
 
     def clean_first_name(self):
         first_name = self.cleaned_data.get("first_name")
-        if not (all(x.isalpha() or x.isspace() for x in first_name)):
-            raise forms.ValidationError(
-                'Enter alphabetical characters and spaces only.'
-            )
-        if len(first_name) > 20:
-            raise forms.ValidationError(
-                'First name must contain 20 characters or less.'
-            )
-        return first_name
+        return clean_name(first_name)
 
     def clean_last_name(self):
         last_name = self.cleaned_data.get("last_name")
-        if not (all(x.isalpha() or x.isspace() for x in last_name)):
-            raise forms.ValidationError(
-                'Enter alphabetical characters and spaces only.'
-            )
-        if len(last_name) > 20:
-            raise forms.ValidationError(
-                'Last name must contain 20 characters or less.'
-            )
-        return last_name
+        return clean_name(last_name)
 
     def clean_email2(self):
         email1 = self.cleaned_data.get("email1")
@@ -70,24 +66,28 @@ class RegistrationForm(UserCreationForm):
 
 class EditProfileForm(UserChangeForm):
     email = forms.EmailField(required=True)
-
-    def __init__(self, *args, **kwargs):
-        super().__init__(*args, **kwargs)
+    first_name = forms.CharField(required=True)
+    last_name = forms.CharField(required=True)
 
     class Meta:
         model = User
-        fields = ("email", "first_name", "last_name")
+        fields = ("first_name",
+                  "last_name",
+                  "email")
 
-    def is_valid(self, user):
-        isvalid = super(EditProfileForm, self).is_valid()
-        try:
-            valid_email = not User.objects.filter(email=self.cleaned_data["email"]) \
-                .exclude(username=user.username)
-            if not valid_email:
-                self.email_error = 'The email is already in use.'
-                return
-            else:
-                return isvalid and valid_email
-        except KeyError:
-            self.email_error = 'Please enter an email address'
-            return
+    def clean_email(self):
+        email = self.cleaned_data['email']
+        if email and User.objects.filter(email=email) \
+                .exclude(username=self.instance.username):
+            raise forms.ValidationError(
+                'Email is already in use.'
+            )
+        return email
+
+    def clean_first_name(self):
+        first_name = self.cleaned_data.get("first_name")
+        return clean_name(first_name)
+
+    def clean_last_name(self):
+        last_name = self.cleaned_data.get("last_name")
+        return clean_name(last_name)

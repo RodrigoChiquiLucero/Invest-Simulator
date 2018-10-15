@@ -68,7 +68,7 @@ def edit_profile(request):
         old_user = request.user
         if request.method == 'POST':
             form = EditProfileForm(request.POST, instance=request.user)
-            if form.is_valid(request.user):
+            if form.is_valid():
                 user = form.save()
                 update_session_auth_hash(request, user)  # Important!
                 messages.success(request, 'Your profile was successfully updated!')
