@@ -3,6 +3,8 @@ from django.contrib.auth import login, authenticate, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
 from User.form import RegistrationForm, EditProfileForm
 from django.shortcuts import render, redirect
+from Game.models import Wallet
+from django.contrib.auth.models import User
 
 
 def signup(request):
@@ -14,6 +16,11 @@ def signup(request):
             form.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
+            # asign a wallet
+            new_user = User.objects.get(username=username)
+            wallet = Wallet(user=new_user)
+            wallet.save()
+            # authenticate
             user = authenticate(username=username, password=raw_password)
             login(request, user)
             return render(request, 'registration/signedup.html')

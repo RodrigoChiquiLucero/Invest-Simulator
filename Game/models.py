@@ -1,36 +1,62 @@
 from django.db import models
 from django.contrib.auth.models import User
+from Game import interface_control as ic
+import datetime
+
 
 # /*
 # TODO: separar todos los modelos en archivos distintos
 # */
 
 
-class AssetStruct:
-    def __init__(self, name, asset_type, sell=-1, buy=-1):
-        self.name = name
-        self.type = asset_type
-        self.sell = sell
-        self.buy = buy
-
-
 class Asset(models.Model):
-    name = models.CharField(max_length=75, primary_key=True)
+    name = models.CharField(max_length=75, primary_key=True, unique=True)
     type = models.CharField(max_length=10)
+
+    @staticmethod
+    def from_struct(struct):
+        return Asset(name=struct.name, type=struct.type)
+
+    def as_struct(self):
+        return ic.AssetStruct(name=self.name, asset_type=self.type)
 
 
 class Wallet(models.Model):
     id = models.IntegerField(primary_key=True)
-    user_id = models.ForeignKey(User, on_delete=models.CASCADE)
-    assets = models.ManyToManyField(Asset)
-    liquid = models.FloatField(null=False)
+    user = models.ForeignKey(User, on_delete=models.CASCADE)
+    liquid = models.FloatField(null=False, default=10000)
+    assets = models.ManyToManyField(Asset, through='Ownership')
+
+    @staticmethod
+    def get_info(user):
+        response = {}
+        wallet = Wallet.objects.get(user=user)
+        response['liquid'] = wallet.liquid
+        value_wallet = wallet.liquid
+        ownerships = Ownership.objects.filter(wallet=wallet, quantity__gt=0)
+        assets = []
+        for o in ownerships:
+            asset = ic.get_asset_quote(o.asset.as_struct())
+            asset.quantity = o.quantity
+            value_wallet += o.quantity * asset.sell
+            assets.append(asset)
+        response['assets'] = assets
+        response['value_wallet'] = value_wallet
+        response['error'] = False
+        return response
+
+
+class Ownership(models.Model):
+    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
+    asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
+    quantity = models.IntegerField(default=0)
 
 
 class Transaction(models.Model):
     id = models.IntegerField(primary_key=True)
-    wallet_id = models.ForeignKey(Wallet, on_delete=models.CASCADE)
+    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
     asset = models.ForeignKey(Asset, on_delete=models.DO_NOTHING)
     asset_price = models.FloatField(null=False)
-    date = models.DateField()
+    date = models.DateField(default=datetime.date.today)
     quantity = models.IntegerField()
     is_purchase = models.BooleanField(null=False)

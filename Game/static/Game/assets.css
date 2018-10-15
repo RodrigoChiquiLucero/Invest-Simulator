@@ -1,11 +1,19 @@
+.assets .title {
+    font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
+    font-size: 15px;
+    padding: 20px 100px;
+    background-color: deepskyblue;
+    border-bottom: 1px solid #000;
+    color: white;
+    text-align: center;
+    caption-side: top;
+}
+
 .assets th {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     font-size: 15px;
-    padding-top: 20px;
-    padding-right: 100px;
-    padding-left: 100px;
-    padding-bottom: 20px;
-    background-color: deepskyblue;
+    padding: 20px 100px;
+    background-color: darkblue;
     border-bottom: 1px solid #000;
     color: white;
     text-align: center;
@@ -35,3 +43,26 @@
     clear: right;
 }
 
+.assets .error_message {
+    width: 50%;
+    height: max-content;
+}
+
+.assets .error_message h1 {
+    background-color: antiquewhite;
+    color: red;
+    padding-bottom: 10px;
+    padding-top: 10px;
+}
+
+.outer {
+}
+
+.middle {
+}
+
+.inner {
+    margin-left: auto;
+    margin-right: auto;
+    padding-top: 10%;
+}
