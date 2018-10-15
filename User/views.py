@@ -77,6 +77,7 @@ def edit_profile(request):
                 args = {'email': old_user.email,
                         'first': old_user.first_name,
                         'last': old_user.last_name,
+                        'image': old_user.image,
                         'form': form}
                 return render(request, 'accounts/edit_profile.html', args)
         else:
@@ -86,3 +87,22 @@ def edit_profile(request):
                     'last': old_user.last_name,
                     'form': form}
             return render(request, 'accounts/edit_profile.html', args)
+
+def change_avatar(request):
+    if not request.user.is_authenticated:
+        return redirect('/user/login')
+    else:
+        if request.method == 'POST':
+            form = EditProfileForm(request.POST, instance=request.user)
+            if form.is_valid(request.user):
+                form.clean_avatar()
+                form.save()
+                messages.success(request, 'Your profile avatar was successfully updated')
+                return redirect('/user/profile')
+            else:
+                args = {'form': form}
+                return render(request, 'accounts/edit_avatar.html', args)
+        else:
+            form = EditProfileForm(request.POST, instance=request.user)
+            args = {'form': form}
+            return render(request, 'accounts/edit_avatar.html', args)

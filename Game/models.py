@@ -46,7 +46,6 @@ class Wallet(models.Model):
         response['error'] = False
         return response
 
-
 class Ownership(models.Model):
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
     asset = models.ForeignKey(Asset, on_delete=models.CASCADE)

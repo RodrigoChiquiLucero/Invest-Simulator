@@ -1,6 +1,8 @@
 from django import forms
 from django.contrib.auth.forms import UserCreationForm, UserChangeForm
 from django.contrib.auth.models import User
+from django.core.files.images import get_image_dimensions
+
 
 
 class RegistrationForm(UserCreationForm):
@@ -8,6 +10,7 @@ class RegistrationForm(UserCreationForm):
     last_name = forms.CharField(required=True)
     email1 = forms.EmailField(required=True)
     email2 = forms.EmailField(required=True)
+    avatar = forms.ImageField(required=False)
 
     class Meta:
         model = User
@@ -70,13 +73,14 @@ class RegistrationForm(UserCreationForm):
 
 class EditProfileForm(UserChangeForm):
     email = forms.EmailField(required=True)
+    image = forms.ImageField(required=True)
 
     def __init__(self, *args, **kwargs):
         super().__init__(*args, **kwargs)
 
     class Meta:
         model = User
-        fields = ("email", "first_name", "last_name")
+        fields = ("email", "first_name", "last_name", "image")
 
     def is_valid(self, user):
         isvalid = super(EditProfileForm, self).is_valid()
@@ -91,3 +95,35 @@ class EditProfileForm(UserChangeForm):
         except KeyError:
             self.email_error = 'Please enter an email address'
             return
+
+    def clean_avatar(self):
+        avatar = self.cleaned_data['avatar']
+
+        try:
+            w, h = get_image_dimensions(avatar)
+
+            # validate dimensions
+            max_width = max_height = 100
+            if w > max_width or h > max_height:
+                raise forms.ValidationError(
+                    u'Please use an image that is '
+                    '%s x %s pixels or smaller.' % (max_width, max_height))
+
+            # validate content type
+            main, sub = avatar.content_type.split('/')
+            if not (main == 'image' and sub in ['jpeg', 'pjpeg', 'gif', 'png']):
+                raise forms.ValidationError(u'Please use a JPEG, GIF or PNG image.')
+
+            # validate file size
+            if len(avatar) > (20 * 1024):
+                raise forms.ValidationError(
+                    u'Avatar file size may not exceed 20k.')
+
+        except AttributeError:
+            """
+            Handles case when we are updating the user profile
+            and do not supply a new avatar
+            """
+            pass
+
+        return avatar

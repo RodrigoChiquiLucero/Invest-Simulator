@@ -12,6 +12,9 @@
                 <h1>First Name: {{ user.first_name }}</h1>
                 <h1>Last Name: {{ user.last_name }}</h1>
                 <img src="{{ user.image.url }}" width="240">
+                <a href="/user/profile/avatar">
+                    <input type="button" value="Change avatar">
+                </a>
                 <a href="/user/profile/password">
                    <input type="button" value="Change Password" />
                 </a>
