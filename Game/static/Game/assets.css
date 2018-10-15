@@ -13,7 +13,7 @@
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     font-size: 15px;
     padding: 20px 100px;
-    background-color: darkblue;
+    background-color: deepskyblue;
     border-bottom: 1px solid #000;
     color: white;
     text-align: center;
@@ -37,7 +37,7 @@
     padding-bottom: .6em;
     color: #fff;
     background-color: mediumseagreen;
-    border-radius: 5px;
+    border-radius: 2px;
     border: solid #cccccc 1px;
     box-shadow: 2px 2px 1px #888888;
     clear: right;
@@ -49,10 +49,12 @@
 }
 
 .assets .error_message h1 {
-    background-color: antiquewhite;
     color: red;
-    padding-bottom: 10px;
-    padding-top: 10px;
+    margin-top: 5%;
+    padding: 2%;
+    background: #FFF;
+    border-radius: 2px;
+    box-shadow: 0 6px 8px rgba(0, 0, 0, 0.4);
 }
 
 .outer {
