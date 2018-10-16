@@ -1,10 +1,9 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from User.form import RegistrationForm, EditProfileForm
+from User.form import RegistrationForm, EditProfileForm, AvatarForm
 from django.shortcuts import render, redirect
 from Game.models import Wallet
-from django.contrib.auth.models import User
 
 
 def signup(request):
@@ -16,10 +15,6 @@ def signup(request):
             form.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
-            # asign a wallet
-            new_user = User.objects.get(username=username)
-            wallet = Wallet(user=new_user)
-            wallet.save()
             # authenticate
             user = authenticate(username=username, password=raw_password)
             login(request, user)
@@ -69,7 +64,7 @@ def edit_profile(request):
     else:
         old_user = request.user
         if request.method == 'POST':
-            form = EditProfileForm(request.POST, request.FILES, instance=request.user)
+            form = EditProfileForm(request.POST, instance=request.user)
             if form.is_valid():
                 user = form.save()
                 update_session_auth_hash(request, user)  # Important!
@@ -88,3 +83,21 @@ def edit_profile(request):
                     'last': old_user.last_name,
                     'form': form}
             return render(request, 'accounts/edit_profile.html', args)
+
+
+def change_avatar(request):
+    if not request.user.is_authenticated:
+        return redirect('/user/login')
+    else:
+        wallet = Wallet.objects.get(user=request.user)
+        context = {'avatar_url': wallet.image.url}
+        if request.method == 'POST':
+            form = AvatarForm(request.POST, request.FILES)
+            form.setUser(request.user)
+            if form.is_valid():
+                form.save()
+                return redirect('/user/profile')
+            context['form'] = form
+            return render(request, 'accounts/change_avatar.html', context)
+        else:
+            return render(request, 'accounts/change_avatar.html', context)
