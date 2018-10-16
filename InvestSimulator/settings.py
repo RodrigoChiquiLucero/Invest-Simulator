@@ -30,7 +30,7 @@ ALLOWED_HOSTS = ['*']
 # Redireccion de log in/out.
 # LOGOUT_REDIRECT_URL = '/'
 
-LOGIN_REDIRECT_URL = '/game/'
+LOGIN_REDIRECT_URL = '/game/loggedin'
 
 # Application definition
 
