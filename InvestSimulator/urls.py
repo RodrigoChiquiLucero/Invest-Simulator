@@ -8,5 +8,5 @@ urlpatterns = [
     path('', include('Home.urls')),
     path('user/', include('User.urls')),
     path('game/', include('Game.urls')),
-    path('tests/', include('Simulations.urls')),
+    path('simulations/', include('Simulations.urls')),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
