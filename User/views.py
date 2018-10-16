@@ -40,15 +40,12 @@ def change_password(request):
         return redirect('/user/login')
     else:
         if request.method == 'POST':
-            form = PasswordChangeForm(request.user, request.POST)
+            form = PasswordChangeForm(user=request.user, data=request.POST)
             if form.is_valid():
                 user = form.save()
                 update_session_auth_hash(request, user)  # Important!
-                messages.success(request, 'Your password was successfully updated!')
-                return redirect('/user/profile/password')
+                return redirect('/user/profile/')
             else:
-                messages.warning(request, 'Please correct the error above.')
-                form = PasswordChangeForm(request.user)
                 args = {'form': form}
                 return render(request, 'accounts/change_password.html', args)
 
@@ -93,7 +90,7 @@ def change_avatar(request):
         context = {'avatar_url': wallet.image.url}
         if request.method == 'POST':
             form = AvatarForm(request.POST, request.FILES)
-            form.setUser(request.user)
+            form.set_user(request.user)
             if form.is_valid():
                 form.save()
                 return redirect('/user/profile')
