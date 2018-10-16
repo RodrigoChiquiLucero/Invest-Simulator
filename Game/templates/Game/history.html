@@ -1,0 +1,45 @@
+{% extends 'Game/base.html' %}
+{% load static from staticfiles %}
+
+{% block body %}
+
+    <link rel="stylesheet" href="{% static 'Game/assets.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/wallet.css' %}">
+    <div align="center" class="outer">
+        <div align="center" class="middle">
+            <div align="center" class="assets inner">
+                {% if prices %}
+                    <table>
+                        <caption class="title">History for {{ name }} are:
+                        </caption>
+                        <tr>
+                            <th> Day</th>
+                            <th> Buy</th>
+                            <th> Sell</th>
+                        </tr>
+                        {% for p in prices %}
+                            <tr>
+                                <td>{{ p.day }}</td>
+                                <td>{{ p.buy }} $</td>
+                                <td>{{ p.sell }} $</td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <div class="error_message">
+                        {% if error %}
+                            <h1>
+                                Invest simulator ran into server related
+                                issues. We
+                                are truly sorry.
+                            </h1>
+                        {% else %}
+                            <h1> There is no history avaiable
+                                for {{ name }}! </h1>
+                        {% endif %}
+                    </div>
+                {% endif %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
