@@ -44,7 +44,7 @@ def change_password(request):
             if form.is_valid():
                 user = form.save()
                 update_session_auth_hash(request, user)  # Important!
-                return redirect('/user/profile/')
+                return render(request, 'accounts/change_succesfull.html')
             else:
                 args = {'form': form}
                 return render(request, 'accounts/change_password.html', args)
@@ -66,7 +66,7 @@ def edit_profile(request):
                 user = form.save()
                 update_session_auth_hash(request, user)  # Important!
                 messages.success(request, 'Your profile was successfully updated!')
-                return redirect('/user/profile')
+                return render(request, 'accounts/change_succesfull.html')
             else:
                 args = {'email': old_user.email,
                         'first': old_user.first_name,
