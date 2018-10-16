@@ -26,6 +26,7 @@ class Wallet(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     liquid = models.FloatField(null=False, default=10000)
     assets = models.ManyToManyField(Asset, through='Ownership')
+    image = models.ImageField(upload_to='profile_image', default='profile_image/no_image.jpg')
 
     @staticmethod
     def get_info(user):
@@ -44,7 +45,6 @@ class Wallet(models.Model):
         response['value_wallet'] = value_wallet
         response['error'] = False
         return response
-
 
 class Ownership(models.Model):
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
