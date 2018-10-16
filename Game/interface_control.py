@@ -1,5 +1,12 @@
 import urllib3.request
 import json
+import datetime as dt
+
+DATE_FORMAT = '%Y-%m-%d'
+
+
+def str_to_date(strdate):
+    return dt.datetime.strptime(strdate, DATE_FORMAT)
 
 
 class AssetStruct:

@@ -2,11 +2,13 @@ from django.shortcuts import render, redirect
 from Game.interface_control import AssetComunication as ACommunication
 from Game.models import Wallet
 
+
 def loggedin(request):
     if not request.user.is_authenticated:
         return redirect('/user/login')
     else:
         return render(request, 'Game/loggedin.html')
+
 
 def game(request):
     if not request.user.is_authenticated:
