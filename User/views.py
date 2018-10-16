@@ -10,7 +10,7 @@ def signup(request):
     if request.user.is_authenticated:
         return redirect('/game/')
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
+        form = RegistrationForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')

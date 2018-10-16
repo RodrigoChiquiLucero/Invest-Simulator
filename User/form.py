@@ -5,6 +5,29 @@ from Game.models import Wallet
 from django.core.files.images import get_image_dimensions
 
 
+def clean_avatar(avatar):
+    try:
+        w, h = get_image_dimensions(avatar)
+        # validate dimensions
+        max_width = max_height = 900
+        if w > max_width or h > max_height:
+            raise forms.ValidationError(
+                u'Please use an image that is '
+                '%s x %s pixels or smaller.' % (max_width, max_height))
+        # validate content type
+        main, sub = avatar.content_type.split('/')
+        if not (main == 'image' and sub in ['jpeg', 'pjpeg', 'gif', 'png']):
+            raise forms.ValidationError(u'Please use a JPEG, GIF or PNG image.')
+        # validate file size
+        if len(avatar) > (200 * 1024):
+            raise forms.ValidationError(
+                u'Avatar file size may not exceed 200k.')
+    except AttributeError:
+        pass
+
+    return avatar
+
+
 def clean_name(name):
     if not (all(x.isalpha() or x.isspace() for x in name)):
         raise forms.ValidationError(
@@ -22,6 +45,7 @@ class RegistrationForm(UserCreationForm):
     last_name = forms.CharField(required=True)
     email1 = forms.EmailField(required=True)
     email2 = forms.EmailField(required=True)
+    avatar = forms.ImageField(required=True)
 
     class Meta:
         model = User
@@ -31,19 +55,27 @@ class RegistrationForm(UserCreationForm):
                   "email1",
                   "email2",
                   "password1",
-                  "password2")
+                  "password2",
+                  "avatar")
 
     def save(self, commit=True):
         user = super(RegistrationForm, self).save(commit=False)
         user.first_name = self.cleaned_data["first_name"]
         user.last_name = self.cleaned_data["last_name"]
         user.email = self.cleaned_data["email1"]
-        # asign a wallet
-        wallet = Wallet(user=user)
-        wallet.save()
+        avatar = self.cleaned_data["avatar"]
         if commit:
             user.save()
+            # asign a wallet
+            wallet = Wallet(user=user)
+            if avatar:
+                wallet.image = avatar
+            wallet.save()
         return user
+
+    def clean_avatar(self):
+        avatar = self.cleaned_data["avatar"]
+        return clean_avatar(avatar)
 
     def clean_first_name(self):
         first_name = self.cleaned_data.get("first_name")
@@ -110,26 +142,7 @@ class AvatarForm(forms.Form):
 
     def clean_avatar(self):
         avatar = self.cleaned_data["avatar"]
-        try:
-            w, h = get_image_dimensions(avatar)
-            # validate dimensions
-            max_width = max_height = 900
-            if w > max_width or h > max_height:
-                raise forms.ValidationError(
-                    u'Please use an image that is '
-                    '%s x %s pixels or smaller.' % (max_width, max_height))
-            # validate content type
-            main, sub = avatar.content_type.split('/')
-            if not (main == 'image' and sub in ['jpeg', 'pjpeg', 'gif', 'png']):
-                raise forms.ValidationError(u'Please use a JPEG, GIF or PNG image.')
-            # validate file size
-            if len(avatar) > (20 * 1024):
-                raise forms.ValidationError(
-                    u'Avatar file size may not exceed 20k.')
-        except AttributeError:
-            pass
-
-        return avatar
+        return clean_avatar(avatar)
 
     def save(self):
         wallet = Wallet.objects.get(user=self.user)
