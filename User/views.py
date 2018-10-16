@@ -1,25 +1,20 @@
 from django.contrib import messages
 from django.contrib.auth import login, authenticate, update_session_auth_hash
 from django.contrib.auth.forms import PasswordChangeForm
-from User.form import RegistrationForm, EditProfileForm
+from User.form import RegistrationForm, EditProfileForm, AvatarForm
 from django.shortcuts import render, redirect
 from Game.models import Wallet
-from django.contrib.auth.models import User
 
 
 def signup(request):
     if request.user.is_authenticated:
         return redirect('/game/')
     if request.method == 'POST':
-        form = RegistrationForm(request.POST)
+        form = RegistrationForm(request.POST, request.FILES)
         if form.is_valid():
             form.save()
             username = form.cleaned_data.get('username')
             raw_password = form.cleaned_data.get('password1')
-            # asign a wallet
-            new_user = User.objects.get(username=username)
-            wallet = Wallet(user=new_user)
-            wallet.save()
             # authenticate
             user = authenticate(username=username, password=raw_password)
             login(request, user)
@@ -35,7 +30,9 @@ def view_profile(request):
     if not request.user.is_authenticated:
         return redirect('/user/login')
     else:
-        return render(request, 'accounts/profile.html')
+        wallet = Wallet.objects.get(user=request.user)
+        context = {'image_url': wallet.image.url}
+        return render(request, 'accounts/profile.html', context)
 
 
 def change_password(request):
@@ -43,15 +40,12 @@ def change_password(request):
         return redirect('/user/login')
     else:
         if request.method == 'POST':
-            form = PasswordChangeForm(request.user, request.POST)
+            form = PasswordChangeForm(user=request.user, data=request.POST)
             if form.is_valid():
                 user = form.save()
                 update_session_auth_hash(request, user)  # Important!
-                messages.success(request, 'Your password was successfully updated!')
-                return redirect('/user/profile/password')
+                return render(request, 'accounts/change_succesfull.html')
             else:
-                messages.warning(request, 'Please correct the error above.')
-                form = PasswordChangeForm(request.user)
                 args = {'form': form}
                 return render(request, 'accounts/change_password.html', args)
 
@@ -68,11 +62,11 @@ def edit_profile(request):
         old_user = request.user
         if request.method == 'POST':
             form = EditProfileForm(request.POST, instance=request.user)
-            if form.is_valid(request.user):
+            if form.is_valid():
                 user = form.save()
                 update_session_auth_hash(request, user)  # Important!
                 messages.success(request, 'Your profile was successfully updated!')
-                return redirect('/user/profile')
+                return render(request, 'accounts/change_succesfull.html')
             else:
                 args = {'email': old_user.email,
                         'first': old_user.first_name,
@@ -86,3 +80,21 @@ def edit_profile(request):
                     'last': old_user.last_name,
                     'form': form}
             return render(request, 'accounts/edit_profile.html', args)
+
+
+def change_avatar(request):
+    if not request.user.is_authenticated:
+        return redirect('/user/login')
+    else:
+        wallet = Wallet.objects.get(user=request.user)
+        context = {'avatar_url': wallet.image.url}
+        if request.method == 'POST':
+            form = AvatarForm(request.POST, request.FILES)
+            form.set_user(request.user)
+            if form.is_valid():
+                form.save()
+                return redirect('/user/profile')
+            context['form'] = form
+            return render(request, 'accounts/change_avatar.html', context)
+        else:
+            return render(request, 'accounts/change_avatar.html', context)

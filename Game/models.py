@@ -1,5 +1,6 @@
 from django.db import models
 from django.contrib.auth.models import User
+from Game.interface_control import AssetComunication as ACommunication
 from Game import interface_control as ic
 import datetime
 
@@ -26,6 +27,7 @@ class Wallet(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     liquid = models.FloatField(null=False, default=10000)
     assets = models.ManyToManyField(Asset, through='Ownership')
+    image = models.ImageField(upload_to='profile_image', default='profile_image/no_image.jpg')
 
     @staticmethod
     def get_info(user):
@@ -35,8 +37,9 @@ class Wallet(models.Model):
         value_wallet = wallet.liquid
         ownerships = Ownership.objects.filter(wallet=wallet, quantity__gt=0)
         assets = []
+        asset_communication = ACommunication("http://localhost:8000/simulations/")
         for o in ownerships:
-            asset = ic.get_asset_quote(o.asset.as_struct())
+            asset = asset_communication.get_asset_quote(o.asset.as_struct())
             asset.quantity = o.quantity
             value_wallet += o.quantity * asset.sell
             assets.append(asset)

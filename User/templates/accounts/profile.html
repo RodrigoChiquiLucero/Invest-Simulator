@@ -1,23 +1,30 @@
-{% extends 'base.html' %}
+{% extends 'Game/base.html' %}
 {% load static from staticfiles %}
 
 {% block body %}
     <link rel="stylesheet" href="{% static 'User/signup.css' %}">
+    <link rel="stylesheet" href="{% static 'User/avatar.css' %}">
     <form method="POST">
-    {% csrf_token %}
+        {% csrf_token %}
         <div id="login-box">
+            <div class="avatar">
+                <a href="/user/profile/change_avatar">
+                    <img src="{{ image_url }}">
+                </a>
+                <div class="bottom-right">Click to change your avatar!</div>
+            </div>
             <div class="left">
                 <h1>Username: {{ user }}</h1>
                 <h1>Email: {{ user.email }}</h1>
                 <h1>First Name: {{ user.first_name }}</h1>
                 <h1>Last Name: {{ user.last_name }}</h1>
                 <a href="/user/profile/password">
-                   <input type="button" value="Change Password" />
+                    <input type="button" value="Change Password"/>
                 </a>
                 <a href="/user/profile/edit">
-                   <input type="button" value="Edit Profile" />
+                    <input type="button" value="Edit Profile"/>
                 </a>
             </div>
         </div>
-  </form>
+    </form>
 {% endblock %}
