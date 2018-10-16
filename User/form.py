@@ -133,7 +133,7 @@ class EditProfileForm(UserChangeForm):
 class AvatarForm(forms.Form):
     avatar = forms.ImageField(required=True)
 
-    def setUser(self, user):
+    def set_user(self, user):
         self.user = user
 
     class Meta:
