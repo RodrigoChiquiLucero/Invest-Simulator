@@ -30,6 +30,7 @@ ALLOWED_HOSTS = ['*']
 # Redireccion de log in/out.
 # LOGOUT_REDIRECT_URL = '/'
 
+LOGIN_URL = '/user/login'
 LOGIN_REDIRECT_URL = '/game/loggedin'
 
 # Application definition
@@ -125,6 +126,8 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+
+API_URL = 'http://localhost:8000/simulations/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'InvestSimulator/media')
 MEDIA_URL = '/media/'
