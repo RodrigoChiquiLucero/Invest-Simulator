@@ -2,13 +2,13 @@ const container = document.getElementById("myChart");
 const raw_data = container.getAttribute("data-js-vars").replace(/'/g, '"');
 const data = JSON.parse(raw_data || '{}');
 
-let dates = data.map(function(item) {
+let dates = data.map(function (item) {
     return item.day;
 });
-let buys = data.map(function(item) {
+let buys = data.map(function (item) {
     return item.buy;
 });
-let sells = data.map(function(item) {
+let sells = data.map(function (item) {
     return item.sell;
 });
 
@@ -36,7 +36,7 @@ let myChart = new Chart(ctx, {
                 'rgba(  153,    102,    255,    1)',
             ],
             borderWidth: 1
-        },{
+        }, {
             label: 'Sell price',
             data: sells,
             backgroundColor: [
@@ -58,8 +58,22 @@ let myChart = new Chart(ctx, {
         }]
     },
     options: {
-        scales: {
+        tooltips: {
+            callbacks: {
+                label: function (tooltipItems, data) {
+                    return "$ " + tooltipItems.yLabel.toString();
+                }
+            }
+        },
+        title: {
+            display: true,
+            text: 'Time / price graphic'
+        }, scales: {
             yAxes: [{
+                scaleLabel: {
+                    display: true,
+                    labelString: "Price"
+                },
                 ticks: {
                     beginAtZero: true
                 }
