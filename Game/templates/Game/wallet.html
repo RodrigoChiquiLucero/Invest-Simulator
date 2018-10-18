@@ -5,7 +5,13 @@
 
     <link rel="stylesheet" href="{% static 'Game/assets.css' %}">
     <link rel="stylesheet" href="{% static 'Game/wallet.css' %}">
-    <div align="center" class="outer">
+    <button class="w3-button w3-green w3-round-large w3-animate-zoom" style="width: 12%; height: 7%; margin: 10px">
+        <i class="fas fa-dollar-sign"></i> {{ liquid }}  <i class="fas fa-piggy-bank"></i>
+    </button>
+    <button class="w3-button w3-green w3-round-large w3-animate-zoom" style="width: 12%; height: 7%; margin: 10px">
+        <i class="fas fa-dollar-sign"></i> {{ value_wallet }}  <i class="fas fa-wallet"></i>
+    </button>
+    <div align="center" class="outer w3-container w3-center w3-animate-zoom">
         <div align="center" class="middle">
             <div align="center" class="assets inner">
                 {% if assets %}
@@ -41,8 +47,8 @@
             {% if error %}
                 Invest simulator ran into server related issues. We are truly sorry.
             {% else %}
-                Welcome to your wallet. Current cash amount: {{ liquid }} $ <br>
-                Current net worth: {{ value_wallet }} $
+                Welcome to your wallet. Current cash amount: $ {{ liquid }}  <br>
+                Current net worth: $ {{ value_wallet }}
             {% endif %}
         </h2>
     </div>
