@@ -3,6 +3,7 @@ from Game.interface_control import AssetComunication as ACommunication
 from Game.models import Wallet
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+import datetime
 
 
 @login_required
@@ -33,9 +34,12 @@ def wallet(request):
 @login_required
 def history(request, name):
     if request.method == 'POST':
+
+        start = request.POST['start']
+        end = request.POST['end']
+
         asset_comunication = ACommunication(settings.API_URL)
-        prices = asset_comunication.get_asset_history(name, '2018-07-07',
-                                                      '2018-07-15')
+        prices = asset_comunication.get_asset_history(name, start, end)
         prices['name'] = name
         return render(request, 'Game/history.html', prices)
     else:
