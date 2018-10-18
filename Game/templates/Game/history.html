@@ -6,21 +6,13 @@
     <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
     <link rel="stylesheet" href="{% static 'Game/css/wallet.css' %}">
     <script src="{% static 'Game/js/jquery.js' %}"></script>
-    <script src="{% static 'Game/js/p5.min.js' %}"></script>
-    <script src="{% static 'Game/js/history_graphic.js' %}"></script>
+    <script src="{% static 'Game/js/chart.min.js' %}"></script>
+
+
     <div align="center" class="outer">
         <div align="center" class="middle">
             <div align="center" class="assets inner">
                 {% if prices %}
-                    <div id="graphic" data-js-vars="{{ prices }}"></div>
-                    <script>
-                        const container = document.getElementById("graphic");
-                        const raw_data = container.getAttribute("data-js-vars").replace(/'/g, '"');
-                        const data = JSON.parse(raw_data || '{}');
-
-                        myp5 = new p5(s, 'graphic');
-                        myp5.history = data
-                    </script>
                     <table>
                         <caption class="title">History for {{ name }} are:
                         </caption>
@@ -37,6 +29,11 @@
                             </tr>
                         {% endfor %}
                     </table>
+
+                    <div style="width: 500px; height: 400px; margin: 0 auto;" >
+                        <canvas style="background: white;" id="myChart" data-js-vars="{{ prices }}"></canvas>
+                    </div>
+                    <script src="{% static 'Game/js/history_graphic.js' %}"></script>
                 {% else %}
                     <div class="error_message">
                         {% if error %}
