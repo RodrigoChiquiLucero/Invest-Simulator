@@ -7,7 +7,6 @@ from Game.models import Wallet
 from django.contrib.auth.decorators import login_required
 
 
-@login_required
 def signup(request):
     if request.method == 'POST':
         form = RegistrationForm(request.POST, request.FILES)
