@@ -6,7 +6,8 @@
     <link rel="stylesheet" href="{% static 'User/avatar.css' %}">
     <form method="POST">
         {% csrf_token %}
-        <div id="login-box">
+        <div id="login-box" class="w3-animate-zoom">
+            <h1> Profile </h1>
             <div class="avatar">
                 <a href="/user/profile/change_avatar">
                     <img src="{{ image_url }}">
