@@ -9,13 +9,19 @@
             <div class="left">
                 <label for="email">Email:</label>
                 <input value="{{ email }}" type="email" id="email" name="email" placeholder="Email" />
-                {{ form.email.errors }}
+                <div class="email1_error">
+                    {{ form.email.errors }}
+                </div>
                 <label for="id_first_name">First Name:</label>
                 <input value="{{ first }}" type="text" id="id_first_name" name="first_name" placeholder="First Name"/>
-                {{ form.first_name.errors }}
+                 <div class="first_name_error">
+                    {{ form.first_name.errors }}
+                 </div>
                 <label for="id_last_name">Last Name:</label>
                 <input value="{{ last }}" type="text" id="id_last_name" name="last_name" placeholder="Last Name" />
-                {{ form.last_name.errors }}
+                <div class="last_name_error">
+                    {{ form.last_name.errors }}
+                </div>
                 <input type="submit" name="signup_submit" value="Submit"/>
             </div>
         </div>
