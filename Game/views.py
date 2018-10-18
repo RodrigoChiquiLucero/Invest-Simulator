@@ -31,8 +31,12 @@ def wallet(request):
 
 
 @login_required
-def history(request, name, start, end):
-    asset_comunication = ACommunication(settings.API_URL)
-    prices = asset_comunication.get_asset_history(name, start, end)
-    prices['name'] = name
-    return render(request, 'Game/history.html', prices)
+def history(request, name):
+    if request.method == 'POST':
+        asset_comunication = ACommunication(settings.API_URL)
+        prices = asset_comunication.get_asset_history(name, '2018-07-07',
+                                                      '2018-07-15')
+        prices['name'] = name
+        return render(request, 'Game/history.html', prices)
+    else:
+        return render(request, 'Game/select_dates.html')

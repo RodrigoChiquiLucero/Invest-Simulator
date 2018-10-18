@@ -1,0 +1,79 @@
+{% extends 'Game/base.html' %}
+{% load static from staticfiles %}
+
+{% block body %}
+    <link rel="stylesheet" href="{% static 'Game/select_date.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/dist/css/datepicker.min.css' %}">
+    <script src="{% static 'Game/jquery.js' %}"></script>
+    <script src="{% static 'Game/dist/js/datepicker.min.js' %}"></script>
+    <script src="{% static 'Game/dist/js/i18n/datepicker.en.js' %}"></script>
+
+    <script>
+
+        $(function () {
+            var startDate = new Date();
+
+            function startIsEmpty() {
+                let start = document.getElementById("start-date").value;
+                return (start == null || start === "");
+            }
+
+            $("#start-date").datepicker({
+                autoClose: true,
+                disableNavWhenOutOfRange: true,
+                language: 'en',
+                formatDate: 'yyyy-mm-dd',
+                maxDate: new Date(),
+                onSelect: function onSelect(fd, date) {
+                    startDate = date;
+                    console.log(date);
+                    document.getElementById("end-date").value = null;
+                    document.getElementById("end-date").placeholder = "End date";
+                }
+            });
+            $("#end-date").datepicker({
+                autoClose: true,
+                disableNavWhenOutOfRange: true,
+                language: 'en',
+                maxDate: new Date(),
+                onRenderCell: function (date, cellType) {
+                    if (startIsEmpty() || date < startDate) {
+                        return {disabled: true}
+                    } else {
+                        return {disabled: false}
+                    }
+                }
+            });
+
+        });
+    </script>
+
+    <div id="box">
+
+        <form method="POST" name="DateSelector">
+            {% csrf_token %}
+
+            <h1>Select your dates</h1>
+
+            <div class="div">
+                <input id="start-date"
+                       data-date-format="MM dd yyyy"
+                       type="date"
+                       name="start"
+                       placeholder="Start date"
+                       onkeydown="return false"/>
+            </div>
+            <div class="div">
+                <input id="end-date"
+                       data-date-format="MM dd yyyy"
+                       type="date"
+                       name="start"
+                       placeholder="End date"
+                       onkeydown="return false"/>
+            </div>
+
+            <input type="submit" name="signup_submit" value="Send"/>
+
+        </form>
+    </div>
+{% endblock %}

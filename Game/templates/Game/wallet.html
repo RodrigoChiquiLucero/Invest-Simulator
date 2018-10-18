@@ -10,7 +10,8 @@
             <div align="center" class="assets inner">
                 {% if assets %}
                     <table>
-                        <caption class="title">Your purchased assets are: </caption>
+                        <caption class="title">Your purchased assets are:
+                        </caption>
                         <tr>
                             <th> Asset Name</th>
                             <th> Buy</th>
@@ -39,9 +40,10 @@
     <div align="center" class="liquid">
         <h2>
             {% if error %}
-                Invest simulator ran into server related issues. We are truly sorry.
+                Invest simulator ran into server related issues. We are truly
+                sorry.
             {% else %}
-                Welcome to your wallet. Current cash amount: {{ liquid }} $ <br>
+                Welcome to your wallet. Current cash amount: {{ liquid }} $<br>
                 Current net worth: {{ value_wallet }} $
             {% endif %}
         </h2>

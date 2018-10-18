@@ -6,6 +6,5 @@ urlpatterns = [
     path('loggedin/', views.loggedin, name='loggedin'),
     path('assets/', views.assets, name='assets'),
     path('wallet/', views.wallet, name='wallet'),
-    path('history/<slug:name>/<slug:start>/<slug:end>', views.history,
-         name='history'),
+    path('history/<slug:name>/', views.history, name='history'),
 ]

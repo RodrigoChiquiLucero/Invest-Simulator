@@ -23,7 +23,7 @@ def signup(request):
             return render(request, 'registration/signup.html', {'form': form})
     else:
         form = RegistrationForm()
-    return render(request, 'registration/signup.html', {'form': form})
+        return render(request, 'registration/signup.html', {'form': form})
 
 
 def view_profile(request):
@@ -65,7 +65,8 @@ def edit_profile(request):
             if form.is_valid():
                 user = form.save()
                 update_session_auth_hash(request, user)  # Important!
-                messages.success(request, 'Your profile was successfully updated!')
+                messages.success(request,
+                                 'Your profile was successfully updated!')
                 return render(request, 'accounts/change_succesfull.html')
             else:
                 args = {'email': old_user.email,
