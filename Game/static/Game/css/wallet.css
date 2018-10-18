@@ -2,8 +2,11 @@
     width: auto;
     height: 80px;
     position: fixed;
-    top:-10%; right:-100%; left:-100%; bottom:-100%;
-    margin:auto;
+    top: -10%;
+    right: -100%;
+    left: -100%;
+    bottom: -100%;
+    margin: auto;
     background-color: limegreen;
     align-content: center;
     align-items: center;
@@ -17,20 +20,30 @@
 }
 
 @keyframes liquid_animation {
-    from{
+    from {
         fill-opacity: 0;
     }
-    to{
+    to {
         fill-opacity: 1;
     }
 }
 
 @keyframes liquid_animation {
-    0%   {background-color:mediumseagreen}
-    25%  {background-color:green}
-    50%  {background-color:limegreen}
-    75%  {background-color:forestgreen}
-    100% {background-color:limegreen}
+    0% {
+        background-color: mediumseagreen
+    }
+    25% {
+        background-color: green
+    }
+    50% {
+        background-color: limegreen
+    }
+    75% {
+        background-color: forestgreen
+    }
+    100% {
+        background-color: limegreen
+    }
 }
 
 

@@ -49,7 +49,6 @@
     cursor: pointer;
 }
 
-
 .fileContainer [type=file] {
     cursor: inherit;
     display: block;

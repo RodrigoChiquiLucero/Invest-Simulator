@@ -4,10 +4,13 @@
 {% block body %}
     <link rel="stylesheet" href="{% static 'User/signupin.css' %}">
     <link rel="stylesheet" href="{% static 'User/avatar.css' %}">
-    <link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css"
+    <link class="jsbin"
+          href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css"
           rel="stylesheet" type="text/css"/>
-    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+    <script class="jsbin"
+            src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script class="jsbin"
+            src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
     <script>
         function readURL(input) {
             if (input.files && input.files[0]) {
@@ -33,7 +36,8 @@
                 <img id="blah" src="/media/profile_image/no_image.jpg">
                 <label for="avatar" class="fileContainerRegister">
                     Select your avatar
-                    <input type="file" onchange="readURL(this);" name="avatar" id="avatar"/>
+                    <input type="file" onchange="readURL(this);" name="avatar"
+                           id="avatar"/>
                 </label>
                 {{ form.avatar.errors }}
 
@@ -68,21 +72,24 @@
             </div>
 
             <div class="email2_div">
-                <input type="email" name="email2" placeholder="Email confirmation"/>
+                <input type="email" name="email2"
+                       placeholder="Email confirmation"/>
                 <div class="email2_error">
                     {{ form.email2.errors }}
                 </div>
             </div>
 
             <div class="password1_div">
-                <input type="password" name="password1" placeholder="Password"/>
+                <input type="password" name="password1"
+                       placeholder="Password"/>
                 <div class="password1_error">
                     {{ form.password1.errors }}
                 </div>
             </div>
 
             <div class="password2_div">
-                <input type="password" name="password2" placeholder="Password confirmation"/>
+                <input type="password" name="password2"
+                       placeholder="Password confirmation"/>
                 <div class="password2_error">
                     {{ form.password2.errors }}
                 </div>
