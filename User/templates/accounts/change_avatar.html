@@ -29,8 +29,9 @@
             <h1> Your avatar </h1>
             <div class="avatar">
                 <img id="blah" src="{{ avatar_url }}"><br><br><br>
-                {{ form.avatar.errors }}
-
+                <div class="avatar_error">
+                    {{ form.avatar.errors }}
+                </div>
                 <label for="avatar" class="fileContainer">
                     Select your file
                     <input type="file" onchange="readURL(this);" name="avatar" id="avatar"/>
