@@ -5,7 +5,8 @@
     <link rel="stylesheet" href="{% static 'User/signup.css' %}">
     <form method="POST">
     {% csrf_token %}
-        <div id="login-box">
+        <div id="login-box" class="w3-animate-zoom">
+            <h1> Edit Profile </h1>
             <div class="left">
                 <label for="email">Email:</label>
                 <input value="{{ email }}" type="email" id="email" name="email" placeholder="Email" />

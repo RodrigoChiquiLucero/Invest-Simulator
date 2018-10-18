@@ -4,38 +4,37 @@
 {% block body %}
 
     <link rel="stylesheet" href="{% static 'Game/assets.css' %}">
-    <div align="center" class="outer">
-    <div align="center" class="middle">
-    <div align="center" class="assets inner">
-        {% if assets %}
-            <table>
-                <tr>
-                    <th> Name</th>
-                    <th> Buy</th>
-                    <th> Sell</th>
-                    <th> Type</th>
-                    <th> History</th>
-                </tr>
-                {% for a in assets %}
-                    <tr>
-                        <td>{{ a.name }}</td>
-                        <td>{{ a.buy }} $</td>
-                        <td>{{ a.sell }} $</td>
-                        <td>{{ a.type }} </td>
-                        <td><a href="#">Check</a></td>
-                    </tr>
-                {% endfor %}
-            </table>
-        {% else %}
-            <div class="error_message">
-                <h1> There are no available assets </h1>
+    <div align="center" class="outer w3-container w3-center w3-animate-zoom">
+        <div align="center" class="middle">
+            <div align="center" class="assets inner">
+                {% if assets %}
+                    <table>
+                        <tr>
+                            <th> Name</th>
+                            <th> Buy</th>
+                            <th> Sell</th>
+                            <th> Type</th>
+                            <th> History</th>
+                        </tr>
+                        {% for a in assets %}
+                            <tr>
+                                <td>{{ a.name }}</td>
+                                <td>{{ a.buy }} $</td>
+                                <td>{{ a.sell }} $</td>
+                                <td>{{ a.type }} </td>
+                                <td><a href="#">Check</a></td>
+                            </tr>
+                        {% endfor %}
+                    </table>
+                {% else %}
+                    <div class="error_message">
+                        <h1> There are no available assets </h1>
+                    </div>
+                {% endif %}
+                <ul>
+                </ul>
             </div>
-        {% endif %}
-        <ul>
-        </ul>
+        </div>
     </div>
-    </div>
-    </div>
-        <img style="float: right;"  src="{% static 'Home/images/Colorete.gif' %}"> asds
 
 {% endblock %}
