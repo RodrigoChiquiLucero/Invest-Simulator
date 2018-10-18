@@ -4,26 +4,29 @@
 {% block body %}
     <link rel="stylesheet" href="{% static 'User/signup.css' %}">
     <form method="POST">
-    {% csrf_token %}
+        {% csrf_token %}
         <div id="login-box">
             <div class="left">
                 <label for="email">Email:</label>
-                <input value="{{ email }}" type="email" id="email" name="email" placeholder="Email" />
+                <input value="{{ email }}" type="email" id="email" name="email"
+                       placeholder="Email"/>
                 <div class="email1_error">
                     {{ form.email.errors }}
                 </div>
                 <label for="id_first_name">First Name:</label>
-                <input value="{{ first }}" type="text" id="id_first_name" name="first_name" placeholder="First Name"/>
-                 <div class="first_name_error">
+                <input value="{{ first }}" type="text" id="id_first_name"
+                       name="first_name" placeholder="First Name"/>
+                <div class="first_name_error">
                     {{ form.first_name.errors }}
-                 </div>
+                </div>
                 <label for="id_last_name">Last Name:</label>
-                <input value="{{ last }}" type="text" id="id_last_name" name="last_name" placeholder="Last Name" />
+                <input value="{{ last }}" type="text" id="id_last_name"
+                       name="last_name" placeholder="Last Name"/>
                 <div class="last_name_error">
                     {{ form.last_name.errors }}
                 </div>
                 <input type="submit" name="signup_submit" value="Submit"/>
             </div>
         </div>
-  </form>
+    </form>
 {% endblock %}

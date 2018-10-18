@@ -10,7 +10,7 @@
 
 }
 
-.column1{
+.column1 {
     margin-top: 5%;
     margin-left: 5%;
     flex: 1;
@@ -20,10 +20,11 @@
     text-align: justify;
     font-size: 14px;
 }
-.colorin{
+
+.colorin {
     margin-top: 10%;
 }
 
-.title{
+.title {
     text-align: center;
 }

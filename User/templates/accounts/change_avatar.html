@@ -4,10 +4,13 @@
 {% block body %}
     <link rel="stylesheet" href="{% static 'User/signup.css' %}">
     <link rel="stylesheet" href="{% static 'User/avatar.css' %}">
-    <link class="jsbin" href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css"
+    <link class="jsbin"
+          href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css"
           rel="stylesheet" type="text/css"/>
-    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
-    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+    <script class="jsbin"
+            src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script class="jsbin"
+            src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
     <script>
         function readURL(input) {
             if (input.files && input.files[0]) {
@@ -23,7 +26,7 @@
         }
     </script>
 
-    <form method="POST" enctype="multipart/form-data" >
+    <form method="POST" enctype="multipart/form-data">
         {% csrf_token %}
         <div id="login-box">
             <div class="avatar">
@@ -34,7 +37,8 @@
                 </div>
                 <label for="avatar" class="fileContainer">
                     Select your file
-                    <input type="file" onchange="readURL(this);" name="avatar" id="avatar"/>
+                    <input type="file" onchange="readURL(this);" name="avatar"
+                           id="avatar"/>
                 </label>
                 <input type="submit" name="signup_submit" value="Save"/>
             </div>
