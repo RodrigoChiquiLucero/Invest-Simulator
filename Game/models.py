@@ -77,7 +77,7 @@ class Wallet(models.Model):
             ownership.save()
 
             Transaction(wallet=self, asset=asset, asset_price=asset.buy,
-                        date=datetime.date, quantity=quantity,
+                        date=datetime.datetime.now(), quantity=quantity,
                         is_purchase=True).save()
 
             self.liquid -= price

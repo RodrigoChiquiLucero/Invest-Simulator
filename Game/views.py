@@ -39,7 +39,6 @@ def transactions(request):
     return render(request, 'Game/transactions.html', user_transactions)
 
 
-
 @login_required
 def history(request, name):
     if request.method == 'POST':
