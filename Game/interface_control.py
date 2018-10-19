@@ -10,15 +10,6 @@ def str_to_date(strdate):
     return dt.datetime.strptime(strdate, DATE_FORMAT)
 
 
-class AssetStruct:
-    def __init__(self, name, asset_type, sell=-1, buy=-1, quantity=1):
-        self.name = name
-        self.type = asset_type
-        self.sell = sell
-        self.buy = buy
-        self.quantity = quantity
-
-
 class AssetComunication:
     GET_ASSETS = "getAvailableAssets/"
     GET_QUOTE = "getAssetMarketPrice/"
@@ -45,6 +36,7 @@ class AssetComunication:
             return 0
 
     def get_asset_names(self):
+        from Game.models import Asset
         url = self.API_URL + self.GET_ASSETS
         json_assets = self.url_to_json(url)
         asset_list = []
@@ -52,7 +44,7 @@ class AssetComunication:
             if json_assets != 0:
                 json_assets = json_assets['availableAssets']
                 for a in json_assets:
-                    asset = AssetStruct(name=a['name'], asset_type=a['type'])
+                    asset = Asset(name=a['name'], type=a['type'])
                     asset_list.append(asset)
                 return asset_list
         except KeyError:
@@ -76,8 +68,8 @@ class AssetComunication:
             return asset
 
     def quote_for_assets(self, assets):
-        return [self.get_asset_quote(a) for a in assets if
-                self.has_quote(self.get_asset_quote(a))]
+        return [self.get_asset_quote(a) for a in assets
+                if self.has_quote(self.get_asset_quote(a))]
 
     def get_assets(self):
         assets = self.get_asset_names()
