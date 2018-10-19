@@ -3,6 +3,7 @@ from Game.interface_control import AssetComunication as ACommunication
 from Game.models import Wallet
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
+from Game.models import Transaction
 
 
 @login_required
@@ -28,3 +29,12 @@ def wallet(request):
     user = request.user
     wallet_info = Wallet.get_info(user)
     return render(request, 'Game/wallet.html', wallet_info)
+
+
+@login_required
+def transactions(request):
+    user = request.user
+    user_wallet = Wallet.objects.get(user=user)
+    user_transactions = Transaction.get_info(user_wallet)
+    return render(request, 'Game/transactions.html', user_transactions)
+

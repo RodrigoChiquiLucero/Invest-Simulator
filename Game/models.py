@@ -63,3 +63,12 @@ class Transaction(models.Model):
     date = models.DateField(default=datetime.date.today)
     quantity = models.IntegerField()
     is_purchase = models.BooleanField(null=False)
+
+    @staticmethod
+    def get_info(wallet):
+        response = {}
+        transactions = Transaction.objects.filter(wallet=wallet, quantity__gt=0)
+        response['transactions'] = transactions
+        response['error'] = False
+        return response
+
