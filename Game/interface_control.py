@@ -1,5 +1,13 @@
 import urllib3.request
 import json
+import datetime as dt
+from urllib3 import exceptions as urlex
+
+DATE_FORMAT = '%Y-%m-%d'
+
+
+def str_to_date(strdate):
+    return dt.datetime.strptime(strdate, DATE_FORMAT)
 
 
 class AssetStruct:
@@ -14,6 +22,7 @@ class AssetStruct:
 class AssetComunication:
     GET_ASSETS = "getAvailableAssets/"
     GET_QUOTE = "getAssetMarketPrice/"
+    GET_HISTORY = "getAssetHistory/"
 
     def __init__(self, url):
         self.API_URL = url
@@ -26,11 +35,13 @@ class AssetComunication:
     def url_to_json(url):
         urllib3.disable_warnings(urllib3.exceptions.InsecureRequestWarning)
         http = urllib3.PoolManager()
-        res = http.request('GET', url)
-        if res.status == 200:
-            return json.loads(res.data.decode())
-        else:
-            # notify error
+        try:
+            res = http.request('GET', url)
+            if res.status == 200:
+                return json.loads(res.data.decode())
+            else:
+                return 0
+        except urlex.MaxRetryError:
             return 0
 
     def get_asset_names(self):
@@ -65,8 +76,17 @@ class AssetComunication:
             return asset
 
     def quote_for_assets(self, assets):
-        return [self.get_asset_quote(a) for a in assets if self.has_quote(self.get_asset_quote(a))]
+        return [self.get_asset_quote(a) for a in assets if
+                self.has_quote(self.get_asset_quote(a))]
 
     def get_assets(self):
         assets = self.get_asset_names()
         return self.quote_for_assets(assets)
+
+    def get_asset_history(self, nombre, start_date, end_date):
+        url = self.API_URL + self.GET_HISTORY + nombre + "/" + start_date + \
+              "/" + end_date
+        prices = self.url_to_json(url)
+        if prices == 0:
+            prices = {'error': True}
+        return prices

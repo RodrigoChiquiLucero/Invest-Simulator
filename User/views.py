@@ -8,6 +8,8 @@ from django.contrib.auth.decorators import login_required
 
 
 def signup(request):
+    if request.user.is_authenticated:
+        return redirect('/game/')
     if request.method == 'POST':
         form = RegistrationForm(request.POST, request.FILES)
         if form.is_valid():
@@ -22,7 +24,7 @@ def signup(request):
             return render(request, 'registration/signup.html', {'form': form})
     else:
         form = RegistrationForm()
-    return render(request, 'registration/signup.html', {'form': form})
+        return render(request, 'registration/signup.html', {'form': form})
 
 
 @login_required

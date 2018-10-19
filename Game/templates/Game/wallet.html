@@ -3,8 +3,8 @@
 
 {% block body %}
 
-    <link rel="stylesheet" href="{% static 'Game/assets.css' %}">
-    <link rel="stylesheet" href="{% static 'Game/wallet.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/wallet.css' %}">
     <button class="w3-button w3-green w3-round-large w3-animate-zoom" style="width: 12%; height: 7%; margin: 10px">
         <i class="fas fa-dollar-sign"></i> {{ liquid }}  <i class="fas fa-piggy-bank"></i>
     </button>
@@ -27,8 +27,8 @@
                         {% for a in assets %}
                             <tr>
                                 <td>{{ a.name }}</td>
-                                <td>{{ a.buy }} $</td>
-                                <td>{{ a.sell }} $</td>
+                                <td>$ {{ a.buy }}</td>
+                                <td>$ {{ a.sell }}</td>
                                 <td>{{ a.type }}</td>
                                 <td>{{ a.quantity }}</td>
                             </tr>
