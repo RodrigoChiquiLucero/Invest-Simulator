@@ -75,20 +75,41 @@ class Wallet(models.Model):
                                       quantity=asset.quantity)
             else:
                 ownership.quantity += quantity
-            ownership.save()
+            ownership.save(self)
 
             Transaction(wallet=self, asset=asset, asset_price=asset.buy,
                         date=datetime.date, quantity=quantity,
-                        is_purchase=True).save()
+                        is_purchase=True)
+            Transaction.save(self)
 
             self.liquid -= price
             self.save()
             return {"error": False, "message": "Purchase has been succesfull"}
         else:
-            return {"error": True, "message": "Not enough cash biatch"}
+            return {"error": True, "message": "Not enough cash"}
+
+    def sell_asset(self, asset):
+        asset_comms = ACommunication(settings.API_URL)
+        asset = asset_comms.get_asset_quote(asset)
+        price = (asset.sell * asset.quantity)
+        quantity = asset.quantity
+
+        asset = Asset.safe_get(name=asset)
+        ownership = Ownership.safe_get(wallet=self, asset=asset)
+        print (ownership.id)
+        Ownership.objects.filter(id=ownership.id).delete()
+
+        Transaction(wallet=self, asset=asset, asset_price=asset.sell,
+                    date=datetime.date, quantity=quantity, is_purchase=False)
+
+        self.liquid += price
+        self.save()
+
+        return {"error": False, "message": "Asset sold"}
 
 
 class Ownership(models.Model):
+    id = models.AutoField(primary_key=True)
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
     asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
     quantity = models.IntegerField(default=0)
