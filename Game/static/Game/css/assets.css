@@ -1,3 +1,10 @@
+
+.assets table {
+    border-radius: 15px;
+    border-collapse: collapse;
+    overflow: hidden;
+}
+
 .assets .title {
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     font-size: 15px;

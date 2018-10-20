@@ -64,3 +64,20 @@ def ajax_quote(request, name):
         return JsonResponse(asset.to_dict())
     else:
         return HttpResponse(status=403, reason="No asset quote")
+
+
+@login_required
+def ajax_buy(request):
+    if request.method == 'POST':
+        name = request.POST['name']
+        type = request.POST['type']
+        quantity = float(request.POST['quantity'])
+        asset = Asset(name=name, type=type)
+        asset.quantity = quantity
+
+        user = request.user
+        wallet = Wallet.objects.get(user=user)
+
+        return JsonResponse(wallet.buy_asset(asset))
+    else:
+        return HttpResponse(status=400, reason="No GET method")

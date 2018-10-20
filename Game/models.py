@@ -68,12 +68,14 @@ class Wallet(models.Model):
         asset = asset_comms.get_asset_quote(asset)
         price = (asset.buy * asset.quantity)
         quantity = asset.quantity
+        name = asset.name
+        type = asset.type
         if self.liquid >= price:
             asset = Asset.safe_get(name=asset.name)
             # if not asset then crear uno
             if not asset:
-                asset = Asset(name=asset.name,
-                              type=asset.type)
+                asset = Asset(name=name,
+                              type=type)
                 asset.save()
 
             ownership = Ownership.safe_get(wallet=self, asset=asset)
