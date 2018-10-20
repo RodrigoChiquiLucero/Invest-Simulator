@@ -90,20 +90,27 @@ class Wallet(models.Model):
         asset_comms = ACommunication(settings.API_URL)
         asset = asset_comms.get_asset_quote(asset)
         price = (asset.sell * asset.quantity)
-        quantity = asset.quantity
 
-        asset = Asset.safe_get(name=asset)
         ownership = Ownership.safe_get(wallet=self, asset=asset)
-        print (ownership.id)
-        Ownership.objects.filter(id=ownership.id).delete()
 
-        Transaction(wallet=self, asset=asset, asset_price=asset.sell,
-                    date=datetime.date, quantity=quantity, is_purchase=False)
+        if asset.quantity > ownership.quantity:
+            return {"error": True, "message": "Not enogh assets"}
+
+        if asset.quantity == ownership.quantity:
+            ownership.delete()
+            asset.delete()
+        else:
+            ownership.quantity -= asset.quantity
+            ownership.save()
+            asset.save()
+
+        Transaction(wallet=self, asset=asset, asset_price=asset.buy,
+                    date=datetime.datetime.now(), quantity=asset.quantity,
+                    is_purchase=False).save()
 
         self.liquid += price
         self.save()
-
-        return {"error": False, "message": "Asset sold"}
+        return {"error": False, "message": "Sale has been succesfull"}
 
 
 class Ownership(models.Model):
