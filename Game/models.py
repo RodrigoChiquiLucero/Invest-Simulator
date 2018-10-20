@@ -19,6 +19,15 @@ class Asset(models.Model):
     sell = -1
     quantity = -1
 
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "type": self.type,
+            "buy": self.buy,
+            "sell": self.sell,
+            "quantity": self.quantity
+        }
+
     @staticmethod
     def safe_get(name):
         try:

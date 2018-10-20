@@ -12,16 +12,35 @@
 
 label {
     padding-top: 25px;
-    color: white;
     font-size: larger;
 }
 
-#quantity-form {
+.attr {
+    float: left;
+    width: 70%; /* three containers (use 25% for four, and 50% for two, etc) */
+    padding: 5px;
+    text-align: left;
+}
+
+.value {
+    float: right;
+    width: 30%; /* three containers (use 25% for four, and 50% for two, etc) */
+    padding: 5px;
+}
+
+.dinamic-form {
     width: 30%;
     height: 200px;
     background-color: rgba(255, 255, 255, 0.5);
+    color: white;
 }
 
+.accept-form {
+    width: 30%;
+    height: 300px;
+    background-color: rgba(255, 255, 255, 0.5);
+    color: white;
+}
 
 button {
     background: #4EB5E6;

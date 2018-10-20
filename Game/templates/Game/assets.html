@@ -18,17 +18,27 @@
         <div align="center" class="middle">
             <div align="center" class="assets inner">
                 {% if assets %}
-                    <div id="quantity-form">
-                        <form>
-                            <label for="quantity">How much assets do you want
-                                to purchase?</label>
-                            <div class="qbox">
-                                <input id="quantity" type="number" name="quantity"
-                                       value="1" min="1">
-                            </div>
-                            <input id="send-q" type="submit" value="Send"/>
-                            <input id="cancel-q" type="submit" value="Cancel"/>
-                        </form>
+                    <div id="quantity-form" class="dinamic-form">
+                        <label for="quantity">How much assets do you want
+                            to purchase?</label>
+                        <div class="qbox">
+                            <input id="quantity" type="number" name="quantity"
+                                   value="1" min="1">
+                        </div>
+                        <input id="send-q" type="submit" value="Send"/>
+                        <input id="cancel-q" type="submit" value="Cancel"/>
+                    </div>
+                    <div id="accept-form" class="accept-form">
+                        <label>Please confirm your transaction:</label>
+
+                        <div class="qbox">
+                            <p class="attr">Your asset: </p><p id="name" class="value"></p>
+                            <p class="attr">Asset price: </p><p id="price" class="value"></p>
+                            <p class="attr">Total transaction value: </p><p id="total" class="value"></p>
+                        </div>
+
+                        <input id="accept-p" type="submit" value="Buy"/>
+                        <input id="cancel-p" type="submit" value="Cancel"/>
                     </div>
                     <table>
                         <tr>

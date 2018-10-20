@@ -3,7 +3,8 @@ from Game.interface_control import AssetComunication as ACommunication
 from Game.models import Wallet
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from Game.models import Transaction
+from Game.models import Transaction, Asset
+from django.http import JsonResponse, HttpResponse
 
 
 @login_required
@@ -52,3 +53,14 @@ def history(request, name):
         return render(request, 'Game/history.html', prices)
     else:
         return render(request, 'Game/select_dates.html')
+
+
+# AJAX JSON RESPONSES
+@login_required
+def ajax_quote(request, name):
+    asset_comunication = ACommunication(settings.API_URL)
+    asset = asset_comunication.get_asset_quote(Asset(name=name))
+    if asset.buy != -1 and asset.sell != -1:
+        return JsonResponse(asset.to_dict())
+    else:
+        return HttpResponse(status=403, reason="No asset quote")
