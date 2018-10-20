@@ -22,14 +22,10 @@
                         <form>
                             <label for="quantity">How much assets do you want
                                 to purchase?</label>
-
                             <div class="qbox">
-                                <!-- Change the `data-field` of buttons and `name` of input field's for multiple plus minus buttons-->
                                 <input id="quantity" type="number" name="quantity"
                                        value="1" min="1">
                             </div>
-
-
                             <input id="send-q" type="submit" value="Send"/>
                             <input id="cancel-q" type="submit" value="Cancel"/>
                         </form>
@@ -45,8 +41,7 @@
                         </tr>
                         {% for a in assets %}
                             <tr>
-                                <td><a id="action"
-                                       href="#">BUY</a></td>
+                                <td><a class="action" id="{{ a.name }}" href="#">BUY</a></td>
                                 <td>{{ a.name }}</td>
                                 <td>{{ a.buy }} $</td>
                                 <td>{{ a.sell }} $</td>
