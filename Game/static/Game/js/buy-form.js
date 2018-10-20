@@ -23,8 +23,8 @@ $(document).ready(function () {
 
     function populate_accept_form(div, data) {
         div.find("#name").html(data.name);
-        div.find("#price").html(data.buy);
-        div.find("#total").html(data.buy * quantity)
+        div.find("#price").html("$  " + data.buy);
+        div.find("#total").html("$  " + data.buy * quantity)
     }
     function populate_response_form(div, data) {
         let status = div.find("#status");
