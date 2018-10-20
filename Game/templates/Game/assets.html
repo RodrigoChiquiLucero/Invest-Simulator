@@ -57,22 +57,25 @@
                     </div>
                     <table>
                         <tr>
+                            <th> Name </th>
+                            <th> Buy price </th>
+                            <th> Sell price </th>
+                            <th> Type </th>
                             <th></th>
-                            <th> Name</th>
-                            <th> Buy</th>
-                            <th> Sell</th>
-                            <th> Type</th>
                             <th></th>
                         </tr>
                         {% for a in assets %}
                             <tr>
-                                <td><a class="action" id="{{ a.name }}" type="{{ a.type }}" href="#">BUY</a></td>
                                 <td>{{ a.name }}</td>
                                 <td>$ {{ a.buy }}</td>
                                 <td>$ {{ a.sell }}</td>
                                 <td> {{ a.type }} </td>
-                                <td><a href="/game/history/{{ a.name }} ">History</a>
-                                </td>
+                                <td><a class="action w3-button w3-green w3-round-large " id="{{ a.name }}" type="{{ a.type }}" href="#">
+                                    <i class="fas fa-dollar-sign"></i> Buy
+                                </a></td>
+                                <td><a class="action w3-button w3-green w3-round-large " href="/game/history/{{ a.name }} ">
+                                        <i class="fas fa-history"></i> History
+                                </a></td>
                             </tr>
                         {% endfor %}
                     </table>

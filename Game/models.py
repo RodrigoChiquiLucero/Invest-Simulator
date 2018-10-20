@@ -67,6 +67,8 @@ class Wallet(models.Model):
         asset_comms = ACommunication(settings.API_URL)
         asset = asset_comms.get_asset_quote(asset)
         price = (asset.buy * asset.quantity)
+        buy = asset.buy
+        sell = asset.sell
         quantity = asset.quantity
         name = asset.name
         type = asset.type
@@ -77,15 +79,17 @@ class Wallet(models.Model):
 
         if self.liquid >= price:
             asset = Asset.safe_get(name=asset.name)
-            # if not asset then crear uno
+            # if not asset then create one
             if not asset:
                 asset = Asset(name=name,
                               type=type)
                 asset.save()
 
             asset.quantity = quantity
+            asset.buy = buy
+            asset.sell = sell
             ownership = Ownership.safe_get(wallet=self, asset=asset)
-            # if not ownership then crear uno
+            # if not ownership then create one
             if not ownership:
                 ownership = Ownership(asset=asset, wallet=self,
                                       quantity=asset.quantity)
@@ -121,7 +125,7 @@ class Wallet(models.Model):
             ownership.save()
             asset.save()
 
-        Transaction(wallet=self, asset=asset, asset_price=asset.buy,
+        Transaction(wallet=self, asset=asset, asset_price=asset.sell,
                     date=datetime.datetime.now(), quantity=asset.quantity,
                     is_purchase=False).save()
 

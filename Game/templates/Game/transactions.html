@@ -20,7 +20,7 @@
                             <tr>
                                 <td>{{ t.date }}</td>
                                 <td>{{ t.asset.name }} </td>
-                                {% if t.is_purcharse %}
+                                {% if t.is_purchase %}
                                     <td> bought </td>
                                 {% else %}
                                     <td> sold </td>
@@ -32,7 +32,7 @@
                     </table>
                 {% else %}
                     <div class="error_message">
-                        <h1> There are no available transactions </h1>
+                        <h1> You don't have any transactions </h1>
                     </div>
                 {% endif %}
                 <ul>
