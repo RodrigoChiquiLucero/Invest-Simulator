@@ -1,0 +1,37 @@
+
+
+.qbox {
+    padding: 23px;
+}
+
+#quantity {
+    background-color: rgba(255, 255, 255, 0);
+    color: white;
+    text-align: center;
+}
+
+label {
+    padding-top: 25px;
+    color: white;
+    font-size: larger;
+}
+
+#quantity-form {
+    width: 30%;
+    height: 200px;
+    background-color: rgba(255, 255, 255, 0.5);
+}
+
+
+button {
+    background: #4EB5E6;
+    color: #ffffff;
+    border: none;
+    outline: none;
+    padding: 0 10px;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: darkslategrey;
+}
