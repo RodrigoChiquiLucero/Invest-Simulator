@@ -78,6 +78,7 @@ class Wallet(models.Model):
                               type=type)
                 asset.save()
 
+            asset.quantity = quantity
             ownership = Ownership.safe_get(wallet=self, asset=asset)
             # if not ownership then crear uno
             if not ownership:
