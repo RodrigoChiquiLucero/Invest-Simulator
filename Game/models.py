@@ -70,6 +70,11 @@ class Wallet(models.Model):
         quantity = asset.quantity
         name = asset.name
         type = asset.type
+
+        if quantity == 0:
+            return {"error": True,
+                    "message": "You need to buy at least one asset"}
+
         if self.liquid >= price:
             asset = Asset.safe_get(name=asset.name)
             # if not asset then crear uno
@@ -149,8 +154,8 @@ class Transaction(models.Model):
     @staticmethod
     def get_info(wallet):
         response = {}
-        transactions = Transaction.objects.filter(wallet=wallet, quantity__gt=0)
+        transactions = Transaction.objects.filter(wallet=wallet,
+                                                  quantity__gt=0)
         response['transactions'] = transactions
         response['error'] = False
         return response
-
