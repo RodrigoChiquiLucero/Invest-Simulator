@@ -3,6 +3,7 @@ from django.contrib.auth.models import User
 from Game.models import Wallet, Asset, Ownership
 from Game.interface_control import AssetComunication as AComunication
 from Game import interface_control as ic
+from Game.models import Asset
 
 
 class InterfaceControlTest(TestCase):
@@ -29,13 +30,13 @@ class InterfaceControlTest(TestCase):
 
     def test_asset_comunication_border(self):
         # ask for a quote of unexistent asset
-        asset = ic.AssetStruct(name="NONE", asset_type="NONE")
+        asset = Asset(name="NONE", asset_type="NONE")
         quote = self.asset_comunication.get_asset_quote(asset)
         self.assertEqual(quote.buy, -1)
         self.assertEqual(quote.sell, -1)
 
         # ask for a quote of existent asset
-        asset = ic.AssetStruct(name="MARSHALL", asset_type="currency")
+        asset = Asset(name="MARSHALL", asset_type="currency")
         quote = self.asset_comunication.get_asset_quote(asset)
         self.assertNotEqual(quote.buy, -1)
         self.assertNotEqual(quote.sell, -1)
