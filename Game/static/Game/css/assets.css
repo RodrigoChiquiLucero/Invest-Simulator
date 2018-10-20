@@ -1,4 +1,14 @@
+
+.assets table {
+    border-bottom-left-radius: 15px;
+    border-bottom-right-radius: 15px;
+    border-collapse: collapse;
+    overflow: hidden;
+}
+
 .assets .title {
+    border-top-left-radius: 15px;
+    border-top-right-radius: 15px;
     font-family: "Trebuchet MS", Arial, Helvetica, sans-serif;
     font-size: 15px;
     padding: 20px 100px;

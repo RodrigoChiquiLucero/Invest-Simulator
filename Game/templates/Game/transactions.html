@@ -4,41 +4,37 @@
 {% block body %}
 
     <link rel="stylesheet" href="{% static 'Game/assets.css' %}">
-    <div align="center" class="outer w3-container w3-center w3-animate-zoom">
-        <div align="center" class="middle">
-            <div align="center" class="assets inner">
-                {% if transactions %}
-                    <table>
-                        <tr>
-                            <th> Date </th>
-                            <th> Asset </th>
-                            <th> Type </th>
-                            <th> Price </th>
-                            <th> Quantity </th>
-                        </tr>
-                        {% for t in transactions %}
-                            <tr>
-                                <td>{{ t.date }}</td>
-                                <td>{{ t.asset.name }} </td>
-                                {% if t.is_purcharse %}
-                                    <td> bought </td>
-                                {% else %}
-                                    <td> sold </td>
-                                {%  endif %}
-                                <td>{{ t.asset_price }} </td>
-                                <td>{{ t.quantity }} </td>
-                            </tr>
-                        {% endfor %}
-                    </table>
-                {% else %}
-                    <div class="error_message">
-                        <h1> There are no available transactions </h1>
-                    </div>
-                {% endif %}
-                <ul>
-                </ul>
+    <div align="center" class="outer w3-container w3-animate-zoom middle assets inner">
+        {% if transactions %}
+            <table>
+                <tr>
+                    <th> Date </th>
+                    <th> Asset </th>
+                    <th> Type </th>
+                    <th> Price </th>
+                    <th> Quantity </th>
+                </tr>
+                {% for t in transactions %}
+                    <tr>
+                        <td>{{ t.date }}</td>
+                        <td>{{ t.asset.name }} </td>
+                        {% if t.is_purchase %}
+                            <td> bought </td>
+                        {% else %}
+                            <td> sold </td>
+                        {%  endif %}
+                        <td>{{ t.asset_price }} </td>
+                        <td>{{ t.quantity }} </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <div class="error_message">
+                <h1> You don't have any transactions </h1>
             </div>
-        </div>
+        {% endif %}
+        <ul>
+        </ul>
     </div>
 
 {% endblock %}

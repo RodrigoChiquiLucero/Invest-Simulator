@@ -9,46 +9,46 @@
     <script src="{% static 'Game/js/chart.min.js' %}"></script>
 
 
-    <div align="center" class="outer">
-        <div align="center" class="middle">
-            <div align="center" class="assets inner_history">
-                {% if prices %}
-                    <table>
-                        <caption class="title">History for {{ name }} is:
-                        </caption>
-                        <tr>
-                            <th> Day</th>
-                            <th> Buy</th>
-                            <th> Sell</th>
-                        </tr>
-                        {% for p in prices %}
-                            <tr>
-                                <td>{{ p.day }}</td>
-                                <td>{{ p.buy }} $</td>
-                                <td>{{ p.sell }} $</td>
-                            </tr>
-                        {% endfor %}
-                    </table>
+    <div align="center" class="outer middle assets inner_history w3-center w3-animate-zoom w3-container">
+        {% if prices %}
+            <table>
+                <caption class="title">History for {{ name }} is:
+                </caption>
+                <tr>
+                    <th> Day</th>
+                    <th> Buy</th>
+                    <th> Sell</th>
+                </tr>
+                {% for p in prices %}
+                    <tr>
+                        <td>{{ p.day }}</td>
+                        <td>$ {{ p.buy }} </td>
+                        <td>$ {{ p.sell }} </td>
+                    </tr>
+                {% endfor %}
+                <tr>
+                    <td align="center" colspan="3">
+                        <div >
+                            <canvas style="background: white;" id="myChart" data-js-vars="{{ prices }}"></canvas>
+                        </div>
+                        <script src="{% static 'Game/js/history_graphic.js' %}"></script>
+                    </td>
+                </tr>
+            </table>
 
-                    <div style="width: 675px; height: 400px; margin: 0 auto;" >
-                        <canvas style="background: white;" id="myChart" data-js-vars="{{ prices }}"></canvas>
-                    </div>
-                    <script src="{% static 'Game/js/history_graphic.js' %}"></script>
+        {% else %}
+            <div class="error_message">
+                {% if error %}
+                    <h1>
+                        Invest simulator ran into server related
+                        issues. We
+                        are truly sorry.
+                    </h1>
                 {% else %}
-                    <div class="error_message">
-                        {% if error %}
-                            <h1>
-                                Invest simulator ran into server related
-                                issues. We
-                                are truly sorry.
-                            </h1>
-                        {% else %}
-                            <h1> There is no history available
-                                for {{ name }}! </h1>
-                        {% endif %}
-                    </div>
+                    <h1> There is no history available
+                        for {{ name }}! </h1>
                 {% endif %}
             </div>
-        </div>
+        {% endif %}
     </div>
 {% endblock %}

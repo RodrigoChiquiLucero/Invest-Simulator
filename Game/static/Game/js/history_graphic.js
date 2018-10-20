@@ -20,40 +20,18 @@ let myChart = new Chart(ctx, {
         datasets: [{
             label: 'Buy price',
             data: buys,
-            backgroundColor: [
+            backgroundColor:
                 'rgba(  255,    99,     132,    0.2)',
-                'rgba(  54,     162,    235,    0.2)',
-                'rgba(  255,    206,    86,     0.2)',
-                'rgba(  75,     192,    192,    0.2)',
-                'rgba(  153,    102,    255,    0.2)',
-                'rgba(  255,    159,    64,     0.2)'
-            ],
-            borderColor: [
+            borderColor:
                 'rgba(  255,    99,     132,    1)',
-                'rgba(  54,     162,    235,    1)',
-                'rgba(  255,    206,    86,     1)',
-                'rgba(  75,     192,    192,    1)',
-                'rgba(  153,    102,    255,    1)',
-            ],
             borderWidth: 1
         }, {
             label: 'Sell price',
             data: sells,
-            backgroundColor: [
+            backgroundColor:
                 'rgba(  132,  99,     255,    0.2)',
-                'rgba(  235,  162,    54,     0.2)',
-                'rgba(  86,   206,    255,    0.2)',
-                'rgba(  192,  192,    75,     0.2)',
-                'rgba(  255,  102,    153,    0.2)',
-                'rgba(  64,   159,    255,    0.2)'
-            ],
-            borderColor: [
+            borderColor:
                 'rgba(  132,  99,     255,    1)',
-                'rgba(  235,  162,    54,     1)',
-                'rgba(  86,   206,    255,    1)',
-                'rgba(  192,  192,    75,     1)',
-                'rgba(  255,  102,    153,    1)',
-            ],
             borderWidth: 1
         }]
     },

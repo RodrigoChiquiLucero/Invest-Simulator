@@ -19,6 +19,15 @@ class Asset(models.Model):
     sell = -1
     quantity = -1
 
+    def to_dict(self):
+        return {
+            "name": self.name,
+            "type": self.type,
+            "buy": self.buy,
+            "sell": self.sell,
+            "quantity": self.quantity
+        }
+
     @staticmethod
     def safe_get(name):
         try:
@@ -58,17 +67,29 @@ class Wallet(models.Model):
         asset_comms = ACommunication(settings.API_URL)
         asset = asset_comms.get_asset_quote(asset)
         price = (asset.buy * asset.quantity)
+        buy = asset.buy
+        sell = asset.sell
         quantity = asset.quantity
+        name = asset.name
+        type = asset.type
+
+        if quantity == 0:
+            return {"error": True,
+                    "message": "You need to buy at least one asset"}
+
         if self.liquid >= price:
             asset = Asset.safe_get(name=asset.name)
-            # if not asset then crear uno
+            # if not asset then create one
             if not asset:
-                asset = Asset(name=asset.name,
-                              type=asset.type)
+                asset = Asset(name=name,
+                              type=type)
                 asset.save()
 
+            asset.quantity = quantity
+            asset.buy = buy
+            asset.sell = sell
             ownership = Ownership.safe_get(wallet=self, asset=asset)
-            # if not ownership then crear uno
+            # if not ownership then create one
             if not ownership:
                 ownership = Ownership(asset=asset, wallet=self,
                                       quantity=asset.quantity)
@@ -84,7 +105,33 @@ class Wallet(models.Model):
             self.save()
             return {"error": False, "message": "Purchase has been succesfull"}
         else:
-            return {"error": True, "message": "Not enough cash biatch"}
+            return {"error": True, "message": "Not enough cash"}
+
+    def sell_asset(self, asset):
+        asset_comms = ACommunication(settings.API_URL)
+        asset = asset_comms.get_asset_quote(asset)
+        price = (asset.sell * asset.quantity)
+
+        ownership = Ownership.safe_get(wallet=self, asset=asset)
+
+        if asset.quantity > ownership.quantity:
+            return {"error": True, "message": "Not enogh assets"}
+
+        if asset.quantity == ownership.quantity:
+            ownership.delete()
+            asset.delete()
+        else:
+            ownership.quantity -= asset.quantity
+            ownership.save()
+            asset.save()
+
+        Transaction(wallet=self, asset=asset, asset_price=asset.sell,
+                    date=datetime.datetime.now(), quantity=asset.quantity,
+                    is_purchase=False).save()
+
+        self.liquid += price
+        self.save()
+        return {"error": False, "message": "Sale has been succesfull"}
 
 
 class Ownership(models.Model):
@@ -111,8 +158,8 @@ class Transaction(models.Model):
     @staticmethod
     def get_info(wallet):
         response = {}
-        transactions = Transaction.objects.filter(wallet=wallet, quantity__gt=0)
+        transactions = Transaction.objects.filter(wallet=wallet,
+                                                  quantity__gt=0)
         response['transactions'] = transactions
         response['error'] = False
         return response
-

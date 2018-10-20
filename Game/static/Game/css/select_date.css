@@ -26,7 +26,8 @@ h1{
     color: red;
 }
 
-input[type="text"] {
+input[type="text"],
+input[type="number"] {
     display: block;
     box-sizing: border-box;
     margin-bottom: 20px;
