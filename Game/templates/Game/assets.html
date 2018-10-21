@@ -3,21 +3,30 @@
 
 {% block body %}
 
-    <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
-    <link rel="stylesheet" href="{% static 'Game/css/select_date.css' %}">
-
+    {# LINKS AND SCRIPTS #}
+{#    //font-awesome#}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{#   JQUERY #}
     <script src="{% static 'Game/js/jquery.js' %}"></script>
 
-
+{#    NICE NUMBER#}
     <link rel="stylesheet" href="{% static 'Game/nicenumber/jquery.nice-number.css' %}">
     <script src="{% static 'Game/nicenumber/jquery.nice-number.js' %}"></script>
 
-    <link rel="stylesheet" href="{% static 'Game/css/buy-form.css' %}">
+{#    PERSONAL#}
+    <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/select_date.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/transaction-form.css' %}">
 
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+{#    //TOAST#}
+    <link rel="stylesheet" href="{% static 'Game/css/toastr.scss' %}">
+    <script src="{% static 'Game/js/toastr.js' %}"></script>
 
+{#    TRANSACTIONS#}
     {% csrf_token %}
-    <script src="{% static 'Game/js/buy-form.js' %}"></script>
+    <script src="{% static 'Game/js/ajax.transactions.js' %}"></script>
+    <script src="{% static 'Game/js/prepare-transaction.js' %}"></script>
+    {# LINKS AND SCRIPTS #}
 
     <style>
     .overlay {
@@ -40,9 +49,10 @@
                 <input id="quantity" type="number" name="quantity middle"
                        value="1" min="1">
             </div>
-            <input id="send-q" type="submit" value="Send"/>
-            <input id="cancel-q" type="submit" value="Cancel"/>
+            <input id="send-quantity" type="submit" value="Send"/>
+            <input id="cancel-quantity" type="submit" value="Cancel"/>
         </div>
+
         <div id="accept-form" class="dinamic large overlay">
             <label>Please confirm your transaction:</label>
 
@@ -52,9 +62,10 @@
                 <p class="attr">Total transaction value: </p><p id="total" class="value"></p>
             </div>
 
-            <input id="accept-p" type="submit" value="Buy"/>
-            <input id="cancel-p" type="submit" value="Cancel"/>
+            <input id="accept-transaction" type="submit" value="Buy"/>
+            <input id="cancel-transaction" type="submit" value="Cancel"/>
         </div>
+
         <div id="trans-status" class="dinamic short overlay">
             <label>Your transaction is being processed</label>
 
@@ -63,7 +74,7 @@
                 <i class="fa fa-spinner fa-spin" id="loading" style="font-size:36px;"></i>
             </div>
 
-            <input id="accept-t" type="submit" value="OK"/>
+            <input id="accept-transaction-success" type="submit" value="OK"/>
         </div>
 
         <div id="assets" class="w3-container w3-animate-zoom assets" align="center">
@@ -95,6 +106,11 @@
                 </table>
                 <script src="{% static 'Game/js/assets.js' %}"></script>
                 <script>reload_all();</script>
+                <script>
+                    prepare_token();
+                    prepare_input_nicenumber();
+                    prepare_transaction(transaction_types.buy)
+                </script>
             {% else %}
                 <div class="error_message">
                     <h1> There are no available assets </h1>

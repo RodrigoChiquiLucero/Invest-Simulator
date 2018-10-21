@@ -68,13 +68,6 @@ function prepare_input_nicenumber() {
         });
 }
 
-function on_asset_transact(asset) {
-    $(".action").click(function () {
-        asset.name = $(this).attr("id");
-        asset.type = $(this).attr("type");
-        $("#quantity-form").show(500);
-    });
-}
 
 function show_information_form(asset, onsuccess, transaction) {
     $("#quantity-form").hide(400);

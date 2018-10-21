@@ -10,8 +10,6 @@ function prepare_transaction(transaction) {
     let url = transaction === transaction_types.buy?
         '/game/ajax/buy/':'/game/ajax/sell/';
 
-    prepare_token();
-    prepare_input_nicenumber();
 
     divs_hidden_by_default([
         $("#quantity-form"),
@@ -26,7 +24,11 @@ function prepare_transaction(transaction) {
     };
 
 
-    on_asset_transact(asset);
+    $(".action").click(function () {
+        asset.name = $(this).attr("id");
+        asset.type = $(this).attr("type");
+        $("#quantity-form").show(500);
+    });
 
 
     $("#send-quantity").click(function () {
