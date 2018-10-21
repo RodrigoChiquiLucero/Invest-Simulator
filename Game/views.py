@@ -20,9 +20,12 @@ def game(request):
 @login_required
 def assets(request):
     asset_comunication = ACommunication(settings.API_URL)
-    asset_list = asset_comunication.get_assets()
+    asset_list = [a.to_dict() for a in asset_comunication.get_assets()]
     context = {'assets': asset_list}
-    return render(request, 'Game/assets.html', context)
+    if request.is_ajax():
+        return JsonResponse(context)
+    else:
+        return render(request, 'Game/assets.html', context)
 
 
 @login_required

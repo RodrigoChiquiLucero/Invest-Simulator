@@ -66,9 +66,10 @@
             <input id="accept-t" type="submit" value="OK"/>
         </div>
 
-        <div id="assets" class="w3-center w3-animate-zoom w3-container">
+        <div id="assets" class="w3-container w3-animate-zoom assets" align="center">
             {% if assets %}
-                <table>
+                <table id="dinamic-table">
+                    <caption class="title">Available assets in market are: </caption>
                     <tr>
                         <th> Name </th>
                         <th> Buy price </th>
@@ -78,11 +79,11 @@
                         <th></th>
                     </tr>
                     {% for a in assets %}
-                        <tr>
-                            <td>{{ a.name }}</td>
-                            <td>$ {{ a.buy }}</td>
-                            <td>$ {{ a.sell }}</td>
-                            <td> {{ a.type }} </td>
+                        <tr class="dinamic-row">
+                            <td id="name">{{ a.name }}</td>
+                            <td id="buy">$ {{ a.buy }}</td>
+                            <td id="sell">$ {{ a.sell }}</td>
+                            <td id="type"> {{ a.type }} </td>
                             <td><a class="action w3-button w3-green w3-round-large " id="{{ a.name }}" type="{{ a.type }}" href="#">
                                 <i class="fas fa-dollar-sign"></i> Buy
                             </a></td>
@@ -92,6 +93,8 @@
                         </tr>
                     {% endfor %}
                 </table>
+                <script src="{% static 'Game/js/assets.js' %}"></script>
+                <script>reload_all();</script>
             {% else %}
                 <div class="error_message">
                     <h1> There are no available assets </h1>
