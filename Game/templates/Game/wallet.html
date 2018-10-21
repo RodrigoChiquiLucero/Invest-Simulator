@@ -3,46 +3,51 @@
 
 {% block body %}
 
-    <link rel="stylesheet" href="{% static 'Game/assets.css' %}">
-    <link rel="stylesheet" href="{% static 'Game/wallet.css' %}">
-    <div align="center" class="outer">
-        <div align="center" class="middle">
-            <div align="center" class="assets inner">
-                {% if assets %}
-                    <table>
-                        <caption class="title">Your purchased assets are: </caption>
-                        <tr>
-                            <th> Asset Name</th>
-                            <th> Buy</th>
-                            <th> Sell</th>
-                            <th> Type</th>
-                            <th> Quantity</th>
-                        </tr>
-                        {% for a in assets %}
-                            <tr>
-                                <td>{{ a.name }}</td>
-                                <td>{{ a.buy }} $</td>
-                                <td>{{ a.sell }} $</td>
-                                <td>{{ a.type }}</td>
-                                <td>{{ a.quantity }}</td>
-                            </tr>
-                        {% endfor %}
-                    </table>
-                {% else %}
-                    <div class="error_message">
-                        <h1> You have not purchased any assets, yet! </h1>
-                    </div>
-                {% endif %}
+    <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/wallet.css' %}">
+
+    <script src="{% static 'Game/js/jquery.js' %}"></script>
+
+    <button class="w3-button w3-green w3-round-large w3-animate-zoom" style="width: 12%; height: 7%; margin: 10px">
+        <i class="fas fa-dollar-sign"></i> {{ liquid }}  <i class="fas fa-piggy-bank"></i>
+    </button>
+    <button class="w3-button w3-green w3-round-large w3-animate-zoom" style="width: 12%; height: 7%; margin: 10px">
+        <i class="fas fa-dollar-sign"></i> {{ value_wallet }}  <i class="fas fa-wallet"></i>
+    </button>
+    <div align="center" class="outer middle w3-container w3-animate-zoom assets inner">
+        {% if assets %}
+            <table >
+                <caption class="title">Your purchased assets are: </caption>
+                <tr>
+                    <th> Asset Name</th>
+                    <th> Buy</th>
+                    <th> Sell</th>
+                    <th> Type</th>
+                    <th> Quantity</th>
+                </tr>
+                {% for a in assets %}
+                    <tr class="dinamic-row">
+                        <td id="name">{{ a.name }}</td>
+                        <td id="buy">$ {{ a.buy }}</td>
+                        <td id="sell">$ {{ a.sell }}</td>
+                        <td>{{ a.type }}</td>
+                        <td>{{ a.quantity }}</td>
+                    </tr>
+                {% endfor %}
+            </table>
+            <script src="{% static 'Game/js/assets.js' %}"></script>
+            <script>reload_prices()</script>
+        {% else %}
+            <div class="error_message">
+                <h1> You have not purchased any assets, yet! </h1>
             </div>
-        </div>
+        {% endif %}
     </div>
     <div align="center" class="liquid">
         <h2>
             {% if error %}
                 Invest simulator ran into server related issues. We are truly sorry.
             {% else %}
-                Welcome to your wallet. Current cash amount: {{ liquid }} $ <br>
-                Current net worth: {{ value_wallet }} $
             {% endif %}
         </h2>
     </div>

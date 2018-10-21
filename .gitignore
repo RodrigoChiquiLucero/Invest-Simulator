@@ -6,3 +6,5 @@ venv
 *.pyc
 #base de datos
 *.sqlite3
+#iconos
+/InvestSimulator/media/profile_image/

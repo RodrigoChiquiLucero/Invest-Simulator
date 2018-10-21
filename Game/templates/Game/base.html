@@ -4,7 +4,8 @@
     <link rel="shortcut icon" href="{% static "Home/images/dollar.jpg" %}" />
     <link rel="stylesheet" href="https://use.fontawesome.com/releases/v5.4.1/css/all.css" integrity="sha384-5sAR7xN1Nv6T6+dT2mhtzEpVJvfS3NScPQTrOxhwjIuvcA67KV2R5Jz6kr4abQsz" crossorigin="anonymous">
     <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.0.0/css/bootstrap.min.css" integrity="sha384-Gn5384xqQ1aoWXA+058RXPxPg6fy4IWvTNh0E263XmFcJlSAwiGgFAW/dAiS6JXm" crossorigin="anonymous">
-    <link rel="stylesheet" href="{% static 'Game/base.css' %}">
+    <link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+    <link rel="stylesheet" href="{% static 'Game/css/base.css' %}">
 </head>
 <body>
 	<nav class="navbar navbar-light bg-white">
@@ -20,10 +21,19 @@
                     <i class="fas fa-chart-line"></i> Market
                 </a>
 	    </div>
-        <div class="navbar-brand" style="float: right;">
-            <a class="navbar-brand" href="/user/profile" >
-                <i class="fas fa-user"></i> Profile
-            </a>
+        <div class="navbar-brand w3-dropdown-hover" style="float: right; background: white;">
+            <button class="w3-button">
+                <a class="navbar-brand" href="/user/profile">
+                    <i class="fas fa-user"></i> Profile </a>
+            </button>
+            <div class="w3-dropdown-content w3-bar-block w3-card-4">
+                <a class="w3-bar-item w3-button" href="/game/transactions/">
+                    <i class="fas fa-history"></i> History </a>
+                <a class="w3-bar-item w3-button" href="/user/profile/edit">
+                  <i class="fas fa-user-edit"></i> Edit Profile</a>
+                <a class="w3-bar-item w3-button" href="/user/profile/password">
+                  <i class="fas fa-user-cog"></i> Password </a>
+            </div>
             <a class="navbar-brand" href="/user/logout">
                 <i class="fas fa-sign-out-alt"></i> Logout
             </a>
@@ -33,7 +43,7 @@
     <audio preload="auto" src="{% static "Home/music/bgMusic.mp3"%}" loop="true" autobuffer>
     Audio unsupported
     </audio>
-    <i id="volumen" class="fas fa-volume-up" style="float: right; margin-right:3%;" onclick="Mute()"></i>
+    <i id="volumen" class="fas fa-volume-mute" style="float: right; margin-right:3%;" onclick="Mute()"></i>
 
 <script>
 
@@ -78,6 +88,7 @@
             song.currentTime = tillPlayed;
             song.play();
             played = true;
+            song.muted = true;
             } else {
                 song.play();
                 played = true;

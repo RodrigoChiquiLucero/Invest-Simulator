@@ -3,39 +3,106 @@
 
 {% block body %}
 
-    <link rel="stylesheet" href="{% static 'Game/assets.css' %}">
-    <div align="center" class="outer">
-    <div align="center" class="middle">
-    <div align="center" class="assets inner">
-        {% if assets %}
-            <table>
-                <tr>
-                    <th> Name</th>
-                    <th> Buy</th>
-                    <th> Sell</th>
-                    <th> Type</th>
-                    <th> History</th>
-                </tr>
-                {% for a in assets %}
-                    <tr>
-                        <td>{{ a.name }}</td>
-                        <td>{{ a.buy }} $</td>
-                        <td>{{ a.sell }} $</td>
-                        <td>{{ a.type }} </td>
-                        <td><a href="#">Check</a></td>
-                    </tr>
-                {% endfor %}
-            </table>
-        {% else %}
-            <div class="error_message">
-                <h1> There are no available assets </h1>
+    <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/select_date.css' %}">
+
+    <script src="{% static 'Game/js/jquery.js' %}"></script>
+
+
+    <link rel="stylesheet" href="{% static 'Game/nicenumber/jquery.nice-number.css' %}">
+    <script src="{% static 'Game/nicenumber/jquery.nice-number.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static 'Game/css/buy-form.css' %}">
+
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    {% csrf_token %}
+    <script src="{% static 'Game/js/buy-form.js' %}"></script>
+
+    <style>
+    .overlay {
+        position: fixed;
+        background-color: rgba(0,0,0,0.5);
+        top: 50%;
+        left: 50%;
+        -moz-transform: translateX(-50%) translateY(-50%);
+        -webkit-transform: translateX(-50%) translateY(-50%);
+        transform: translateX(-50%) translateY(-50%);
+    }
+    </style>
+
+    <div align="center" class="middle assets inner">
+
+        <div id="quantity-form" class="dinamic short overlay middle">
+            <label for="quantity">How much assets do you want
+                to purchase?</label>
+            <div class="qbox">
+                <input id="quantity" type="number" name="quantity middle"
+                       value="1" min="1">
             </div>
-        {% endif %}
-        <ul>
-        </ul>
+            <input id="send-q" type="submit" value="Send"/>
+            <input id="cancel-q" type="submit" value="Cancel"/>
+        </div>
+        <div id="accept-form" class="dinamic large overlay">
+            <label>Please confirm your transaction:</label>
+
+            <div class="qbox">
+                <p class="attr">Your asset: </p><p id="name" class="value"></p>
+                <p class="attr">Asset price: </p><p id="price" class="value"></p>
+                <p class="attr">Total transaction value: </p><p id="total" class="value"></p>
+            </div>
+
+            <input id="accept-p" type="submit" value="Buy"/>
+            <input id="cancel-p" type="submit" value="Cancel"/>
+        </div>
+        <div id="trans-status" class="dinamic short overlay">
+            <label>Your transaction is being processed</label>
+
+            <div class="qbox">
+                <p id="status"></p>
+                <i class="fa fa-spinner fa-spin" id="loading" style="font-size:36px;"></i>
+            </div>
+
+            <input id="accept-t" type="submit" value="OK"/>
+        </div>
+
+        <div id="assets" class="w3-container w3-animate-zoom assets" align="center">
+            {% if assets %}
+                <table id="dinamic-table">
+                    <caption class="title">Available assets in market are: </caption>
+                    <tr>
+                        <th> Name </th>
+                        <th> Buy price </th>
+                        <th> Sell price </th>
+                        <th> Type </th>
+                        <th></th>
+                        <th></th>
+                    </tr>
+                    {% for a in assets %}
+                        <tr class="dinamic-row">
+                            <td id="name">{{ a.name }}</td>
+                            <td id="buy">$ {{ a.buy }}</td>
+                            <td id="sell">$ {{ a.sell }}</td>
+                            <td id="type"> {{ a.type }} </td>
+                            <td><a class="action w3-button w3-green w3-round-large " id="{{ a.name }}" type="{{ a.type }}" href="#">
+                                <i class="fas fa-dollar-sign"></i> Buy
+                            </a></td>
+                            <td><a class="action w3-button w3-green w3-round-large " href="/game/history/{{ a.name }} ">
+                                    <i class="fas fa-history"></i> History
+                            </a></td>
+                        </tr>
+                    {% endfor %}
+                </table>
+                <script src="{% static 'Game/js/assets.js' %}"></script>
+                <script>reload_all();</script>
+            {% else %}
+                <div class="error_message">
+                    <h1> There are no available assets </h1>
+                </div>
+            {% endif %}
+            <ul>
+            </ul>
+        </div>
     </div>
-    </div>
-    </div>
-        <img style="float: right;"  src="{% static 'Home/images/Colorete.gif' %}"> asds
 
 {% endblock %}

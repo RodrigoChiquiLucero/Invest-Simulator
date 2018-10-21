@@ -1,0 +1,78 @@
+
+
+.qbox {
+    padding: 23px;
+}
+
+#quantity {
+    background-color: rgba(255, 255, 255, 0);
+    color: white;
+    text-align: center;
+}
+
+label {
+    padding-top: 25px;
+    font-size: larger;
+}
+
+.attr {
+    float: left;
+    width: 70%;
+    padding: 5px;
+    text-align: left;
+}
+
+.value {
+    float: right;
+    width: 30%;
+    padding: 5px;
+}
+
+.dinamic {
+    background-color: rgba(255, 255, 255, 0.5);
+    color: white;
+    border-top-left-radius: 20px;
+    border-top-right-radius: 20px;
+}
+
+.short {
+    width: 30%;
+    height: 200px;
+}
+
+.large {
+    width: 30%;
+    height: 300px;
+}
+
+button {
+    background: #4EB5E6;
+    color: #ffffff;
+    border: none;
+    outline: none;
+    padding: 0 10px;
+    border-radius: 5px;
+}
+
+button:hover {
+    background: darkslategrey;
+}
+
+.glyphicon-refresh-animate {
+    -animation: spin .7s infinite linear;
+    -webkit-animation: spin2 .7s infinite linear;
+}
+
+@-webkit-keyframes spin2 {
+    from { -webkit-transform: rotate(0deg);}
+    to { -webkit-transform: rotate(360deg);}
+}
+
+@keyframes spin {
+    from { transform: scale(1) rotate(0deg);}
+    to { transform: scale(1) rotate(360deg);}
+}
+
+input[type="submit"] {
+    margin: 0 auto;
+}
