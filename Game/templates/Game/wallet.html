@@ -16,7 +16,7 @@
     </button>
     <div align="center" class="outer middle w3-container w3-animate-zoom assets inner">
         {% if assets %}
-            <table>
+            <table >
                 <caption class="title">Your purchased assets are: </caption>
                 <tr>
                     <th> Asset Name</th>
@@ -26,7 +26,7 @@
                     <th> Quantity</th>
                 </tr>
                 {% for a in assets %}
-                    <tr id="dinamic-row">
+                    <tr class="dinamic-row">
                         <td id="name">{{ a.name }}</td>
                         <td id="buy">$ {{ a.buy }}</td>
                         <td id="sell">$ {{ a.sell }}</td>
@@ -48,8 +48,6 @@
             {% if error %}
                 Invest simulator ran into server related issues. We are truly sorry.
             {% else %}
-                Welcome to your wallet. Current cash amount: $ {{ liquid }}  <br>
-                Current net worth: $ {{ value_wallet }}
             {% endif %}
         </h2>
     </div>
