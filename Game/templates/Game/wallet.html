@@ -14,18 +14,18 @@
                         </caption>
                         <tr>
                             <th> Asset Name</th>
-                            <th> Buy</th>
-                            <th> Sell</th>
                             <th> Type</th>
                             <th> Quantity</th>
+                            <th> Sell</th>
+                            <th> Buy</th>
                         </tr>
                         {% for a in assets %}
                             <tr>
                                 <td>{{ a.name }}</td>
-                                <td>{{ a.buy }} $</td>
-                                <td>{{ a.sell }} $</td>
                                 <td>{{ a.type }}</td>
                                 <td>{{ a.quantity }}</td>
+                                <td>{{ a.sell }} $</td>
+                                <td>{{ a.buy }} $</td>
                             </tr>
                         {% endfor %}
                     </table>
@@ -43,8 +43,8 @@
                 Invest simulator ran into server related issues. We are truly
                 sorry.
             {% else %}
-                Welcome to your wallet. Current cash amount: {{ liquid }} $<br>
-                Current net worth: {{ value_wallet }} $
+                Welcome to your wallet. Current cash amount: ${{ liquid }}<br>
+                Current net worth: ${{ value_wallet }}
             {% endif %}
         </h2>
     </div>

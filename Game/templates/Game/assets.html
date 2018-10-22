@@ -11,17 +11,17 @@
                     <table>
                         <tr>
                             <th> Name</th>
-                            <th> Buy</th>
-                            <th> Sell</th>
                             <th> Type</th>
+                            <th> Sell</th>
+                            <th> Buy</th>
                             <th> History</th>
                         </tr>
                         {% for a in assets %}
                             <tr>
                                 <td>{{ a.name }}</td>
-                                <td>{{ a.buy }} $</td>
-                                <td>{{ a.sell }} $</td>
                                 <td>{{ a.type }} </td>
+                                <td>{{ a.sell }} $</td>
+                                <td>{{ a.buy }} $</td>
                                 <td><a href="#">Check</a></td>
                             </tr>
                         {% endfor %}
