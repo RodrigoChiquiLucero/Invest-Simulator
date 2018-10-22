@@ -29,4 +29,17 @@
             </div>
         </div>
     </form>
+        <script type="text/javascript">
+        window.onload = function loaddata() {
+            if ("{{ form.email.value }}" !== "None") {
+                document.getElementById('email').value = "{{ form.email.value }}";
+            }
+            if ("{{ form.first_name.value }}" !== "None") {
+                document.getElementById('id_first_name').value = "{{ form.first_name.value }}";
+            }
+            if ("{{ form.last_name.value }}" !== "None") {
+                document.getElementById('id_last_name').value = "{{ form.last_name.value }}";
+            }
+        }
+    </script>
 {% endblock %}

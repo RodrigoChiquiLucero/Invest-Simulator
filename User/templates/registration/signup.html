@@ -8,22 +8,23 @@
           href="http://ajax.googleapis.com/ajax/libs/jqueryui/1/themes/base/jquery-ui.css"
           rel="stylesheet" type="text/css"/>
     <script class="jsbin"
-            src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     <script class="jsbin"
-            src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+    src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
+
     <script>
         function readURL(input) {
-            if (input.files && input.files[0]) {
-                let reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#blah')
-                        .attr('src', e.target.result)
-                        .width(150)
-                        .height(150);
-                };
-                reader.readAsDataURL(input.files[0]);
+        if (input.files && input.files[0]) {
+        let reader = new FileReader();
+        reader.onload = function (e) {
+        $('#blah')
+        .attr('src', e.target.result)
+                            .width(150)
+                            .height(150);
+                    };
+                    reader.readAsDataURL(input.files[0]);
+                }
             }
-        }
     </script>
     <div id="login-box">
 
@@ -39,40 +40,41 @@
                     <input type="file" onchange="readURL(this);" name="avatar"
                            id="avatar"/>
                 </label>
+            <div class ="avatar_error">
                 {{ form.avatar.errors }}
-
+            </div>
             </div>
 
             <div class="first_name_div">
-                <input type="text" name="first_name" placeholder="First name"/>
+                <input type="text" name="first_name" id="1" placeholder="First name"/>
                 <div class="first_name_error">
                     {{ form.first_name.errors }}
                 </div>
             </div>
 
             <div class="last_name_div">
-                <input type="text" name="last_name" placeholder="Last name"/>
+                <input type="text" name="last_name" id="2" placeholder="Last name"/>
                 <div class="last_name_error">
                     {{ form.last_name.errors }}
                 </div>
             </div>
 
             <div class="username_div">
-                <input type="text" name="username" placeholder="Username"/>
+                <input type="text" name="username" id="3" placeholder="Username"/>
                 <div class="username_error">
                     {{ form.username.errors }}
                 </div>
             </div>
 
             <div class="email1_div">
-                <input type="email" name="email1" placeholder="Email"/>
+                <input type="email" name="email1" id="4" placeholder="Email"/>
                 <div class="email1_error">
                     {{ form.email1.errors }}
                 </div>
             </div>
 
             <div class="email2_div">
-                <input type="email" name="email2"
+                <input type="email" name="email2" id="5"
                        placeholder="Email confirmation"/>
                 <div class="email2_error">
                     {{ form.email2.errors }}
@@ -80,7 +82,7 @@
             </div>
 
             <div class="password1_div">
-                <input type="password" name="password1"
+                <input type="password" name="password1" id="6"
                        placeholder="Password"/>
                 <div class="password1_error">
                     {{ form.password1.errors }}
@@ -88,7 +90,7 @@
             </div>
 
             <div class="password2_div">
-                <input type="password" name="password2"
+                <input type="password" name="password2" id="7"
                        placeholder="Password confirmation"/>
                 <div class="password2_error">
                     {{ form.password2.errors }}
@@ -96,7 +98,25 @@
             </div>
 
             <input type="submit" name="signup_submit" value="Sign me up"/>
-
         </form>
     </div>
+    <script type="text/javascript">
+        window.onload = function loaddata() {
+            if ("{{ form.first_name.value }}" !== "None") {
+                document.getElementById('1').value = "{{ form.first_name.value }}";
+            }
+            if ("{{ form.last_name.value }}" !== "None") {
+                document.getElementById('2').value = "{{ form.last_name.value }}";
+            }
+            if ("{{ form.username.value }}" !== "None") {
+                document.getElementById('3').value = "{{ form.username.value }}";
+            }
+            if ("{{ form.email1.value }}" !== "None") {
+                document.getElementById('4').value = "{{ form.email1.value }}";
+            }
+            if ("{{ form.email2.value }}" !== "None") {
+                document.getElementById('5').value = "{{ form.email2.value }}";
+            }
+        }
+    </script>
 {% endblock %}
