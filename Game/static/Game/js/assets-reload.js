@@ -45,9 +45,9 @@ function reload_assets_for_table(table) {
             $.each(data.assets, function (a) {
                 var data = `<tr class="dinamic-row">
                                 <td id="name">${ this.name }</td>
-                                <td id="buy">$ ${ this.buy }</td>
+                                <td id="type"> ${ this.type }</td>
                                 <td id="sell">$ ${ this.sell }</td>
-                                <td id="type"> ${ this.type } </td>
+                                <td id="buy">$ ${ this.buy } </td>
                                 <td><a class="action w3-button w3-green w3-round-large " id="${ this.name }" type="${ this.type }" href="#">
                                     <i class="fas fa-dollar-sign"></i> Buy
                                 </a></td>

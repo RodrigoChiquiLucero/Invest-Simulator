@@ -36,10 +36,14 @@ function populate_response_form(div, data) {
     status.html(data.message);
     if (data.error) {
         label.html("We are very sorry but an error ocurred");
-        status.css('color', 'red');
+        status.css('color', '#CD0000');
+        status.css('font-weight', 'bold');
+        status.css('font-size', '23px');
     } else {
         label.html("Transaction successfull!");
         status.css('color', 'green');
+        status.css('font-weight', 'bold');
+        status.css('font-weight', '23px');
     }
     div.find("#loading").hide();
     $("#accept-t").show(500);
