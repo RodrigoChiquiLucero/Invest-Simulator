@@ -119,11 +119,9 @@ class Wallet(models.Model):
 
         if asset.quantity == ownership.quantity:
             ownership.delete()
-            asset.delete()
         else:
             ownership.quantity -= asset.quantity
             ownership.save()
-            asset.save()
 
         Transaction(wallet=self, asset=asset, asset_price=asset.sell,
                     date=datetime.datetime.now(), quantity=asset.quantity,
