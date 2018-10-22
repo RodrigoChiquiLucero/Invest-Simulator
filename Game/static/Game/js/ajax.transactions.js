@@ -68,13 +68,21 @@ function prepare_input_nicenumber() {
         });
 }
 
-
+let window_close_timeout = null;
 function show_information_form(asset, onsuccess, transaction) {
     $("#quantity-form").hide(400);
-    $("#accept-form").show(500).stop(true)
-        .delay(5000).hide(400);
+    $("#accept-form").show(500)
 
-    console.log(asset);
+    if (window_close_timeout != null) {
+        clearTimeout(window_close_timeout);
+    }
+    window_close_timeout = setTimeout(
+        (function () {
+            $("#accept-form").hide(400);
+            if (transaction_types.buy === transaction)
+                reload_all();
+        }), 5000
+    );
 
     $.ajax({
         url: '/game/ajax/quote/' + asset.name,

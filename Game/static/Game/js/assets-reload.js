@@ -5,7 +5,7 @@ toastr.options = {
     "debug": false,
     "newestOnTop": false,
     "progressBar": false,
-    "preventDuplicates": false,
+    "preventDuplicates": true,
     "onclick": null,
     "showDuration": "300",
     "hideDuration": "1000",
@@ -19,9 +19,15 @@ toastr.options = {
 };
 
 
+let reload = null;
+
 //REALOAD ALL ASSETS INSIDE TABLE
 function reload_all() {
-    setInterval(function () {
+    if(reload !== null) {
+        clearInterval(reload)
+    }
+
+    reload = setInterval(function () {
         reload_assets_for_table($("#dinamic-table"));
     }, 10000);
 }
@@ -49,8 +55,8 @@ function reload_assets_for_table(table) {
                                     <i class="fas fa-history"></i> History
                                 </a></td>`;
                 table.append(data);
-                prepare_transaction(transaction_types.buy);
-            })
+            });
+            load_action_listener();
         },
     });
 }
