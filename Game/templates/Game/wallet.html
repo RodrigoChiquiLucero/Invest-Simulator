@@ -15,7 +15,6 @@
 
     {#    PERSONAL#}
     <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
-    <link rel="stylesheet" href="{% static 'Game/css/select_date.css' %}">
     <link rel="stylesheet" href="{% static 'Game/css/transaction-form.css' %}">
     <link rel="stylesheet" href="{% static 'Game/css/wallet.css' %}">
 
@@ -85,14 +84,8 @@
         </div>
 
         <style>
-            .overlay {
-                position: fixed;
-                background-color: rgba(0, 0, 0, 0.5);
-                top: 50%;
-                left: 50%;
-                -moz-transform: translateX(-50%) translateY(-50%);
-                -webkit-transform: translateX(-50%) translateY(-50%);
-                transform: translateX(-50%) translateY(-50%);
+            .assets th {
+                padding: 20px 75px;
             }
         </style>
         {% if assets %}
@@ -100,20 +93,20 @@
                 <caption class="title">Your purchased assets are:</caption>
                 <tr>
                     <th> Asset Name</th>
-                    <th> Buy</th>
-                    <th> Sell</th>
                     <th> Type</th>
                     <th> Quantity</th>
+                    <th> Sell</th>
+                    <th> Buy</th>
                     <th></th>
                     <th></th>
                 </tr>
                 {% for a in assets %}
                     <tr class="dinamic-row">
                         <td id="name">{{ a.name }}</td>
-                        <td id="buy">$ {{ a.buy }}</td>
-                        <td id="sell">$ {{ a.sell }}</td>
                         <td>{{ a.type }}</td>
                         <td>{{ a.quantity }}</td>
+                        <td id="sell">$ {{ a.sell }}</td>
+                        <td id="buy">$ {{ a.buy }}</td>
                         <td>
                             <a class="action w3-button w3-green w3-round-large "
                                id="{{ a.name }}" type="{{ a.type }}" href="#">

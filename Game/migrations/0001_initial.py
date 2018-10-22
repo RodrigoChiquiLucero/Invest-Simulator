@@ -7,7 +7,6 @@ import django.db.models.deletion
 
 
 class Migration(migrations.Migration):
-
     initial = True
 
     dependencies = [
@@ -18,7 +17,8 @@ class Migration(migrations.Migration):
         migrations.CreateModel(
             name='Asset',
             fields=[
-                ('name', models.CharField(max_length=75, primary_key=True, serialize=False)),
+                ('name', models.CharField(max_length=75, primary_key=True,
+                                          serialize=False)),
                 ('type', models.CharField(max_length=10)),
             ],
         ),
@@ -30,7 +30,9 @@ class Migration(migrations.Migration):
                 ('date', models.DateField(default=datetime.date.today)),
                 ('quantity', models.IntegerField()),
                 ('is_purchase', models.BooleanField()),
-                ('asset', models.ForeignKey(on_delete=django.db.models.deletion.DO_NOTHING, to='Game.Asset')),
+                ('asset', models.ForeignKey(
+                    on_delete=django.db.models.deletion.DO_NOTHING,
+                    to='Game.Asset')),
             ],
         ),
         migrations.CreateModel(
@@ -38,12 +40,15 @@ class Migration(migrations.Migration):
             fields=[
                 ('id', models.IntegerField(primary_key=True, serialize=False)),
                 ('liquid', models.FloatField()),
-                ('user', models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to=settings.AUTH_USER_MODEL)),
+                ('user',
+                 models.ForeignKey(on_delete=django.db.models.deletion.CASCADE,
+                                   to=settings.AUTH_USER_MODEL)),
             ],
         ),
         migrations.AddField(
             model_name='transaction',
             name='wallet',
-            field=models.ForeignKey(on_delete=django.db.models.deletion.CASCADE, to='Game.Wallet'),
+            field=models.ForeignKey(
+                on_delete=django.db.models.deletion.CASCADE, to='Game.Wallet'),
         ),
     ]

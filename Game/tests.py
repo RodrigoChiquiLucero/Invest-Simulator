@@ -9,7 +9,8 @@ from Game.models import Asset
 class InterfaceControlTest(TestCase):
 
     def setUp(self):
-        self.asset_comunication = AComunication('http://localhost:8000/simulations/')
+        self.asset_comunication = AComunication(
+            'http://localhost:8000/simulations/')
         user = User.objects.create(username='test_user')
         Wallet.objects.create(user=user)
 
@@ -21,7 +22,8 @@ class InterfaceControlTest(TestCase):
         # search for all info
         asset_info = [self.asset_comunication.get_asset_quote(a)
                       for a in assets_name
-                      if self.asset_comunication.has_quote(self.asset_comunication.get_asset_quote(a))]
+                      if self.asset_comunication.has_quote(
+                self.asset_comunication.get_asset_quote(a))]
         self.assertNotEqual(asset_info, [])
 
         # dedasset_comunicationated full method
@@ -61,8 +63,9 @@ class InterfaceControlTest(TestCase):
         # check algorithm response
         response = Wallet.get_info(user)
         self.assertFalse(response['error'])
-        expected_assets = [self.asset_comunication.get_asset_quote(asset_a.as_struct()),
-                           self.asset_comunication.get_asset_quote(asset_c.as_struct())]
+        expected_assets = [
+            self.asset_comunication.get_asset_quote(asset_a.as_struct()),
+            self.asset_comunication.get_asset_quote(asset_c.as_struct())]
         result_assets = response['assets']
         self.assertEqual(len(result_assets), len(expected_assets))
 

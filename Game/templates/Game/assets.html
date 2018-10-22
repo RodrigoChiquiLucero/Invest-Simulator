@@ -4,41 +4,31 @@
 {% block body %}
 
     {# LINKS AND SCRIPTS #}
-{#    //font-awesome#}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-{#   JQUERY #}
+    {#    //font-awesome#}
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {#   JQUERY #}
     <script src="{% static 'Game/js/jquery.js' %}"></script>
 
-{#    NICE NUMBER#}
-    <link rel="stylesheet" href="{% static 'Game/nicenumber/jquery.nice-number.css' %}">
+    {#    NICE NUMBER#}
+    <link rel="stylesheet"
+          href="{% static 'Game/nicenumber/jquery.nice-number.css' %}">
     <script src="{% static 'Game/nicenumber/jquery.nice-number.js' %}"></script>
 
-{#    PERSONAL#}
+    {#    PERSONAL#}
     <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
-    <link rel="stylesheet" href="{% static 'Game/css/select_date.css' %}">
     <link rel="stylesheet" href="{% static 'Game/css/transaction-form.css' %}">
 
-{#    //TOAST#}
+    {#    //TOAST#}
     <link rel="stylesheet" href="{% static 'Game/css/toastr.scss' %}">
     <script src="{% static 'Game/js/toastr.js' %}"></script>
 
-{#    TRANSACTIONS#}
+    {#    TRANSACTIONS#}
     {% csrf_token %}
     <script src="{% static 'Game/js/ajax.transactions.js' %}"></script>
     <script src="{% static 'Game/js/prepare-transaction.js' %}"></script>
     {# LINKS AND SCRIPTS #}
 
-    <style>
-    .overlay {
-        position: fixed;
-        background-color: rgba(0,0,0,0.5);
-        top: 50%;
-        left: 50%;
-        -moz-transform: translateX(-50%) translateY(-50%);
-        -webkit-transform: translateX(-50%) translateY(-50%);
-        transform: translateX(-50%) translateY(-50%);
-    }
-    </style>
 
     <div align="center" class="middle assets inner">
 
@@ -46,7 +36,7 @@
             <label for="quantity">How much assets do you want
                 to purchase?</label>
             <div class="qbox">
-                <input id="quantity" type="number" name="quantity middle"
+                <input id="quantity" class="number-input" type="number" name="quantity middle"
                        value="1" min="1">
             </div>
             <input id="send-quantity" type="submit" value="Send"/>
@@ -57,9 +47,12 @@
             <label>Please confirm your transaction:</label>
 
             <div class="qbox">
-                <p class="attr">Your asset: </p><p id="name" class="value"></p>
-                <p class="attr">Asset price: </p><p id="price" class="value"></p>
-                <p class="attr">Total transaction value: </p><p id="total" class="value"></p>
+                <p class="attr">Your asset: </p>
+                <p id="name" class="value"></p>
+                <p class="attr">Asset price: </p>
+                <p id="price" class="value"></p>
+                <p class="attr">Total transaction value: </p>
+                <p id="total" class="value"></p>
             </div>
 
             <input id="accept-transaction" type="submit" value="Buy"/>
@@ -71,36 +64,44 @@
 
             <div class="qbox">
                 <p id="status"></p>
-                <i class="fa fa-spinner fa-spin" id="loading" style="font-size:36px;"></i>
+                <i class="fa fa-spinner fa-spin" id="loading"
+                   style="font-size:36px;"></i>
             </div>
 
             <input id="accept-transaction-success" type="submit" value="OK"/>
         </div>
 
-        <div id="assets" class="w3-container w3-animate-zoom assets" align="center">
+        <div id="assets" class="w3-container w3-animate-zoom assets"
+             align="center">
             {% if assets %}
                 <table id="dinamic-table">
-                    <caption class="title">Available assets in market are: </caption>
+                    <caption class="title">Available assets in market are:
+                    </caption>
                     <tr>
-                        <th> Name </th>
-                        <th> Buy price </th>
-                        <th> Sell price </th>
-                        <th> Type </th>
+                        <th> Name</th>
+                        <th> Type</th>
+                        <th> Sell price</th>
+                        <th> Buy</th>
                         <th></th>
                         <th></th>
                     </tr>
                     {% for a in assets %}
                         <tr class="dinamic-row">
                             <td id="name">{{ a.name }}</td>
-                            <td id="buy">$ {{ a.buy }}</td>
+                            <td id="type">{{ a.type }}</td>
                             <td id="sell">$ {{ a.sell }}</td>
-                            <td id="type"> {{ a.type }} </td>
-                            <td><a class="action w3-button w3-green w3-round-large " id="{{ a.name }}" type="{{ a.type }}" href="#">
-                                <i class="fas fa-dollar-sign"></i> Buy
-                            </a></td>
-                            <td><a class="action w3-button w3-green w3-round-large " href="/game/history/{{ a.name }} ">
+                            <td id="buy">$ {{ a.buy }} </td>
+                            <td>
+                                <a class="action w3-button w3-green w3-round-large "
+                                   id="{{ a.name }}" type="{{ a.type }}"
+                                   href="#">
+                                    <i class="fas fa-dollar-sign"></i> Buy
+                                </a></td>
+                            <td>
+                                <a class="action w3-button w3-green w3-round-large "
+                                   href="/game/history/{{ a.name }} ">
                                     <i class="fas fa-history"></i> History
-                            </a></td>
+                                </a></td>
                         </tr>
                     {% endfor %}
                 </table>

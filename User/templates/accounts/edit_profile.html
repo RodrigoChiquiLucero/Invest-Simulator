@@ -4,21 +4,42 @@
 {% block body %}
     <link rel="stylesheet" href="{% static 'User/signup.css' %}">
     <form method="POST">
-    {% csrf_token %}
-        <div id="login-box" class="w3-animate-zoom">
-            <h1> Edit Profile </h1>
+        {% csrf_token %}
+        <div id="login-box">
             <div class="left">
                 <label for="email">Email:</label>
-                <input value="{{ email }}" type="email" id="email" name="email" placeholder="Email" />
-                {{ form.email.errors }}
+                <input value="{{ email }}" type="email" id="email" name="email"
+                       placeholder="Email"/>
+                <div class="email1_error">
+                    {{ form.email.errors }}
+                </div>
                 <label for="id_first_name">First Name:</label>
-                <input value="{{ first }}" type="text" id="id_first_name" name="first_name" placeholder="First Name"/>
-                {{ form.first_name.errors }}
+                <input value="{{ first }}" type="text" id="id_first_name"
+                       name="first_name" placeholder="First Name"/>
+                <div class="first_name_error">
+                    {{ form.first_name.errors }}
+                </div>
                 <label for="id_last_name">Last Name:</label>
-                <input value="{{ last }}" type="text" id="id_last_name" name="last_name" placeholder="Last Name" />
-                {{ form.last_name.errors }}
+                <input value="{{ last }}" type="text" id="id_last_name"
+                       name="last_name" placeholder="Last Name"/>
+                <div class="last_name_error">
+                    {{ form.last_name.errors }}
+                </div>
                 <input type="submit" name="signup_submit" value="Submit"/>
             </div>
         </div>
-  </form>
+    </form>
+        <script type="text/javascript">
+        window.onload = function loaddata() {
+            if ("{{ form.email.value }}" !== "None") {
+                document.getElementById('email').value = "{{ form.email.value }}";
+            }
+            if ("{{ form.first_name.value }}" !== "None") {
+                document.getElementById('id_first_name').value = "{{ form.first_name.value }}";
+            }
+            if ("{{ form.last_name.value }}" !== "None") {
+                document.getElementById('id_last_name').value = "{{ form.last_name.value }}";
+            }
+        }
+    </script>
 {% endblock %}
