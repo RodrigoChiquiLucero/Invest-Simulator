@@ -100,20 +100,20 @@
                 <caption class="title">Your purchased assets are:</caption>
                 <tr>
                     <th> Asset Name</th>
-                    <th> Buy</th>
-                    <th> Sell</th>
                     <th> Type</th>
                     <th> Quantity</th>
+                    <th> Sell</th>
+                    <th> Buy</th>
                     <th></th>
                     <th></th>
                 </tr>
                 {% for a in assets %}
                     <tr class="dinamic-row">
                         <td id="name">{{ a.name }}</td>
-                        <td id="buy">$ {{ a.buy }}</td>
-                        <td id="sell">$ {{ a.sell }}</td>
                         <td>{{ a.type }}</td>
                         <td>{{ a.quantity }}</td>
+                        <td id="sell">$ {{ a.sell }}</td>
+                        <td id="buy">$ {{ a.buy }}</td>
                         <td>
                             <a class="action w3-button w3-green w3-round-large "
                                id="{{ a.name }}" type="{{ a.type }}" href="#">

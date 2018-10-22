@@ -83,18 +83,18 @@
                     <caption class="title">Available assets in market are: </caption>
                     <tr>
                         <th> Name </th>
-                        <th> Buy price </th>
-                        <th> Sell price </th>
                         <th> Type </th>
+                        <th> Sell price </th>
+                        <th> Buy </th>
                         <th></th>
                         <th></th>
                     </tr>
                     {% for a in assets %}
                         <tr class="dinamic-row">
                             <td id="name">{{ a.name }}</td>
-                            <td id="buy">$ {{ a.buy }}</td>
+                            <td id="buy">$ {{ a.type }}</td>
                             <td id="sell">$ {{ a.sell }}</td>
-                            <td id="type"> {{ a.type }} </td>
+                            <td id="type"> {{ a.buy }} </td>
                             <td><a class="action w3-button w3-green w3-round-large " id="{{ a.name }}" type="{{ a.type }}" href="#">
                                 <i class="fas fa-dollar-sign"></i> Buy
                             </a></td>
