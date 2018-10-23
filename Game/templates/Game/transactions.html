@@ -11,7 +11,8 @@
                     <th> Date </th>
                     <th> Asset </th>
                     <th> Type </th>
-                    <th> Price </th>
+                    <th> Price_Buy </th>
+                    <th> Price_Sell</th>
                     <th> Quantity </th>
                 </tr>
                 {% for t in transactions %}
@@ -23,7 +24,8 @@
                         {% else %}
                             <td> sold </td>
                         {%  endif %}
-                        <td>{{ t.asset_price }} </td>
+                        <td>{{ t.asset_price_buy }} </td>
+                        <td>{{ t.asset_price_sell }} </td>
                         <td>{{ t.quantity }} </td>
                     </tr>
                 {% endfor %}
