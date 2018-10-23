@@ -105,7 +105,7 @@ class Wallet(models.Model):
                                       quantity=asset.quantity)
             else:
                 ownership.quantity += quantity
-1                round(ownership.quantity, 3)
+                round(ownership.quantity, 3)
             ownership.save()
 
             Transaction(wallet=self, asset=asset, asset_price_buy=asset.buy,
@@ -136,6 +136,8 @@ class Wallet(models.Model):
                     "message": "You need to sell at least one asset"}
 
         ownership = Ownership.safe_get(wallet=self, asset=asset)
+        if not ownership:
+            return {"error": True, "message": "You do not own this asset"}
 
         if asset.quantity > ownership.quantity:
             return {"error": True, "message": "Not enough assets"}
