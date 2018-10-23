@@ -4,6 +4,7 @@ from Game.models import Wallet, Asset, Ownership
 from Game.interface_control import AssetComunication as AComunication
 from Game import interface_control as ic
 from Game.models import Asset
+from django.conf import settings
 
 
 class InterfaceControlTest(TestCase):
@@ -71,3 +72,68 @@ class InterfaceControlTest(TestCase):
 
         for e, r in zip(expected_assets, result_assets):
             self.assertEqual(e.name, r.name)
+
+    def test_wallet_buy(self):
+        # get user
+        user = User.objects.get(username='test_user')
+        wallet = Wallet.objects.get(user=user)
+
+        # set communication
+        asset_comms = ic.AssetComunication(settings.API_URL)
+
+        # create and save assets
+        assets = self.asset_comunication.get_asset_names()
+
+        asset_a = assets[0]
+        asset_a = Asset.objects.create(name=asset_a.name, type=asset_a.type)
+        asset_a = asset_comms.get_asset_quote(asset_a)
+        asset_a.quantity = 2.3
+
+        asset_c = assets[3]
+        asset_c = Asset.objects.create(name=asset_c.name, type=asset_c.type)
+        asset_c = asset_comms.get_asset_quote(asset_c)
+        asset_c.quantity = 1.4
+
+        # check wallet money
+        print(wallet.liquid)
+
+        # buy assets
+        wallet.buy_asset(asset_a)
+        wallet.buy_asset(asset_c)
+
+        # check money again
+        print(wallet.liquid)
+
+    def test_wallet_sell(self):
+        # get user
+        user = User.objects.get(username='test_user')
+        wallet = Wallet.objects.get(user=user)
+
+        # set communication
+        asset_comms = ic.AssetComunication(settings.API_URL)
+
+        # create and save assets
+        assets = self.asset_comunication.get_asset_names()
+
+        asset_a = assets[0]
+        asset_a = Asset.objects.create(name=asset_a.name,
+                                       type=asset_a.type)
+        asset_a = asset_comms.get_asset_quote(asset_a)
+        asset_a.quantity = 2.3
+
+        asset_c = assets[3]
+        asset_c = Asset.objects.create(name=asset_c.name,
+                                       type=asset_c.type)
+        asset_c = asset_comms.get_asset_quote(asset_c)
+        asset_c.quantity = 1.4
+
+        # check wallet money
+        print(wallet.liquid)
+
+        # sell assets
+        wallet.sell_asset(asset_a)
+        wallet.sell_asset(asset_c)
+
+        # check money again
+        print(wallet.liquid)
+
