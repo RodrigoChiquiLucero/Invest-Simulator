@@ -46,6 +46,11 @@ class Wallet(models.Model):
 
     @staticmethod
     def get_info(user):
+        """
+        full wallet info given user
+        :param user:
+        :return dictionary with the user wallet:{assets, value_wallet, error}
+        """
         response = {}
         wallet = Wallet.objects.get(user=user)
         response['liquid'] = wallet.liquid
@@ -64,6 +69,11 @@ class Wallet(models.Model):
         return response
 
     def buy_asset(self, asset):
+        """
+        add an asset to the user wallet and add the transaction to user history.
+        :param asset:
+        :return: diccionary with status info for this action
+        """
         asset_comms = ACommunication(settings.API_URL)
         asset = asset_comms.get_asset_quote(asset)
         price = (asset.buy * asset.quantity)
@@ -98,7 +108,8 @@ class Wallet(models.Model):
 1                round(ownership.quantity, 3)
             ownership.save()
 
-            Transaction(wallet=self, asset=asset, asset_price=asset.buy,
+            Transaction(wallet=self, asset=asset, asset_price_buy=asset.buy,
+                        asset_price_sell=asset.sell,
                         date=datetime.datetime.now(), quantity=quantity,
                         is_purchase=True).save()
 
@@ -110,6 +121,11 @@ class Wallet(models.Model):
             return {"error": True, "message": "Not enough cash"}
 
     def sell_asset(self, asset):
+        """
+        remove an asset to the user wallet and add the transaction to user history.
+        :param asset:
+        :return: diccionary with status info for this action
+        """
         asset_comms = ACommunication(settings.API_URL)
         asset = asset_comms.get_asset_quote(asset)
         price = (asset.sell * asset.quantity)
@@ -131,7 +147,8 @@ class Wallet(models.Model):
             round(ownership.quantity, 3)
             ownership.save()
 
-        Transaction(wallet=self, asset=asset, asset_price=asset.sell,
+        Transaction(wallet=self, asset=asset, asset_price_buy=asset.buy,
+                    asset_price_sell=asset.sell,
                     date=datetime.datetime.now(), quantity=asset.quantity,
                     is_purchase=False).save()
 
@@ -148,6 +165,11 @@ class Ownership(models.Model):
 
     @staticmethod
     def safe_get(wallet, asset):
+        """
+        get a specific asset which have the user.
+        :param wallet, asset:
+        :return dictionary with the assets in his user wallet:{assets, wallet, quantity}
+        """
         try:
             return Ownership.objects.get(wallet=wallet, asset=asset)
         except ObjectDoesNotExist:
@@ -157,7 +179,8 @@ class Ownership(models.Model):
 class Transaction(models.Model):
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
     asset = models.ForeignKey(Asset, on_delete=models.DO_NOTHING)
-    asset_price = models.FloatField(null=False)
+    asset_price_buy = models.FloatField(null=False, default=-1)
+    asset_price_sell = models.FloatField(null=False, default=-1)
     date = models.DateField(default=datetime.date.today)
     quantity = models.FloatField()
     is_purchase = models.BooleanField(null=False)

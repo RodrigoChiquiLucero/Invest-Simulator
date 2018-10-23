@@ -16,6 +16,10 @@ class AssetComunication:
     GET_HISTORY = "getAssetHistory/"
 
     def __init__(self, url):
+        """
+
+        :rtype:
+        """
         self.API_URL = url
 
     @staticmethod
