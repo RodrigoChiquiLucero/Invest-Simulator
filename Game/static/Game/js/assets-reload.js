@@ -1,24 +1,3 @@
-
-//CONFIGURE TOASTS
-toastr.options = {
-    "closeButton": true,
-    "debug": false,
-    "newestOnTop": false,
-    "progressBar": false,
-    "preventDuplicates": true,
-    "onclick": null,
-    "showDuration": "300",
-    "hideDuration": "1000",
-    "timeOut": "3000",
-    "extendedTimeOut": "1000",
-    "showEasing": "swing",
-    "hideEasing": "linear",
-    "showMethod": "fadeIn",
-    "hideMethod": "fadeOut",
-    "positionClass": "toast-bottom-center",
-};
-
-
 let reload = null;
 
 //REALOAD ALL ASSETS INSIDE TABLE
@@ -39,7 +18,6 @@ function reload_assets_for_table(table) {
             $(".dinamic-row").remove();
             $("#prepare_transaction").remove();
 
-            toastr.success('Asset information updated');
             console.log("Info updated");
 
             $.each(data.assets, function (a) {
@@ -75,7 +53,7 @@ function reload_prices_for_row(row) {
         url: '/game/ajax/quote/' + row.find("#name").html(),
         success: function (data) {
 
-            toastr.success('Asset information updated');
+            console.log("Info updated");
 
             let buy = data.buy;
             let sell = data.sell;
