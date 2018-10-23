@@ -111,6 +111,11 @@ class Wallet(models.Model):
         asset_comms = ACommunication(settings.API_URL)
         asset = asset_comms.get_asset_quote(asset)
         price = (asset.sell * asset.quantity)
+        quantity = asset.quantity
+
+        if quantity == 0:
+            return {"error": True,
+                    "message": "You need to sell at least one asset"}
 
         ownership = Ownership.safe_get(wallet=self, asset=asset)
 
