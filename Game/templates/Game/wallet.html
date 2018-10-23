@@ -3,52 +3,134 @@
 
 {% block body %}
 
-    <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
-    <link rel="stylesheet" href="{% static 'Game/css/wallet.css' %}">
-
+    {# LINKS AND SCRIPTS #}
+    {#    //font-awesome#}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {#   JQUERY #}
     <script src="{% static 'Game/js/jquery.js' %}"></script>
 
-    <button class="w3-button w3-green w3-round-large w3-animate-zoom" style="width: 12%; height: 7%; margin: 10px">
-        <i class="fas fa-dollar-sign"></i> {{ liquid }}  <i class="fas fa-piggy-bank"></i>
+    {#    NICE NUMBER#}
+    <link rel="stylesheet" href="{% static 'Game/nicenumber/jquery.nice-number.css' %}">
+    <script src="{% static 'Game/nicenumber/jquery.nice-number.js' %}"></script>
+
+    {#    PERSONAL#}
+    <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/transaction-form.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/wallet.css' %}">
+
+    {#    //TOAST#}
+    <link rel="stylesheet" href="{% static 'Game/css/toastr.scss' %}">
+    <script src="{% static 'Game/js/toastr.js' %}"></script>
+
+    {#    TRANSACTIONS#}
+    {% csrf_token %}
+    <script src="{% static 'Game/js/ajax.transactions.js' %}"></script>
+    <script src="{% static 'Game/js/prepare-transaction.js' %}"></script>
+    {# LINKS AND SCRIPTS #}
+
+    {# CONTENT #}
+    <button class="w3-button w3-green w3-round-large w3-animate-zoom"
+            style="width: 12%; height: 7%; margin: 10px">
+        <i class="fas fa-dollar-sign"></i> {{ liquid }} <i
+            class="fas fa-piggy-bank"></i>
     </button>
-    <button class="w3-button w3-green w3-round-large w3-animate-zoom" style="width: 12%; height: 7%; margin: 10px">
-        <i class="fas fa-dollar-sign"></i> {{ value_wallet }}  <i class="fas fa-wallet"></i>
+    <button class="w3-button w3-green w3-round-large w3-animate-zoom"
+            style="width: 12%; height: 7%; margin: 10px">
+        <i class="fas fa-dollar-sign"></i> {{ value_wallet }} <i
+            class="fas fa-wallet"></i>
     </button>
-    <div align="center" class="outer middle w3-container w3-animate-zoom assets inner">
+
+
+    <div align="center"
+         class="outer middle w3-container w3-animate-zoom assets inner">
+
+        <div id="quantity-form" class="dinamic short overlay middle">
+            <label for="quantity">How much assets do you want
+                to sell?</label>
+            <div class="qbox">
+                <input id="quantity" type="number" name="quantity middle"
+                       value="1" min="1">
+            </div>
+            <input id="send-quantity" type="submit" value="Send"/>
+            <input id="cancel-quantity" type="submit" value="Cancel"/>
+        </div>
+
+        <div id="accept-form" class="dinamic large overlay">
+            <label>Please confirm your transaction:</label>
+
+            <div class="qbox">
+                <p class="attr">Your asset: </p>
+                <p id="name" class="value"></p>
+                <p class="attr">Asset price: </p>
+                <p id="price" class="value"></p>
+                <p class="attr">Total transaction value: </p>
+                <p id="total" class="value"></p>
+            </div>
+
+            <input id="accept-transaction" type="submit" value="Sell"/>
+            <input id="cancel-transaction" type="submit" value="Cancel"/>
+        </div>
+
+        <div id="trans-status" class="dinamic short overlay">
+            <label>Your transaction is being processed</label>
+
+            <div class="qbox">
+                <p id="status"></p>
+                <i class="fa fa-spinner fa-spin" id="loading"
+                   style="font-size:36px;"></i>
+            </div>
+
+                <input id="accept-transaction-success" type="submit" value="OK" onclick="location.href='';"  />
+        </div>
+
+        <style>
+            .assets th {
+                padding: 20px 75px;
+            }
+        </style>
         {% if assets %}
-            <table >
-                <caption class="title">Your purchased assets are: </caption>
+            <table>
+                <caption class="title">Your purchased assets are:</caption>
                 <tr>
                     <th> Asset Name</th>
-                    <th> Buy</th>
-                    <th> Sell</th>
                     <th> Type</th>
                     <th> Quantity</th>
+                    <th> Sell</th>
+                    <th> Buy</th>
+                    <th></th>
+                    <th></th>
                 </tr>
                 {% for a in assets %}
                     <tr class="dinamic-row">
                         <td id="name">{{ a.name }}</td>
-                        <td id="buy">$ {{ a.buy }}</td>
-                        <td id="sell">$ {{ a.sell }}</td>
                         <td>{{ a.type }}</td>
                         <td>{{ a.quantity }}</td>
+                        <td id="sell">$ {{ a.sell }}</td>
+                        <td id="buy">$ {{ a.buy }}</td>
+                        <td>
+                            <a class="action w3-button w3-green w3-round-large "
+                               id="{{ a.name }}" type="{{ a.type }}" href="#">
+                                <i class="fas fa-dollar-sign"></i> Sell
+                            </a></td>
+                        <td>
+                            <a class="action w3-button w3-green w3-round-large "
+                               href="/game/history/{{ a.name }} ">
+                                <i class="fas fa-history"></i> History
+                            </a></td>
                     </tr>
                 {% endfor %}
             </table>
-            <script src="{% static 'Game/js/assets.js' %}"></script>
-            <script>reload_prices()</script>
+            <script src="{% static 'Game/js/assets-reload.js' %}"></script>
+            <script>
+                prepare_token();
+                prepare_input_nicenumber();
+                reload_prices()
+            </script>
         {% else %}
             <div class="error_message">
                 <h1> You have not purchased any assets, yet! </h1>
             </div>
         {% endif %}
     </div>
-    <div align="center" class="liquid">
-        <h2>
-            {% if error %}
-                Invest simulator ran into server related issues. We are truly sorry.
-            {% else %}
-            {% endif %}
-        </h2>
-    </div>
+    <script>prepare_transaction(transaction_types.sell);</script>
 {% endblock %}

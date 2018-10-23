@@ -7,7 +7,7 @@ Aplicación web orientada al público general que simula inversiones en tiempo r
 - Rodrigo Lucero
 - Agustin Gomez
 - Igor Andruskiewitsch
-- Marcos Martinelli
+- Marco Martinelli
 - Federico Rivero
 - Alexis Guerra
 
@@ -15,8 +15,12 @@ Aplicación web orientada al público general que simula inversiones en tiempo r
 Para poder correr el proyecto se deberán cumplir los siguientes requisitos:
 
 - Python 3.6/ 3.7
-- **Django 2.1.2**
-- **urllib3 1.23** 
+
+- **Django==2.1.2**
+- **ipython==7.0.1**
+- **urllib3==1.23**
+- **pillow**
+- **coverage**
 
 Aquellos marcados en **negrita** pueden ser instalados usando
 ```

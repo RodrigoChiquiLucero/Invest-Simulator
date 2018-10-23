@@ -17,7 +17,8 @@ def clean_avatar(avatar):
         # validate content type
         main, sub = avatar.content_type.split('/')
         if not (main == 'image' and sub in ['jpeg', 'pjpeg', 'gif', 'png']):
-            raise forms.ValidationError(u'Please use a JPEG, GIF or PNG image.')
+            raise forms.ValidationError(
+                u'Please use a JPEG, GIF or PNG image.')
         # validate file size
         if len(avatar) > (200 * 1024):
             raise forms.ValidationError(

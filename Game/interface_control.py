@@ -68,8 +68,8 @@ class AssetComunication:
             return asset
 
     def quote_for_assets(self, assets):
-        return [self.get_asset_quote(a) for a in assets
-                if self.has_quote(self.get_asset_quote(a))]
+        return [self.get_asset_quote(a) for a in assets if
+                self.has_quote(self.get_asset_quote(a))]
 
     def get_assets(self):
         assets = self.get_asset_names()

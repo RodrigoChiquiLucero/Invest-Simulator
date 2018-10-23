@@ -7,4 +7,5 @@ venv
 #base de datos
 *.sqlite3
 #iconos
+.coverage
 /InvestSimulator/media/profile_image/

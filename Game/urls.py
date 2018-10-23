@@ -11,4 +11,5 @@ urlpatterns = [
 
     path('ajax/quote/<slug:name>/', views.ajax_quote, name='ajax_quote'),
     path('ajax/buy/', views.ajax_buy, name='ajax_buy'),
+    path('ajax/sell/', views.ajax_sell, name='ajax_sell'),
 ]
