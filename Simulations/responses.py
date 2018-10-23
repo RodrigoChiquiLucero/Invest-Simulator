@@ -22,10 +22,6 @@ def get_available_assets(request):
                 "name": "MARSHALL",
                 "type": "currency",
             },
-            {
-                "name": "Nuevo",
-                "type": "currency",
-            },
         ]
     }
     return JsonResponse(response_data)
@@ -34,27 +30,22 @@ def get_available_assets(request):
 quotes = {
     "DOLAR":
         {
-            "sell": 23,
+            "sell": 500,
             "buy": 400
         },
     "ADIDAS":
         {
-            "sell": 65,
+            "sell": 900,
             "buy": 90
         },
     "LXA":
         {
-            "sell": 43,
+            "sell": 40000,
             "buy": 22323
-        },
-    "Nuevo":
-        {
-            "sell": 113,
-            "buy": 2110
         },
     "MARSHALL":
         {
-            "sell": 232,
+            "sell": 2,
             "buy": 1000
         }
 }

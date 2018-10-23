@@ -44,6 +44,7 @@ function prepare_transaction(transaction) {
     });
 
     $("#cancel-transaction").click(function () {
+        stopTimer(timer_interval);
         $("#accept-form").stop(true).hide(400);
         $("#quantity-form").show(500);
     });

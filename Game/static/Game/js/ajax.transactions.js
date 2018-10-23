@@ -23,7 +23,7 @@ function divs_hidden_by_default(divs) {
 }
 
 function populate_accept_form(div, asset, quantity, transaction) {
-    let price = transaction === transaction_types.buy? asset.buy: asset.sell;
+    let price = transaction === transaction_types.buy ? asset.buy : asset.sell;
 
     div.find("#name").html(asset.name);
     div.find("#price").html("$  " + price);
@@ -31,6 +31,7 @@ function populate_accept_form(div, asset, quantity, transaction) {
 }
 
 function populate_response_form(div, data) {
+    //todo: agregar info de cuantos se vendieron y a que precio
     let status = div.find("#status");
     let label = div.find("label");
     status.html(data.message);
@@ -73,9 +74,20 @@ function prepare_input_nicenumber() {
 }
 
 let window_close_timeout = null;
+let timer_interval = null;
+
+function stopTimer() {
+    clearInterval(timer_interval);
+    setTimeout(
+        function () {
+            $(".timer").find("p").html(5);
+        }, 1000
+    )
+}
+
 function show_information_form(asset, onsuccess, transaction) {
     $("#quantity-form").hide(400);
-    $("#accept-form").show(500)
+    $("#accept-form").show(500);
 
     if (window_close_timeout != null) {
         clearTimeout(window_close_timeout);
@@ -85,8 +97,18 @@ function show_information_form(asset, onsuccess, transaction) {
             $("#accept-form").hide(400);
             if (transaction_types.buy === transaction)
                 reload_all();
+            stopTimer();
         }), 5000
     );
+
+    timer_interval = setInterval(
+        function () {
+            let timer = $(".timer").find("p");
+            let old_num = parseInt(timer.html());
+            timer.html(old_num - 1);
+        }, 900
+    );
+
 
     $.ajax({
         url: '/game/ajax/quote/' + asset.name,
