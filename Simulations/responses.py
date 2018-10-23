@@ -41,7 +41,7 @@ quotes = {
     "LXA":
         {
             "sell": 40000,
-            "buy": 22323
+            "buy": 22
         },
     "MARSHALL":
         {
