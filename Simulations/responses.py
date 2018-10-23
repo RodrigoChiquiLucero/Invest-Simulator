@@ -128,7 +128,8 @@ def get_asset_history(request, name, start_date, end_date):
     try:
         start_date = str_to_date(start_date)
         end_date = str_to_date(end_date)
-        dates = [start_date + datetime.timedelta(days=x) for x in range(0, (end_date - start_date).days)]
+        dates = [start_date + datetime.timedelta(days=x) for x in
+                 range(0, (end_date - start_date).days)]
 
         prices = history[name]["prices"]
         prices = [p for p in prices if str_to_date(p["day"]) in dates]
