@@ -80,7 +80,7 @@
                    style="font-size:36px;"></i>
             </div>
 
-            <input id="accept-transaction-success" type="submit" value="OK"/>
+                <input id="accept-transaction-success" type="submit" value="OK" onclick="location.href='';"  />
         </div>
 
         <style>
@@ -131,15 +131,6 @@
                 <h1> You have not purchased any assets, yet! </h1>
             </div>
         {% endif %}
-    </div>
-    <div align="center" class="liquid">
-        <h2>
-            {% if error %}
-                Invest simulator ran into server related issues. We are truly
-                sorry.
-            {% else %}
-            {% endif %}
-        </h2>
     </div>
     <script>prepare_transaction(transaction_types.sell);</script>
 {% endblock %}
