@@ -32,13 +32,13 @@ class InterfaceControlTest(TestCase):
 
     def test_asset_comunication_border(self):
         # ask for a quote of unexistent asset
-        asset = Asset(name="NONE", asset_type="NONE")
+        asset = Asset(name="NONE", type="NONE")
         quote = self.asset_comunication.get_asset_quote(asset)
         self.assertEqual(quote.buy, -1)
         self.assertEqual(quote.sell, -1)
 
         # ask for a quote of existent asset
-        asset = Asset(name="MARSHALL", asset_type="currency")
+        asset = Asset(name="MARSHALL", type="currency")
         quote = self.asset_comunication.get_asset_quote(asset)
         self.assertNotEqual(quote.buy, -1)
         self.assertNotEqual(quote.sell, -1)
@@ -64,8 +64,8 @@ class InterfaceControlTest(TestCase):
         response = Wallet.get_info(user)
         self.assertFalse(response['error'])
         expected_assets = [
-            self.asset_comunication.get_asset_quote(asset_a.as_struct()),
-            self.asset_comunication.get_asset_quote(asset_c.as_struct())]
+            self.asset_comunication.get_asset_quote(asset_a),
+            self.asset_comunication.get_asset_quote(asset_c)]
         result_assets = response['assets']
         self.assertEqual(len(result_assets), len(expected_assets))
 
