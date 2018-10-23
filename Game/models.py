@@ -103,7 +103,7 @@ class Wallet(models.Model):
 
             self.liquid -= price
             self.save()
-            return {"error": False, "message": "Purchase has been succesfull"}
+            return {"error": False, "message": "Purchase has been successful"}
         else:
             return {"error": True, "message": "Not enough cash"}
 
@@ -111,11 +111,16 @@ class Wallet(models.Model):
         asset_comms = ACommunication(settings.API_URL)
         asset = asset_comms.get_asset_quote(asset)
         price = (asset.sell * asset.quantity)
+        quantity = asset.quantity
+
+        if quantity == 0:
+            return {"error": True,
+                    "message": "You need to sell at least one asset"}
 
         ownership = Ownership.safe_get(wallet=self, asset=asset)
 
         if asset.quantity > ownership.quantity:
-            return {"error": True, "message": "Not enogh assets"}
+            return {"error": True, "message": "Not enough assets"}
 
         if asset.quantity == ownership.quantity:
             ownership.delete()
@@ -135,7 +140,7 @@ class Wallet(models.Model):
 class Ownership(models.Model):
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
     asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
-    quantity = models.IntegerField(default=0)
+    quantity = models.FloatField(default=0)
 
     @staticmethod
     def safe_get(wallet, asset):
@@ -150,7 +155,7 @@ class Transaction(models.Model):
     asset = models.ForeignKey(Asset, on_delete=models.DO_NOTHING)
     asset_price = models.FloatField(null=False)
     date = models.DateField(default=datetime.date.today)
-    quantity = models.IntegerField()
+    quantity = models.FloatField()
     is_purchase = models.BooleanField(null=False)
 
     @staticmethod
