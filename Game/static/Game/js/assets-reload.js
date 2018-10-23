@@ -53,7 +53,7 @@ function reload_prices_for_row(row) {
         url: '/game/ajax/quote/' + row.find("#name").html(),
         success: function (data) {
 
-            toastr.success('Asset information updated');
+            console.log("Info updated");
 
             let buy = data.buy;
             let sell = data.sell;

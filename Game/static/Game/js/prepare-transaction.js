@@ -7,14 +7,12 @@ let transaction_types = {
 let asset = {
     name: '',
     type: '',
-    quantity: 1
+    quantity: 1,
+    buy: -1,
+    sell: -1
 };
 
 function prepare_transaction(transaction) {
-
-    let url = transaction === transaction_types.buy?
-        '/game/ajax/buy/':'/game/ajax/sell/';
-
 
     divs_hidden_by_default([
         $("#quantity-form"),
@@ -40,7 +38,7 @@ function prepare_transaction(transaction) {
 
     $("#accept-transaction").click(function () {
         show_transaction_status();
-        start_transaction(url, asset.name, asset.quantity, asset.type);
+        start_transaction(transaction, asset.name, asset.quantity, asset.type);
     });
 
     $("#cancel-transaction").click(function () {

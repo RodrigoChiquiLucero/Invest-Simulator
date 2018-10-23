@@ -22,16 +22,18 @@ function divs_hidden_by_default(divs) {
     })
 }
 
-function populate_accept_form(div, asset, quantity, transaction) {
-    let price = transaction === transaction_types.buy ? asset.buy : asset.sell;
+function populate_accept_form(div, asset_quote, quantity, transaction) {
+    let price = transaction === transaction_types.buy ? asset_quote.buy : asset_quote.sell;
 
-    div.find("#name").html(asset.name);
+    asset.buy = asset_quote.buy;
+    asset.sell = asset_quote.sell;
+
+    div.find("#name").html(asset_quote.name);
     div.find("#price").html("$  " + price);
     div.find("#total").html("$  " + price * quantity)
 }
 
-function populate_response_form(div, data) {
-    //todo: agregar info de cuantos se vendieron y a que precio
+function populate_response_form(type, div, data) {
     let status = div.find("#status");
     let label = div.find("label");
     status.html(data.message);
@@ -41,7 +43,16 @@ function populate_response_form(div, data) {
         status.css('font-weight', 'bold');
         status.css('font-size', '23px');
     } else {
-        label.html("Transaction successfull!");
+        let trans = type === transaction_types.buy ?
+            'bought' : 'sold';
+
+        let price = type === transaction_types.buy ?
+            asset.buy : asset.sell;
+
+        label.html(
+            `You have ${trans} ${asset.quantity} ${asset.name} at ${price} each!`
+        );
+
         status.css('color', 'green');
         status.css('font-weight', 'bold');
         status.css('font-weight', '23px');
@@ -64,6 +75,7 @@ function prepare_input_nicenumber() {
                 case "8":
                 case "9":
                 case "0":
+                case ".":
                 case "Backspace":
                     return true;
 
@@ -128,7 +140,11 @@ function show_transaction_status() {
     $("#trans-status").show(500).find("#accept-t").hide(0);
 }
 
-function start_transaction(url, name, quantity, type) {
+function start_transaction(transaction, name, quantity, type) {
+
+    let url = transaction === transaction_types.buy ?
+        '/game/ajax/buy/' : '/game/ajax/sell/';
+
     $.ajax({
         url: url,
         type: 'post',
@@ -138,10 +154,10 @@ function start_transaction(url, name, quantity, type) {
             'type': type,
         },
         success: function (data) {
-            populate_response_form($("#trans-status"), data);
+            populate_response_form(transaction, $("#trans-status"), data);
         },
         error: function (jqXHR, status, errorThrown) {
-            populate_response_form($("#trans-status"), {
+            populate_response_form(transaction, $("#trans-status"), {
                 'error': true,
                 'message': status
             });
