@@ -9,3 +9,4 @@ venv
 #iconos
 .coverage
 /InvestSimulator/media/profile_image/
+/Game/migrations/
