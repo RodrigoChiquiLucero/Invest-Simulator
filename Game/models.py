@@ -49,7 +49,7 @@ class Wallet(models.Model):
         """
         full wallet info given user
         :param user:
-        :return dictionary with the user wallet:{assets, value_wallet, error}
+        :return dict {assets: [Asset], value_wallet: Float, error: Bool}
         """
         response = {}
         wallet = Wallet.objects.get(user=user)
@@ -70,9 +70,9 @@ class Wallet(models.Model):
 
     def buy_asset(self, asset):
         """
-        add an asset to the user wallet and add the transaction to user history.
+        add an asset to the user wallet and add the transaction to user history
         :param asset:
-        :return: diccionary with status info for this action
+        :return: dict {error: Bool, message: String}
         """
         asset_comms = ACommunication(settings.API_URL)
         asset = asset_comms.get_asset_quote(asset)
@@ -122,9 +122,10 @@ class Wallet(models.Model):
 
     def sell_asset(self, asset):
         """
-        remove an asset to the user wallet and add the transaction to user history.
+        remove an asset to the user wallet and
+        add the transaction to user history.
         :param asset:
-        :return: diccionary with status info for this action
+        :return: dict {error: Bool, message: String}
         """
         asset_comms = ACommunication(settings.API_URL)
         asset = asset_comms.get_asset_quote(asset)
@@ -168,9 +169,9 @@ class Ownership(models.Model):
     @staticmethod
     def safe_get(wallet, asset):
         """
-        get a specific asset which have the user.
+        get a specific ownership, return None if it doesn't exists
         :param wallet, asset:
-        :return dictionary with the assets in his user wallet:{assets, wallet, quantity}
+        :return Ownership
         """
         try:
             return Ownership.objects.get(wallet=wallet, asset=asset)
@@ -189,9 +190,13 @@ class Transaction(models.Model):
 
     @staticmethod
     def get_info(wallet):
+        """
+        search for all made transactions
+        :param wallet:
+        :return dict {transactions: [Transactions]}:
+        """
         response = {}
         transactions = Transaction.objects.filter(wallet=wallet,
                                                   quantity__gt=0)
         response['transactions'] = transactions
-        response['error'] = False
         return response
