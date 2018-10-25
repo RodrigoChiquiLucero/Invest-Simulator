@@ -2,7 +2,7 @@
 
 Aplicación web orientada al público general que simula inversiones en tiempo real.
 
-### Integrantes 🤓
+# Integrantes:
 
 - Rodrigo Lucero
 - Agustin Gomez
@@ -11,18 +11,58 @@ Aplicación web orientada al público general que simula inversiones en tiempo r
 - Federico Rivero
 - Alexis Guerra
 
-### Requisitos 📋
-Para poder correr el proyecto se deberán cumplir los siguientes requisitos:
+# Instalacion:
+Requisitos previos:
+- Homebrew.
+- Git.
+- Python 3.6/3.7.  
 
-- Python 3.6/ 3.7
-
-- **Django==2.1.2**
-- **ipython==7.0.1**
-- **urllib3==1.23**
-- **pillow**
-- **coverage**
-
-Aquellos marcados en **negrita** pueden ser instalados usando
+Se deben seguir los siguientes pasos, ejecutando cada comando en la terminal:
+#### 1. Clonar repositorio de la aplicacion:
 ```
-pip install -r requirements.txt
+mkdir investsimulator
+cd investsimulator
+git clone https://gitlab.com/LocosXelAsado/investsimulator.git
+```
+#### 2. Instalar virtualenv:
+En linux: 
+```
+sudo apt-get install python3-pip
+sudo pip3 install virtualenv 
+```
+En MacOS:
+```
+brew install python
+pip3 install virtualenv
+```
+#### 3. Crear entorno virtual:
+```
+virtualenv venv
+```
+#### 4. Activar entorno virtual:
+```
+source ./venv/bin/activate
+```
+#### 5. Instalar requerimientos:
+```
+pip3 install -r investsimulator/requirements.txt
+```
+Esto instalara los siguientes paquetes:
+   - **django==2.1.2**
+   - **ipython==7.0.1**
+   - **urllib3==1.23**    
+   - **pillow**
+   - **coverage**
+#### 7. Correr migraciones:
+```
+python3 investsimulator/manage.py migrate
+```   
+#### 8. Activar el servidor:
+```
+python3 investsimulator/manage.py runserver
+```
+#### 9. Abrir la aplicacion:
+En el navegador deseado, ingresar la url:
+```
+localhost:8000
 ```
