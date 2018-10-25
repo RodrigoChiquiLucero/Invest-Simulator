@@ -26,7 +26,7 @@ function populate_accept_form(div, asset_quote, quantity, transaction, liquid) {
     let price = transaction === transaction_types.buy ? asset_quote.buy : asset_quote.sell;
 
     let result = transaction === transaction_types.buy ?
-        (liquid - (price*quantity)) : (liquid + (price*quantity));
+        (liquid - (price * quantity)) : (liquid + (price * quantity));
 
     asset.buy = asset_quote.buy;
     asset.sell = asset_quote.sell;
@@ -37,7 +37,7 @@ function populate_accept_form(div, asset_quote, quantity, transaction, liquid) {
     div.find("#name").html(asset_quote.name);
     div.find("#price").html("$  " + price);
     div.find("#total").html("$  " + price * quantity);
-    div.find("#result").html("$  " +  result);
+    div.find("#result").html("$  " + result);
 
     div.find(".qbox").show(500);
     div.find("#accept-transaction").show(500);
@@ -87,16 +87,22 @@ function prepare_input_nicenumber() {
                 (event.keyCode >= 96 && event.keyCode <= 105) ||
                 event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
                 event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
-
             } else {
                 event.preventDefault();
             }
 
-            if ($(this).val().indexOf('.') !== -1 && event.keyCode == 190)
+            let point =  $(this).val().indexOf('.');
+            if (point !== -1 && point === ($(this).val().length - 4)
+                && (event.keyCode !== 8) && (event.keyCode !== 46) ) {
+
+                event.preventDefault();
+            }
+
+            if ($(this).val().indexOf('.') !== -1 && event.keyCode === 190)
                 event.preventDefault();
             //if a decimal has been added, disable the "."-button
 
-        });
+        })
 }
 
 let window_close_timeout = null;

@@ -62,7 +62,7 @@ function prepare_transaction(transaction, liquid) {
     $("#accept-transaction-success").click(function () {
         if (transaction_types.buy === transaction)
             reload_all();
-
+        location.href = "";
         load_action_listener();
         $("#trans-status").hide(400);
     });
