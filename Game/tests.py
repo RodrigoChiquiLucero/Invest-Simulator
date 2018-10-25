@@ -78,6 +78,7 @@ class InterfaceControlTest(TestCase):
         # create and save assets
         assets = self.asset_communication.get_assets()
 
+        print("4th test begin")
         asset_a = assets[0]
         asset_a.quantity = 2.3
 
@@ -85,8 +86,15 @@ class InterfaceControlTest(TestCase):
         asset_c.quantity = 1.4
 
         # buy assets
+        print(wallet.liquid)
         wallet.buy_asset(asset_a)
+        print(wallet.liquid)
+        print(Ownership.objects.all())
         wallet.buy_asset(asset_c)
+        print(wallet.liquid)
+        print(Ownership.objects.all())
+        print("4th test end")
+        print("--------------------\n")
 
     def test_wallet_buy_border(self):
         # get user
@@ -94,18 +102,21 @@ class InterfaceControlTest(TestCase):
         wallet = Wallet.objects.get(user=user)
 
         # create and save assets
-        assets = self.asset_communication.get_asset_names()
+        assets = self.asset_communication.get_assets()
 
+        print("5th test begin")
         asset_a = assets[0]
-        asset_a = Asset.objects.create(name=asset_a.name,
-                                       type=asset_a.type)
-        asset_a = self.asset_communication.get_asset_quote(asset_a)
         asset_a.quantity = 200000
 
         # buy assets
+        print(wallet.liquid)
         wallet.buy_asset(asset_a)
+        print(wallet.liquid)
+        print(Ownership.objects.all())
+        print("5th test end")
+        print("--------------------\n")
 
-    def test_wallet_sell(self):
+    def test_wallet_sell_asset_part(self):
         # get user
         user = User.objects.get(username='test_user')
         wallet = Wallet.objects.get(user=user)
@@ -113,29 +124,160 @@ class InterfaceControlTest(TestCase):
         # create and save assets
         assets = self.asset_communication.get_assets()
 
+        print("6th test begin")
         asset_a = assets[0]
         asset_a.quantity = 2.3
 
         asset_c = assets[3]
         asset_c.quantity = 1.4
 
-        # sell assets
-        wallet.sell_asset(asset_a)
-        wallet.sell_asset(asset_c)
+        # create and save transactions
+        Ownership.objects.create(asset=asset_a, quantity=3, wallet=wallet)
+        Ownership.objects.create(asset=asset_c, quantity=5, wallet=wallet)
 
-    def test_wallet_sell_border(self):
+        # sell assets
+        print("Before sell")
+        print(wallet.liquid)
+        print(Ownership.objects.all())
+        wallet.sell_asset(asset_a)
+        print("After first sell")
+        print(wallet.liquid)
+        print(Ownership.objects.all())
+        print("After second sell")
+        wallet.sell_asset(asset_c)
+        print(wallet.liquid)
+        print(Ownership.objects.all())
+        print("6th test end")
+        print("--------------------\n")
+
+    def test_wallet_sell_asset_full(self):
         # get user
         user = User.objects.get(username='test_user')
         wallet = Wallet.objects.get(user=user)
 
         # create and save assets
-        assets = self.asset_communication.get_asset_names()
+        assets = self.asset_communication.get_assets()
 
+        print("7th test begin")
         asset_a = assets[0]
-        asset_a = Asset.objects.create(name=asset_a.name,
-                                       type=asset_a.type)
-        asset_a = self.asset_communication.get_asset_quote(asset_a)
-        asset_a.quantity = 20000000
+        asset_a.quantity = 3
+
+        asset_c = assets[3]
+        asset_c.quantity = 5
+
+        # create and save transactions
+        Ownership.objects.create(asset=asset_a, quantity=3, wallet=wallet)
+        Ownership.objects.create(asset=asset_c, quantity=5, wallet=wallet)
 
         # sell assets
+        print("Before sell")
+        print(wallet.liquid)
+        print(Ownership.objects.all())
         wallet.sell_asset(asset_a)
+        print("After first sell")
+        print(wallet.liquid)
+        print(Ownership.objects.all())
+        print("After second sell")
+        wallet.sell_asset(asset_c)
+        print(wallet.liquid)
+        print(Ownership.objects.all())
+        print("7th test end")
+        print("--------------------\n")
+
+    def test_wallet_sell_border_quantity(self):
+        # get user
+        user = User.objects.get(username='test_user')
+        wallet = Wallet.objects.get(user=user)
+
+        # create and save assets
+        assets = self.asset_communication.get_assets()
+
+        print("8th test begin")
+        asset_a = assets[0]
+        asset_a.quantity = 20000000
+
+        # create and save transactions
+        Ownership.objects.create(asset=asset_a, quantity=3, wallet=wallet)
+
+        # sell assets
+        print("Before sell")
+        print(wallet.liquid)
+        print(Ownership.objects.all())
+        wallet.sell_asset(asset_a)
+        print("After sell")
+        print(wallet.liquid)
+        print(Ownership.objects.all())
+        print("8th test end")
+        print("--------------------\n")
+
+    def test_wallet_sell_border_ownership(self):
+        # get user
+        user = User.objects.get(username='test_user')
+        wallet = Wallet.objects.get(user=user)
+
+        # create and save assets
+        assets = self.asset_communication.get_assets()
+
+        print("9th test begin")
+        asset_a = assets[0]
+        asset_a.quantity = 2
+
+        # sell assets
+        print("Before sell")
+        print(wallet.liquid)
+        print(Ownership.objects.all())
+        wallet.sell_asset(asset_a)
+        print("After sell")
+        print(wallet.liquid)
+        print(Ownership.objects.all())
+        print("9th test end")
+        print("--------------------\n")
+
+    def test_wallet_buy_then_sell(self):
+        # get user
+        user = User.objects.get(username='test_user')
+        wallet = Wallet.objects.get(user=user)
+
+        # create and save assets
+        assets = self.asset_communication.get_assets()
+
+        print("10th test begin")
+        asset_a = assets[0]
+        asset_a.quantity = 2
+
+        print("Before buy")
+        print(wallet.liquid)
+        print(Ownership.objects.all())
+        wallet.buy_asset(asset_a)
+        print("After buy & before sell")
+        print(wallet.liquid)
+        print(Ownership.objects.all())
+        wallet.sell_asset(asset_a)
+        print("After sell")
+        print(wallet.liquid)
+        print(Ownership.objects.all())
+        print("10th test end")
+        print("--------------------\n")
+
+    def test_wallet_buy_border_quantity(self):
+        # get user
+        user = User.objects.get(username='test_user')
+        wallet = Wallet.objects.get(user=user)
+
+        # create and save assets
+        assets = self.asset_communication.get_assets()
+
+        print("11th test begin")
+        asset_a = assets[0]
+        asset_a.quantity = 0
+
+        # buy assets
+        print("Before buy")
+        print(wallet.liquid)
+        print(Ownership.objects.all())
+        wallet.buy_asset(asset_a)
+        print("After buy")
+        print(wallet.liquid)
+        print(Ownership.objects.all())
+        print("11th test end")
+        print("--------------------\n")

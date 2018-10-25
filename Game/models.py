@@ -124,7 +124,7 @@ class Wallet(models.Model):
         """
         remove an asset to the user wallet and add the transaction to user history.
         :param asset:
-        :return: diccionary with status info for this action
+        :return: dictionary with status info for this action
         """
         asset_comms = ACommunication(settings.API_URL)
         asset = asset_comms.get_asset_quote(asset)
