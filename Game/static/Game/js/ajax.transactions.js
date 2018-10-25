@@ -64,7 +64,6 @@ function populate_response_form(type, div, data) {
 function prepare_input_nicenumber() {
     $('input[type="number"]').niceNumber({
         autoSize: false,
-        step: 0.01
     })
         .keydown(function (event) {
 
