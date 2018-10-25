@@ -1,0 +1,64 @@
+{% load static from staticfiles %}
+
+{#   JQUERY #}
+<script src="{% static 'Game/lib/jquery.js' %}"></script>
+
+{#    NICE NUMBER#}
+<link rel="stylesheet"
+      href="{% static 'Game/lib/nicenumber/jquery.nice-number.css' %}">
+<script src="{% static 'Game/lib/nicenumber/jquery.nice-number.js' %}"></script>
+
+{#    PERSONAL#}
+<link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
+<link rel="stylesheet" href="{% static 'Game/css/transaction-form.css' %}">
+
+{#    TRANSACTIONS#}
+{% csrf_token %}
+<script src="{% static 'Game/js/ajax.transactions.js' %}"></script>
+<script src="{% static 'Game/js/prepare-transaction.js' %}"></script>
+
+
+{#FORMS#}
+<div id="quantity-form" class="dinamic short overlay middle">
+    <label for="quantity"></label>
+    <div class="qbox">
+        <input id="quantity" class="number-input" type="number"
+               name="quantity middle"
+               value="1" min="1">
+    </div>
+    <input id="send-quantity" type="submit" value="Send"/>
+    <input id="cancel-quantity" type="submit" value="Cancel"/>
+</div>
+
+<div id="accept-form" class="dinamic large overlay">
+    <label>Please confirm your transaction:</label>
+
+    <div class="timer">
+        <p>5</p>
+    </div>
+
+    <div class="qbox">
+        <p class="attr">Your asset: </p>
+        <p id="name" class="value"></p>
+        <p class="attr">Asset price: </p>
+        <p id="price" class="value"></p>
+        <p class="attr">Total transaction value: </p>
+        <p id="total" class="value"></p>
+    </div>
+
+
+    <input id="accept-transaction" type="submit" value="Transaction"/>
+    <input id="cancel-transaction" type="submit" value="Cancel"/>
+</div>
+
+<div id="trans-status" class="dinamic short overlay">
+    <label>Your transaction is being processed</label>
+
+    <div class="qbox">
+        <p id="status"></p>
+        <i class="fa fa-spinner fa-spin" id="loading"
+           style="font-size:36px;"></i>
+    </div>
+
+    <input id="accept-transaction-success" type="submit" value="OK"/>
+</div>

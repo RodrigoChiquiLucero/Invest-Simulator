@@ -14,6 +14,15 @@ let asset = {
 
 function prepare_transaction(transaction) {
 
+    let transact = transaction === transaction_types.buy ? "buy" : "sell";
+
+    //load forms defaults
+    $("#quantity-form").find("label").html(
+        `How much assets do you want to ${transact}?`
+    );
+    $("#accept-form").find("#accept-transaction")
+        .attr("value",transact.toUpperCase());
+
     divs_hidden_by_default([
         $("#quantity-form"),
         $("#accept-form"),
