@@ -37,7 +37,7 @@ function populate_accept_form(div, asset_quote, quantity, transaction, liquid) {
     div.find("#name").html(asset_quote.name);
     div.find("#price").html("$  " + price);
     div.find("#total").html("$  " + price * quantity);
-    div.find("#result").html("$  " + result);
+    div.find("#result").html("$  " + result.toFixed(3));
 
     div.find(".qbox").show(500);
     div.find("#accept-transaction").show(500);
