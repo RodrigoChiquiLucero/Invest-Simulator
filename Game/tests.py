@@ -78,26 +78,28 @@ class InterfaceControlTest(TestCase):
         # create and save assets
         assets = self.asset_communication.get_assets()
 
-        print("3rd Test begin")
         asset_a = assets[0]
         asset_a.quantity = 2.3
 
         asset_c = assets[3]
         asset_c.quantity = 1.4
 
+        # expected results
+        expected_money_result = 7680.0
+        expected_ownership_result = [
+            Ownership.objects.create(asset=asset_a, wallet=wallet,
+                                     quantity=2.3),
+            Ownership.objects.create(asset=asset_c, wallet=wallet,
+                                     quantity=1.4)]
+
         # buy assets
-        print("Before 1st buy")
-        print(wallet.liquid)
         wallet.buy_asset(asset_a)
-        print("After 1st buy & before 2nd")
-        print(wallet.liquid)
-        print(Ownership.objects.all())
         wallet.buy_asset(asset_c)
-        print("After 2nd buy")
-        print(wallet.liquid)
-        print(Ownership.objects.all())
-        print("3rd Test end")
-        print("--------------------\n")
+
+        # check algorithm response
+        self.assertEqual(expected_money_result, wallet.liquid)
+        self.assertEqual(expected_ownership_result,
+                         list(Ownership.objects.all()))
 
     def test_wallet_buy_border_quantity(self):
         # get user
@@ -107,20 +109,20 @@ class InterfaceControlTest(TestCase):
         # create and save assets
         assets = self.asset_communication.get_assets()
 
-        print("4th Test begin")
         asset_a = assets[0]
         asset_a.quantity = 200000
 
+        # expected results
+        expected_money_result = 10000
+        expected_ownership_result = []
+
         # buy assets
-        print("Before buy")
-        print(wallet.liquid)
-        print(Ownership.objects.all())
         wallet.buy_asset(asset_a)
-        print("After buy")
-        print(wallet.liquid)
-        print(Ownership.objects.all())
-        print("4th Test end")
-        print("--------------------\n")
+
+        # check algorithm response
+        self.assertEqual(expected_money_result, wallet.liquid)
+        self.assertEqual(expected_ownership_result,
+                         list(Ownership.objects.all()))
 
     def test_wallet_buy_border_nil_quantity(self):
         # get user
@@ -130,20 +132,20 @@ class InterfaceControlTest(TestCase):
         # create and save assets
         assets = self.asset_communication.get_assets()
 
-        print("5th Test begin")
         asset_a = assets[0]
         asset_a.quantity = 0
 
+        # expected results
+        expected_money_result = 10000
+        expected_ownership_result = []
+
         # buy assets
-        print("Before buy")
-        print(wallet.liquid)
-        print(Ownership.objects.all())
         wallet.buy_asset(asset_a)
-        print("After buy")
-        print(wallet.liquid)
-        print(Ownership.objects.all())
-        print("5th Test end")
-        print("--------------------\n")
+
+        # check algorithm response
+        self.assertEqual(expected_ownership_result,
+                         list(Ownership.objects.all()))
+        self.assertEqual(expected_money_result, wallet.liquid)
 
     def test_wallet_sell_asset_part(self):
         # get user
@@ -153,37 +155,36 @@ class InterfaceControlTest(TestCase):
         # create and save assets
         assets = self.asset_communication.get_assets()
 
-        print("6th Test begin")
         asset_a = assets[0]
-        asset_a.quantity = 2.3
-
         asset_c = assets[3]
-        asset_c.quantity = 1.4
 
         # create and save transactions
-        Ownership.objects.create(asset=asset_a, quantity=3, wallet=wallet)
-        Ownership.objects.create(asset=asset_c, quantity=5, wallet=wallet)
+        own1 = Ownership.objects.create(asset=asset_a, quantity=3,
+                                           wallet=wallet)
+        own2 = Ownership.objects.create(asset=asset_c, quantity=5,
+                                           wallet=wallet)
+
+        asset_a.quantity = 2.3
+        asset_c.quantity = 1.4
+
+        # expected results
+        expected_money_result = 11152.8
+        expected_asset_a_quantity = 0.7
+        expected_asset_c_quantity = 3.6
+        expected_ownership_result = [own1, own2]
 
         # sell assets
-        print("Before sell")
-        print(wallet.liquid)
-        print(Ownership.objects.all())
-        print(Ownership.objects.all()[0].quantity)
-        print(Ownership.objects.all()[1].quantity)
         wallet.sell_asset(asset_a)
-        print("After first sell")
-        print(wallet.liquid)
-        print(Ownership.objects.all())
-        print(Ownership.objects.all()[0].quantity)
-        print(Ownership.objects.all()[1].quantity)
-        print("After second sell")
         wallet.sell_asset(asset_c)
-        print(wallet.liquid)
-        print(Ownership.objects.all())
-        print(Ownership.objects.all()[0].quantity)
-        print(Ownership.objects.all()[1].quantity)
-        print("6th Test end")
-        print("--------------------\n")
+
+        # check algorithm response
+        self.assertEqual(expected_money_result, wallet.liquid)
+        self.assertEqual(expected_asset_a_quantity,
+                         Ownership.objects.all()[0].quantity)
+        self.assertEqual(expected_asset_c_quantity,
+                         Ownership.objects.all()[1].quantity)
+        self.assertEqual(expected_ownership_result,
+                         list(Ownership.objects.all()))
 
     def test_wallet_sell_asset_full(self):
         # get user
@@ -193,7 +194,6 @@ class InterfaceControlTest(TestCase):
         # create and save assets
         assets = self.asset_communication.get_assets()
 
-        print("7th Test begin")
         asset_a = assets[0]
         asset_a.quantity = 3
 
@@ -204,20 +204,18 @@ class InterfaceControlTest(TestCase):
         Ownership.objects.create(asset=asset_a, quantity=3, wallet=wallet)
         Ownership.objects.create(asset=asset_c, quantity=5, wallet=wallet)
 
+        # expected results
+        expected_money_result = 11510.0
+        expected_ownership_result = []
+
         # sell assets
-        print("Before sell")
-        print(wallet.liquid)
-        print(Ownership.objects.all())
         wallet.sell_asset(asset_a)
-        print("After first sell")
-        print(wallet.liquid)
-        print(Ownership.objects.all())
-        print("After second sell")
         wallet.sell_asset(asset_c)
-        print(wallet.liquid)
-        print(Ownership.objects.all())
-        print("7th Test end")
-        print("--------------------\n")
+
+        # check algorithm response
+        self.assertEqual(expected_money_result, wallet.liquid)
+        self.assertEqual(expected_ownership_result,
+                         list(Ownership.objects.all()))
 
     def test_wallet_sell_border_quantity(self):
         # get user
@@ -227,23 +225,24 @@ class InterfaceControlTest(TestCase):
         # create and save assets
         assets = self.asset_communication.get_assets()
 
-        print("8th test begin")
         asset_a = assets[0]
         asset_a.quantity = 20000000
 
         # create and save transactions
-        Ownership.objects.create(asset=asset_a, quantity=3, wallet=wallet)
+        own = Ownership.objects.create(asset=asset_a, quantity=3,
+                                       wallet=wallet)
+
+        # expected results
+        expected_money_result = 10000
+        expected_ownership_result = [own]
 
         # sell assets
-        print("Before sell")
-        print(wallet.liquid)
-        print(Ownership.objects.all())
         wallet.sell_asset(asset_a)
-        print("After sell")
-        print(wallet.liquid)
-        print(Ownership.objects.all())
-        print("8th test end")
-        print("--------------------\n")
+
+        # check algorithm response
+        self.assertEqual(expected_money_result, wallet.liquid)
+        self.assertEqual(expected_ownership_result,
+                         list(Ownership.objects.all()))
 
     def test_wallet_sell_border_nil_quantity(self):
         # get user
@@ -253,23 +252,23 @@ class InterfaceControlTest(TestCase):
         # create and save assets
         assets = self.asset_communication.get_assets()
 
-        print("9th test begin")
         asset_a = assets[0]
         asset_a.quantity = 0
 
         # create and save transactions
-        Ownership.objects.create(asset=asset_a, quantity=3, wallet=wallet)
+        own = Ownership.objects.create(asset=asset_a, quantity=3, wallet=wallet)
+
+        # expected results
+        expected_money_result = 10000
+        expected_ownership_result = [own]
 
         # sell assets
-        print("Before sell")
-        print(wallet.liquid)
-        print(Ownership.objects.all())
         wallet.sell_asset(asset_a)
-        print("After sell")
-        print(wallet.liquid)
-        print(Ownership.objects.all())
-        print("9th test end")
-        print("--------------------\n")
+
+        # check algorithm response
+        self.assertEqual(expected_money_result, wallet.liquid)
+        self.assertEqual(expected_ownership_result,
+                         list(Ownership.objects.all()))
 
     def test_wallet_sell_border_ownership(self):
         # get user
@@ -279,20 +278,20 @@ class InterfaceControlTest(TestCase):
         # create and save assets
         assets = self.asset_communication.get_assets()
 
-        print("10th test begin")
         asset_a = assets[0]
         asset_a.quantity = 2
 
+        # expected results
+        expected_money_result = 10000
+        expected_ownership_result = []
+
         # sell assets
-        print("Before sell")
-        print(wallet.liquid)
-        print(Ownership.objects.all())
         wallet.sell_asset(asset_a)
-        print("After sell")
-        print(wallet.liquid)
-        print(Ownership.objects.all())
-        print("10th test end")
-        print("--------------------\n")
+
+        # check algorithm response
+        self.assertEqual(expected_money_result, wallet.liquid)
+        self.assertEqual(expected_ownership_result,
+                         list(Ownership.objects.all()))
 
     def test_wallet_buy_then_sell(self):
         # get user
@@ -302,20 +301,17 @@ class InterfaceControlTest(TestCase):
         # create and save assets
         assets = self.asset_communication.get_assets()
 
-        print("11th test begin")
         asset_a = assets[0]
         asset_a.quantity = 2
 
-        print("Before buy")
-        print(wallet.liquid)
-        print(Ownership.objects.all())
+        # expected results
+        expected_money_result = 10200
+        expected_ownership_result = []
+
         wallet.buy_asset(asset_a)
-        print("After buy & before sell")
-        print(wallet.liquid)
-        print(Ownership.objects.all())
         wallet.sell_asset(asset_a)
-        print("After sell")
-        print(wallet.liquid)
-        print(Ownership.objects.all())
-        print("11th test end")
-        print("--------------------\n")
+
+        # check algorithm response
+        self.assertEqual(expected_money_result, wallet.liquid)
+        self.assertEqual(expected_ownership_result,
+                         list(Ownership.objects.all()))
