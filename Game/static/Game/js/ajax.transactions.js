@@ -62,26 +62,30 @@ function populate_response_form(type, div, data) {
 }
 
 function prepare_input_nicenumber() {
-    $('input[type="number"]').niceNumber()
-        .on("keypress", function (e) {
-            switch (e.key) {
-                case "1":
-                case "2":
-                case "3":
-                case "4":
-                case "5":
-                case "6":
-                case "7":
-                case "8":
-                case "9":
-                case "0":
-                case ".":
-                case "Backspace":
-                    return true;
+    $('input[type="number"]').niceNumber({
+        autoSize: false,
+        step: 0.01
+    })
+        .keydown(function (event) {
 
-                default:
-                    return false;
+
+            if (event.shiftKey == true) {
+                event.preventDefault();
             }
+
+            if ((event.keyCode >= 48 && event.keyCode <= 57) ||
+                (event.keyCode >= 96 && event.keyCode <= 105) ||
+                event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+                event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
+
+            } else {
+                event.preventDefault();
+            }
+
+            if ($(this).val().indexOf('.') !== -1 && event.keyCode == 190)
+                event.preventDefault();
+            //if a decimal has been added, disable the "."-button
+
         });
 }
 
