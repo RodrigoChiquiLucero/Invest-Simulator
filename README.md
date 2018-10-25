@@ -32,7 +32,7 @@ sudo pip3 install virtualenv
 ```
 En MacOS:
 ```
-brew install virtualenv
+brew install python
 pip3 install virtualenv
 ```
 #### 3. Crear entorno virtual:
@@ -48,7 +48,7 @@ source ./venv/bin/activate
 pip3 install requirements.txt
 ```
 Esto instalara los siguientes paquetes:
-   - **Django==2.1.2**
+   - **django==2.1.2**
    - **ipython==7.0.1**
    - **urllib3==1.23**    
    - **pillow**
