@@ -28,9 +28,16 @@ function populate_accept_form(div, asset_quote, quantity, transaction) {
     asset.buy = asset_quote.buy;
     asset.sell = asset_quote.sell;
 
+    div.find("label").html("Please confirm your transaccion")
+        .css("color", "white");
+
     div.find("#name").html(asset_quote.name);
     div.find("#price").html("$  " + price);
     div.find("#total").html("$  " + price * quantity)
+
+    div.find(".qbox").show(500);
+    div.find("#accept-transaction").show(500);
+    div.find("#cancel-transaction").show(500);
 }
 
 function populate_response_form(type, div, data) {
@@ -91,6 +98,10 @@ function prepare_input_nicenumber() {
 let window_close_timeout = null;
 let timer_interval = null;
 
+function stopWindowTimeout() {
+    clearTimeout(window_close_timeout);
+}
+
 function stopTimer() {
     clearInterval(timer_interval);
     setTimeout(
@@ -100,7 +111,7 @@ function stopTimer() {
     )
 }
 
-function show_information_form(asset, onsuccess, transaction) {
+function show_information_form(asset, transaction) {
     $("#quantity-form").hide(400);
     $("#accept-form").show(500);
 
@@ -110,6 +121,7 @@ function show_information_form(asset, onsuccess, transaction) {
     window_close_timeout = setTimeout(
         (function () {
             $("#accept-form").hide(400);
+            $("#quantity-form").show(500);
             if (transaction_types.buy === transaction)
                 reload_all();
             stopTimer();
@@ -128,12 +140,16 @@ function show_information_form(asset, onsuccess, transaction) {
     $.ajax({
         url: '/game/ajax/quote/' + asset.name,
         success: function (data) {
-            onsuccess($("#accept-form"), data, asset.quantity, transaction)
+            populate_accept_form($("#accept-form"), data, asset.quantity, transaction)
         },
         error: function (jqXHR, status, errorThrown) {
-            $("#accept-form").find("label")
+            let accept_form = $("#accept-form");
+            accept_form.find("label")
                 .html("This asset is not available anymore")
                 .css('color', 'red');
+            accept_form.find(".qbox").hide();
+            accept_form.find("#accept-transaction").hide();
+            accept_form.find("#cancel-transaction").hide();
         }
     });
 }

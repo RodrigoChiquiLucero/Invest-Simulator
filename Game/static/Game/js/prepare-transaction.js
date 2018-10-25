@@ -34,8 +34,7 @@ function prepare_transaction(transaction) {
     $("#send-quantity").click(function () {
         //on quantity select
         asset.quantity = $("#quantity").val();
-        console.log("send-quantity");
-        show_information_form(asset, populate_accept_form, transaction)
+        show_information_form(asset, transaction)
     });
 
     $("#cancel-quantity").click(function () {
@@ -43,14 +42,18 @@ function prepare_transaction(transaction) {
         $("#quantity-form").hide(400);
         if (transaction_types.buy === transaction)
             reload_all();
+        load_action_listener();
     });
 
     $("#accept-transaction").click(function () {
+        stopWindowTimeout();
+        stopTimer(timer_interval);
         show_transaction_status();
         start_transaction(transaction, asset.name, asset.quantity, asset.type);
     });
 
     $("#cancel-transaction").click(function () {
+        stopWindowTimeout();
         stopTimer(timer_interval);
         $("#accept-form").stop(true).hide(400);
         $("#quantity-form").show(500);
@@ -60,6 +63,7 @@ function prepare_transaction(transaction) {
         if (transaction_types.buy === transaction)
             reload_all();
 
+        load_action_listener();
         $("#trans-status").hide(400);
     });
 }
@@ -68,6 +72,7 @@ function load_action_listener() {
     let action = $(".action");
     action.unbind();
     action.click(function () {
+        action.unbind();
         asset.name = $(this).attr("id");
         asset.type = $(this).attr("type");
         $("#quantity-form").show(500);

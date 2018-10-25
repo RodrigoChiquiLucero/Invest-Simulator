@@ -22,6 +22,12 @@ def assets(request):
     asset_comunication = ACommunication(settings.API_URL)
     asset_list = [a.to_dict() for a in asset_comunication.get_assets()]
     context = {'assets': asset_list}
+
+    # user info
+    wallet = Wallet.get_info(request.user)
+    context['value_wallet'] = wallet['value_wallet']
+    context['liquid'] = wallet['liquid']
+
     if request.is_ajax():
         return JsonResponse(context)
     else:
@@ -82,23 +88,6 @@ def ajax_buy(request):
         wallet = Wallet.objects.get(user=user)
 
         return JsonResponse(wallet.buy_asset(asset))
-    else:
-        return HttpResponse(status=400, reason="No GET method")
-
-
-@login_required
-def ajax_sell(request):
-    if request.method == 'POST':
-        name = request.POST['name']
-        type = request.POST['type']
-        quantity = float(request.POST['quantity'])
-        asset = Asset(name=name, type=type)
-        asset.quantity = quantity
-
-        user = request.user
-        wallet = Wallet.objects.get(user=user)
-
-        return JsonResponse(wallet.sell_asset(asset))
     else:
         return HttpResponse(status=400, reason="No GET method")
 

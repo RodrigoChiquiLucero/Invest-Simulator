@@ -5,12 +5,25 @@
 
     {# LINKS AND SCRIPTS #}
     {#    //font-awesome#}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 
     <div align="center"
          class="outer middle w3-container w3-animate-zoom assets inner">
 
         {% include 'Game/transaction-form.html' %}
+
+        {# CONTENT #}
+        <button class="w3-button w3-green w3-round-large w3-animate-zoom"
+                style="width: 12%; height: 7%; margin: 10px">
+            <i class="fas fa-dollar-sign"></i> {{ liquid }} <i
+                class="fas fa-piggy-bank"></i>
+        </button>
+        <button class="w3-button w3-green w3-round-large w3-animate-zoom"
+                style="width: 12%; height: 7%; margin: 10px">
+            <i class="fas fa-dollar-sign"></i> {{ value_wallet }} <i
+                class="fas fa-wallet"></i>
+        </button>
 
         <style>
             .assets th {
@@ -61,5 +74,10 @@
             </div>
         {% endif %}
     </div>
-    <script>prepare_transaction(transaction_types.sell);</script>
+    <script>
+        prepare_transaction(transaction_types.sell);
+        $("#accept-transaction-success").click(function () {
+            location.href = '';
+        });
+    </script>
 {% endblock %}
