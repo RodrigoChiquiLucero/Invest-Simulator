@@ -45,7 +45,7 @@ source ./venv/bin/activate
 ```
 #### 5. Instalar requerimientos:
 ```
-pip3 install requirements.txt
+pip3 install -r investsimulator/requirements.txt
 ```
 Esto instalara los siguientes paquetes:
    - **django==2.1.2**
@@ -53,7 +53,16 @@ Esto instalara los siguientes paquetes:
    - **urllib3==1.23**    
    - **pillow**
    - **coverage**
-#### 6. Activar el servidor:
+#### 7. Correr migraciones:
 ```
-python3 manage.py runserver
+python3 investsimulator/manage.py migrate
+```   
+#### 8. Activar el servidor:
+```
+python3 investsimulator/manage.py runserver
+```
+#### 9. Abrir la aplicacion:
+En el navegador deseado, ingresar la url:
+```
+localhost:8000
 ```
