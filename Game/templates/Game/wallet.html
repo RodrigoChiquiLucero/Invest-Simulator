@@ -75,7 +75,7 @@
         {% endif %}
     </div>
     <script>
-        prepare_transaction(transaction_types.sell);
+        prepare_transaction(transaction_types.sell, "{{ liquid }}");
         $("#accept-transaction-success").click(function () {
             location.href = '';
         });

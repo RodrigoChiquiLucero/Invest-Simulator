@@ -64,7 +64,7 @@
                 <script>
                     prepare_token();
                     prepare_input_nicenumber();
-                    prepare_transaction(transaction_types.buy)
+                    prepare_transaction(transaction_types.buy, "{{ liquid }}")
                 </script>
             {% else %}
                 <div class="error_message">

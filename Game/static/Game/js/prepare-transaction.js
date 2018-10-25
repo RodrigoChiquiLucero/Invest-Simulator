@@ -12,7 +12,7 @@ let asset = {
     sell: -1
 };
 
-function prepare_transaction(transaction) {
+function prepare_transaction(transaction, liquid) {
 
     let transact = transaction === transaction_types.buy ? "buy" : "sell";
 
@@ -34,7 +34,7 @@ function prepare_transaction(transaction) {
     $("#send-quantity").click(function () {
         //on quantity select
         asset.quantity = $("#quantity").val();
-        show_information_form(asset, transaction)
+        show_information_form(asset, transaction, liquid)
     });
 
     $("#cancel-quantity").click(function () {

@@ -12,25 +12,12 @@
             src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
     <script class="jsbin"
             src="http://ajax.googleapis.com/ajax/libs/jqueryui/1.8.0/jquery-ui.min.js"></script>
-    <script src="{% static 'Game/js/jquery.js' %}"></script>
+    <script src="{% static 'Game/lib/jquery.js' %}"></script>
     <link rel="stylesheet" href="{% static 'Game/css/toastr.scss' %}"/>
-    <script src="{% static 'Game/js/toastr.js' %}"></script>
+    <script src="{% static 'Game/lib/toastr.js' %}"></script>
+    <script src="{% static 'Game/lib/jquery.capslock/jquery.capslockstate.js' %}"></script>
+    <script src="{% static 'User/js/signup.js' %}"></script>
 
-
-    <script>
-        function readURL(input) {
-            if (input.files && input.files[0]) {
-                let reader = new FileReader();
-                reader.onload = function (e) {
-                    $('#blah')
-                        .attr('src', e.target.result)
-                        .width(150)
-                        .height(150);
-                };
-                reader.readAsDataURL(input.files[0]);
-            }
-        }
-    </script>
     <div id="login-box" class="w3-animate-zoom">
 
         <form method="POST" enctype="multipart/form-data">
@@ -104,40 +91,6 @@
                     {{ form.password2.errors }}
                 </div>
             </div>
-
-
-            <script>
-                $(document).ready(
-                    function () {
-                        $(".pass").keydown(
-                            function (e) {
-                                console.log("Entramos");
-                                var caps = e.getModifierState && e.getModifierState('CapsLock');
-                                if (caps) {
-                                    toastr.warning('WARNING - CAPS ON');
-                                }
-                            }
-                        );
-                        toastr.options = {
-                            "closeButton": true,
-                            "debug": false,
-                            "newestOnTop": false,
-                            "progressBar": false,
-                            "preventDuplicates": true,
-                            "onclick": null,
-                            "showDuration": "100",
-                            "hideDuration": "100",
-                            "timeOut": "100",
-                            "extendedTimeOut": "100",
-                            "showEasing": "swing",
-                            "hideEasing": "linear",
-                            "showMethod": "fadeIn",
-                            "hideMethod": "fadeOut",
-                            "positionClass": "toast-bottom-center",
-                        };
-                    }
-                )
-            </script>
 
             <input type="submit" name="signup_submit" value="Sign me up"/>
         </form>

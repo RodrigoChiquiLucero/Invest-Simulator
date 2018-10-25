@@ -22,8 +22,11 @@ function divs_hidden_by_default(divs) {
     })
 }
 
-function populate_accept_form(div, asset_quote, quantity, transaction) {
+function populate_accept_form(div, asset_quote, quantity, transaction, liquid) {
     let price = transaction === transaction_types.buy ? asset_quote.buy : asset_quote.sell;
+
+    let result = transaction === transaction_types.buy ?
+        (liquid - (price*quantity)) : (liquid + (price*quantity));
 
     asset.buy = asset_quote.buy;
     asset.sell = asset_quote.sell;
@@ -33,7 +36,8 @@ function populate_accept_form(div, asset_quote, quantity, transaction) {
 
     div.find("#name").html(asset_quote.name);
     div.find("#price").html("$  " + price);
-    div.find("#total").html("$  " + price * quantity)
+    div.find("#total").html("$  " + price * quantity);
+    div.find("#result").html("$  " +  result);
 
     div.find(".qbox").show(500);
     div.find("#accept-transaction").show(500);
@@ -111,7 +115,7 @@ function stopTimer() {
     )
 }
 
-function show_information_form(asset, transaction) {
+function show_information_form(asset, transaction, liquid) {
     $("#quantity-form").hide(400);
     $("#accept-form").show(500);
 
@@ -140,7 +144,7 @@ function show_information_form(asset, transaction) {
     $.ajax({
         url: '/game/ajax/quote/' + asset.name,
         success: function (data) {
-            populate_accept_form($("#accept-form"), data, asset.quantity, transaction)
+            populate_accept_form($("#accept-form"), data, asset.quantity, transaction, liquid)
         },
         error: function (jqXHR, status, errorThrown) {
             let accept_form = $("#accept-form");
