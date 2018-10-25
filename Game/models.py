@@ -83,7 +83,7 @@ class Wallet(models.Model):
         name = asset.name
         type = asset.type
 
-        if quantity == 0:
+        if quantity <= 0:
             return {"error": True,
                     "message": "You need to buy at least one asset"}
 
@@ -105,7 +105,7 @@ class Wallet(models.Model):
                                       quantity=asset.quantity)
             else:
                 ownership.quantity += quantity
-                round(ownership.quantity, 3)
+                ownership.quantity = round(ownership.quantity, 3)
             ownership.save()
 
             Transaction(wallet=self, asset=asset, asset_price_buy=asset.buy,
@@ -114,7 +114,7 @@ class Wallet(models.Model):
                         is_purchase=True).save()
 
             self.liquid -= price
-            round(self.liquid, 3)
+            self.liquid = round(self.liquid, 3)
             self.save()
             return {"error": False, "message": "Purchase has been successful"}
         else:
@@ -131,7 +131,7 @@ class Wallet(models.Model):
         price = (asset.sell * asset.quantity)
         quantity = asset.quantity
 
-        if quantity == 0:
+        if quantity <= 0:
             return {"error": True,
                     "message": "You need to sell at least one asset"}
 
@@ -146,7 +146,7 @@ class Wallet(models.Model):
             ownership.delete()
         else:
             ownership.quantity -= asset.quantity
-            round(ownership.quantity, 3)
+            ownership.quantity = round(ownership.quantity, 3)
             ownership.save()
 
         Transaction(wallet=self, asset=asset, asset_price_buy=asset.buy,
@@ -155,7 +155,7 @@ class Wallet(models.Model):
                     is_purchase=False).save()
 
         self.liquid += price
-        round(self.liquid, 3)
+        ownership.quantity = round(self.liquid, 3)
         self.save()
         return {"error": False, "message": "Sale has been succesfull"}
 
