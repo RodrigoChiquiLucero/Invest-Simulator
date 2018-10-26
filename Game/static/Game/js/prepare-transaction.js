@@ -12,7 +12,16 @@ let asset = {
     sell: -1
 };
 
-function prepare_transaction(transaction) {
+function prepare_transaction(transaction, liquid) {
+
+    let transact = transaction === transaction_types.buy ? "buy" : "sell";
+
+    //load forms defaults
+    $("#quantity-form").find("label").html(
+        `How much assets do you want to ${transact}?`
+    );
+    $("#accept-form").find("#accept-transaction")
+        .attr("value",transact.toUpperCase());
 
     divs_hidden_by_default([
         $("#quantity-form"),
@@ -25,8 +34,7 @@ function prepare_transaction(transaction) {
     $("#send-quantity").click(function () {
         //on quantity select
         asset.quantity = $("#quantity").val();
-        console.log("send-quantity");
-        show_information_form(asset, populate_accept_form, transaction)
+        show_information_form(asset, transaction, liquid)
     });
 
     $("#cancel-quantity").click(function () {
@@ -34,14 +42,18 @@ function prepare_transaction(transaction) {
         $("#quantity-form").hide(400);
         if (transaction_types.buy === transaction)
             reload_all();
+        load_action_listener();
     });
 
     $("#accept-transaction").click(function () {
+        stopWindowTimeout();
+        stopTimer(timer_interval);
         show_transaction_status();
         start_transaction(transaction, asset.name, asset.quantity, asset.type);
     });
 
     $("#cancel-transaction").click(function () {
+        stopWindowTimeout();
         stopTimer(timer_interval);
         $("#accept-form").stop(true).hide(400);
         $("#quantity-form").show(500);
@@ -50,7 +62,8 @@ function prepare_transaction(transaction) {
     $("#accept-transaction-success").click(function () {
         if (transaction_types.buy === transaction)
             reload_all();
-
+        location.href = "";
+        load_action_listener();
         $("#trans-status").hide(400);
     });
 }
@@ -59,6 +72,7 @@ function load_action_listener() {
     let action = $(".action");
     action.unbind();
     action.click(function () {
+        action.unbind();
         asset.name = $(this).attr("id");
         asset.type = $(this).attr("type");
         $("#quantity-form").show(500);

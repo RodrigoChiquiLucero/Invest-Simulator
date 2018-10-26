@@ -12,7 +12,7 @@
  */
 /* global define */
 (function (define) {
-    define(['jquery'], function ($) {
+    define(['Game/static/Game/lib/jquery'], function ($) {
         return (function () {
             var $container;
             var listener;
@@ -469,7 +469,7 @@
     });
 }(typeof define === 'function' && define.amd ? define : function (deps, factory) {
     if (typeof module !== 'undefined' && module.exports) { //Node
-        module.exports = factory(require('jquery'));
+        module.exports = factory(require('Game/static/Game/lib/jquery'));
     } else {
         window.toastr = factory(window.jQuery);
     }

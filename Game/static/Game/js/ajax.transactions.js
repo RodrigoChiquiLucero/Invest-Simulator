@@ -22,15 +22,26 @@ function divs_hidden_by_default(divs) {
     })
 }
 
-function populate_accept_form(div, asset_quote, quantity, transaction) {
+function populate_accept_form(div, asset_quote, quantity, transaction, liquid) {
     let price = transaction === transaction_types.buy ? asset_quote.buy : asset_quote.sell;
+
+    let result = transaction === transaction_types.buy ?
+        (liquid - (price * quantity)) : (liquid + (price * quantity));
 
     asset.buy = asset_quote.buy;
     asset.sell = asset_quote.sell;
 
+    div.find("label").html("Please confirm your transaccion")
+        .css("color", "white");
+
     div.find("#name").html(asset_quote.name);
     div.find("#price").html("$  " + price);
-    div.find("#total").html("$  " + price * quantity)
+    div.find("#total").html("$  " + price * quantity);
+    div.find("#result").html("$  " + result.toFixed(3));
+
+    div.find(".qbox").show(500);
+    div.find("#accept-transaction").show(500);
+    div.find("#cancel-transaction").show(500);
 }
 
 function populate_response_form(type, div, data) {
@@ -62,31 +73,44 @@ function populate_response_form(type, div, data) {
 }
 
 function prepare_input_nicenumber() {
-    $('input[type="number"]').niceNumber()
-        .on("keypress", function (e) {
-            switch (e.key) {
-                case "1":
-                case "2":
-                case "3":
-                case "4":
-                case "5":
-                case "6":
-                case "7":
-                case "8":
-                case "9":
-                case "0":
-                case ".":
-                case "Backspace":
-                    return true;
+    $('input[type="number"]').niceNumber({
+        autoSize: false,
+    })
+        .keydown(function (event) {
 
-                default:
-                    return false;
+
+            if (event.shiftKey == true) {
+                event.preventDefault();
             }
-        });
+
+            if ((event.keyCode >= 48 && event.keyCode <= 57) ||
+                (event.keyCode >= 96 && event.keyCode <= 105) ||
+                event.keyCode == 8 || event.keyCode == 9 || event.keyCode == 37 ||
+                event.keyCode == 39 || event.keyCode == 46 || event.keyCode == 190) {
+            } else {
+                event.preventDefault();
+            }
+
+            let point =  $(this).val().indexOf('.');
+            if (point !== -1 && point === ($(this).val().length - 4)
+                && (event.keyCode !== 8) && (event.keyCode !== 46) ) {
+
+                event.preventDefault();
+            }
+
+            if ($(this).val().indexOf('.') !== -1 && event.keyCode === 190)
+                event.preventDefault();
+            //if a decimal has been added, disable the "."-button
+
+        })
 }
 
 let window_close_timeout = null;
 let timer_interval = null;
+
+function stopWindowTimeout() {
+    clearTimeout(window_close_timeout);
+}
 
 function stopTimer() {
     clearInterval(timer_interval);
@@ -97,7 +121,7 @@ function stopTimer() {
     )
 }
 
-function show_information_form(asset, onsuccess, transaction) {
+function show_information_form(asset, transaction, liquid) {
     $("#quantity-form").hide(400);
     $("#accept-form").show(500);
 
@@ -107,6 +131,7 @@ function show_information_form(asset, onsuccess, transaction) {
     window_close_timeout = setTimeout(
         (function () {
             $("#accept-form").hide(400);
+            $("#quantity-form").show(500);
             if (transaction_types.buy === transaction)
                 reload_all();
             stopTimer();
@@ -125,12 +150,16 @@ function show_information_form(asset, onsuccess, transaction) {
     $.ajax({
         url: '/game/ajax/quote/' + asset.name,
         success: function (data) {
-            onsuccess($("#accept-form"), data, asset.quantity, transaction)
+            populate_accept_form($("#accept-form"), data, asset.quantity, transaction, liquid)
         },
         error: function (jqXHR, status, errorThrown) {
-            $("#accept-form").find("label")
+            let accept_form = $("#accept-form");
+            accept_form.find("label")
                 .html("This asset is not available anymore")
                 .css('color', 'red');
+            accept_form.find(".qbox").hide();
+            accept_form.find("#accept-transaction").hide();
+            accept_form.find("#cancel-transaction").hide();
         }
     });
 }

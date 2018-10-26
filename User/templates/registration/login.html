@@ -3,6 +3,12 @@
 
 {% block body %}
     <link rel="stylesheet" href="{% static 'User/signupin.css' %}">
+
+    <script src="{% static 'Game/lib/jquery.js' %}"></script>
+    <script src="{% static 'Game/lib/jquery.capslock/jquery.capslockstate.js' %}"></script>
+    <link rel="stylesheet" href="{% static 'Game/css/toastr.scss' %}"/>
+    <script src="{% static 'Game/lib/toastr.js' %}"></script>
+
     <div id="login-box" class="w3-animate-zoom">
 
         <form method="POST">
@@ -34,4 +40,38 @@
 
         </form>
     </div>
+    <script>
+        $(document).ready(
+            function () {
+                toastr.options = {
+                    "closeButton": true,
+                    "debug": false,
+                    "newestOnTop": false,
+                    "progressBar": false,
+                    "preventDuplicates": true,
+                    "onclick": null,
+                    "showDuration": "100",
+                    "hideDuration": "100",
+                    "timeOut": "100000",
+                    "extendedTimeOut": "100",
+                    "showEasing": "swing",
+                    "hideEasing": "linear",
+                    "showMethod": "fadeIn",
+                    "hideMethod": "fadeOut",
+                    "positionClass": "toast-bottom-center",
+                };
+
+                $(window).capslockstate();
+
+                $(window).bind("capsChanged", function (event) {
+                    if ($(window).capslockstate("state") === true) {
+                        toastr.warning("Caps lock is on! Be careful!");
+                    } else {
+                        toastr.clear()
+                    }
+                });
+
+            }
+        );
+    </script>
 {% endblock %}
