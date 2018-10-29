@@ -73,15 +73,14 @@ function populate_response_form(type, div, data) {
 }
 
 function prepare_input_nicenumber() {
-    $('input[type="number"]').niceNumber({
-        autoSize: false,
-    })
+    let input_nn = $('#quantity');
+    input_nn
+        .niceNumber({
+            autoSize: false,
+        })
         .keydown(function (event) {
-
-
-            if (event.shiftKey == true) {
+            if (event.shiftKey == true)
                 event.preventDefault();
-            }
 
             if ((event.keyCode >= 48 && event.keyCode <= 57) ||
                 (event.keyCode >= 96 && event.keyCode <= 105) ||
@@ -93,15 +92,11 @@ function prepare_input_nicenumber() {
 
             let point =  $(this).val().indexOf('.');
             if (point !== -1 && point === ($(this).val().length - 4)
-                && (event.keyCode !== 8) && (event.keyCode !== 46) ) {
-
+                && (event.keyCode !== 8) && (event.keyCode !== 46) )
                 event.preventDefault();
-            }
 
             if ($(this).val().indexOf('.') !== -1 && event.keyCode === 190)
                 event.preventDefault();
-            //if a decimal has been added, disable the "."-button
-
         })
 }
 
