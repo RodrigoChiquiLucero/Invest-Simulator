@@ -6,6 +6,11 @@
     --font-size: 30px;
 }
 
+.form-t {
+    padding: 5px;
+    font-size: 20px;
+}
+
 .type-box {
     padding-bottom: -15px;
 }
