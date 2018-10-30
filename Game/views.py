@@ -64,6 +64,17 @@ def history(request, name):
         return render(request, 'Game/select_dates.html')
 
 
+@login_required
+def set_alarm(request):
+    if request.method == 'POST':
+        return HttpResponse(status=404, reason="Can't set your alarm yet!")
+    else:
+        asset_comunication = ACommunication(settings.API_URL)
+        asset_list = [a.to_dict() for a in asset_comunication.get_assets()]
+        context = {'assets': asset_list}
+        return render(request, 'Game/set_alarm.html', context)
+
+
 # AJAX JSON RESPONSES
 @login_required
 def ajax_quote(request, name):

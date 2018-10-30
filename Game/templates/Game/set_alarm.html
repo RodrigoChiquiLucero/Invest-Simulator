@@ -1,0 +1,80 @@
+{% extends 'Game/base.html' %}
+{% load static from staticfiles %}
+
+{% block body %}
+
+    {# LINKS AND SCRIPTS #}
+    {#    //font-awesome#}
+    <link rel="stylesheet"
+          href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+
+    {#   JQUERY #}
+    <script src="{% static 'Game/lib/jquery.js' %}"></script>
+    {#    NICE NUMBER#}
+    <link rel="stylesheet"
+          href="{% static 'Game/lib/nicenumber/jquery.nice-number.css' %}">
+    <script src="{% static 'Game/lib/nicenumber/jquery.nice-number.js' %}"></script>
+
+    <link rel="stylesheet" href="{% static 'Game/css/transaction-form.css' %}">
+    <script src="{% static 'Game/js/ajax.transactions.js' %}"></script>
+
+    {#    PERSONAL#}
+    <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/alert.css' %}">
+
+    <div align="center" class="middle assets inner">
+
+        <div id="assets" class="w3-container w3-animate-zoom assets"
+             align="center">
+            <div id="quantity-form" class="alarm-form short overlay middle">
+                <label for="quantity">Set your threshold</label>
+                <div class="qbox">
+                    <input id="quantity" class="number-input" type="number"
+                           name="quantity middle"
+                           value="1" min="1">
+                </div>
+                <input id="send-alert" class="send-button" type="submit" value="Set my alert"/>
+            </div>
+            <script>
+                prepare_input_nicenumber();
+            </script>
+
+            {% if assets %}
+                <table style="border-top-left-radius: 20px;border-top-right-radius: 20px;">
+                    <tr>
+                        <th> Name</th>
+                        <th> Type</th>
+                        <th> Sell price</th>
+                        <th> Buy</th>
+                        <th>
+                            <label class="check" style="margin-left: 0">
+                                <input type="checkbox">
+                                <span class="checkmark"></span>
+                            </label>
+                        </th>
+                    </tr>
+                    {% for a in assets %}
+                        <tr class="dinamic-row">
+                            <td id="name">{{ a.name }}</td>
+                            <td id="type">{{ a.type }}</td>
+                            <td id="sell">$ {{ a.sell }}</td>
+                            <td id="buy">$ {{ a.buy }} </td>
+                            <td>
+                                <label class="check">
+                                    <input type="checkbox">
+                                    <span class="checkmark"></span>
+                                </label>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+
+            {% else %}
+                <div class="error_message">
+                    <h1> There are no available assets </h1>
+                </div>
+            {% endif %}
+        </div>
+
+    </div>
+{% endblock %}
