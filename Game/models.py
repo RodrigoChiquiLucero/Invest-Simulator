@@ -200,3 +200,17 @@ class Transaction(models.Model):
                                                   quantity__gt=0)
         response['transactions'] = transactions
         return response
+
+
+class Alarm(models.Model):
+    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
+    asset = models.ForeignKey(Asset, on_delete=models.DO_NOTHING)
+    asset_price = models.FloatField(null=False, default=-1)
+    type = models.IntegerField(null=False, default=-1)
+
+    @staticmethod
+    def get_info(wallet):
+        response = {}
+        alarms = Alarm.objects.filter(wallet=wallet, quantity__gt=0)
+        response['alarms'] = alarms
+        return alarms

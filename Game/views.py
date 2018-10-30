@@ -63,6 +63,36 @@ def history(request, name):
     else:
         return render(request, 'Game/select_dates.html')
 
+@login_required
+def ranking(request):
+        users = []
+        wallets = Wallet.objects.all()
+        for w in wallets:
+            users.append({'username': w.user.username, 'wallet': w.get_info(w.user)['value_wallet'], 'ranking': 1})
+        users.sort(key=lambda k: k['wallet'], reverse=1)
+        index = 0
+        for u in users:
+            index += 1
+            u['ranking'] = index
+        return render(request, 'Game/ranking.html', {'users': users})
+
+
+@login_required
+def set_alarm(request):
+    if request.method == 'POST':
+        if float(request.POST['threshold']) < 0:
+            return HttpResponse(status=400, reason="Incorrect threshold value")
+        elif not request.POST.getlist('assets[]'):
+            return HttpResponse(status=400,
+                                reason="You need to select at least one asset")
+        else:
+            return HttpResponse(status=200, reason="Your alarm has been set!")
+    else:
+        asset_comunication = ACommunication(settings.API_URL)
+        asset_list = [a.to_dict() for a in asset_comunication.get_assets()]
+        context = {'assets': asset_list}
+        return render(request, 'Game/set_alarm.html', context)
+
 
 # AJAX JSON RESPONSES
 @login_required
