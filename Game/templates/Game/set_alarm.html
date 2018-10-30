@@ -44,13 +44,21 @@
 
             <div id="quantity-form" class="alarm-form not-so-large overlay middle">
                 <label>Set your alarm type</label>
-                <div class="type-box">
-                    <label>
-                        <input type="radio" name="type" id="up" value="true" checked >Up
-                    </label>
-                    <label>
-                        <input type="radio" name="type" id="down" value="false" >Down
-                    </label>
+                <div class="type-box container">
+                    <form class="toggle">
+
+                        <input type="radio" id="choice1" name="choice"
+                               value="true">
+                        <label for="choice1">Up</label>
+
+                        <input type="radio" id="choice2" name="choice"
+                               value="false">
+                        <label for="choice2">Down</label>
+
+                        <div id="flap"><span class="content"></span>
+                        </div>
+
+                    </form>
                 </div>
 
                 <label for="quantity">Set your threshold</label>

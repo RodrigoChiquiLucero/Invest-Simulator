@@ -1,4 +1,3 @@
-
 window.onload = function () {
     prepare_token();
 
@@ -39,9 +38,9 @@ window.onload = function () {
     $("#send-alert").click(function () {
         //take all selected assets
         let selected = [];
-        $(".selected-check").each( function () {
-                if($(this).is(':checked'))
-                    selected.push($(this).attr('id'))
+        $(".selected-check").each(function () {
+            if ($(this).is(':checked'))
+                selected.push($(this).attr('id'))
         });
 
         //what is the selected type?
@@ -53,12 +52,13 @@ window.onload = function () {
         $("#quantity-form").hide(400);
         $("#trans-status").show(500).find("#accept-success").hide();
         $.ajax({
-            url:'',
+            url: '',
             type: 'post',
             data: {
                 'isUp': isUp,
                 'threshold': threshold,
-                'assets': selected },
+                'assets': selected
+            },
             success: function (data) {
                 populate_success(data)
             },
@@ -68,5 +68,40 @@ window.onload = function () {
 
         });
 
-    })
+    });
+
+    const st = {};
+
+    st.flap = document.querySelector('#flap');
+    st.toggle = document.querySelector('.toggle');
+
+    st.choice1 = document.querySelector('#choice1');
+    st.choice2 = document.querySelector('#choice2');
+
+    st.flap.addEventListener('transitionend', () => {
+
+        if (st.choice1.checked) {
+            st.toggle.style.transform = 'rotateY(-15deg)';
+            setTimeout(() => st.toggle.style.transform = '', 400);
+        } else {
+            st.toggle.style.transform = 'rotateY(15deg)';
+            setTimeout(() => st.toggle.style.transform = '', 400);
+        }
+
+    });
+
+    st.clickHandler = (e) => {
+
+        if (e.target.tagName === 'LABEL') {
+            setTimeout(() => {
+                st.flap.children[0].textContent = e.target.textContent;
+            }, 250);
+        }
+    };
+
+    document.addEventListener('DOMContentLoaded', () => {
+        st.flap.children[0].textContent = st.choice2.nextElementSibling.textContent;
+    });
+
+    document.addEventListener('click', (e) => st.clickHandler(e));
 };
