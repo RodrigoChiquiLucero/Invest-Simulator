@@ -20,19 +20,46 @@
 
     {#    PERSONAL#}
     <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
-    <link rel="stylesheet" href="{% static 'Game/css/alert.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/alarm.css' %}">
 
-    <div align="center" class="middle assets inner">
+    {% csrf_token %}
+    <script src="{% static 'Game/js/alarm.js' %}"></script>
+
+    <div align="center" class="middle assets inner" style="padding-top: 0">
 
         <div id="assets" class="w3-container w3-animate-zoom assets"
              align="center">
-            <div id="quantity-form" class="alarm-form short overlay middle">
-                <label for="quantity">Set your threshold</label>
+
+            <div id="trans-status" class="dinamic short overlay">
+                <label>Your alert is being processed</label>
+
                 <div class="qbox">
-                    <input id="quantity" class="number-input" type="number"
+                    <p id="status"></p>
+                    <i class="fa fa-spinner fa-spin" id="loading"
+                       style="font-size:36px;"></i>
+                </div>
+
+                <input id="accept-success" type="submit" value="OK"/>
+            </div>
+
+            <div id="quantity-form" class="alarm-form not-so-large overlay middle">
+                <label>Set your alarm type</label>
+                <div class="type-box">
+                    <label>
+                        <input type="radio" name="type" id="up" value="true" checked >Up
+                    </label>
+                    <label>
+                        <input type="radio" name="type" id="down" value="false" >Down
+                    </label>
+                </div>
+
+                <label for="quantity">Set your threshold</label>
+                <div class="thres-box">
+                    <input id="quantity" class="number-input" type="text"
                            name="quantity middle"
                            value="1" min="1">
                 </div>
+
                 <input id="send-alert" class="send-button" type="submit" value="Set my alert"/>
             </div>
             <script>
@@ -48,7 +75,7 @@
                         <th> Buy</th>
                         <th>
                             <label class="check" style="margin-left: 0">
-                                <input type="checkbox">
+                                <input type="checkbox" id="general">
                                 <span class="checkmark"></span>
                             </label>
                         </th>
@@ -61,7 +88,9 @@
                             <td id="buy">$ {{ a.buy }} </td>
                             <td>
                                 <label class="check">
-                                    <input type="checkbox">
+                                    <input type="checkbox"
+                                           class="selected-check"
+                                            id="{{ a.name }}">
                                     <span class="checkmark"></span>
                                 </label>
                             </td>

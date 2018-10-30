@@ -67,7 +67,13 @@ def history(request, name):
 @login_required
 def set_alarm(request):
     if request.method == 'POST':
-        return HttpResponse(status=404, reason="Can't set your alarm yet!")
+        if float(request.POST['threshold']) < 0:
+            return HttpResponse(status=400, reason="Incorrect threshold value")
+        elif not request.POST.getlist('assets[]'):
+            return HttpResponse(status=400,
+                                reason="You need to select at least one asset")
+        else:
+            return HttpResponse(status=200, reason="Your alarm has been set!")
     else:
         asset_comunication = ACommunication(settings.API_URL)
         asset_list = [a.to_dict() for a in asset_comunication.get_assets()]
