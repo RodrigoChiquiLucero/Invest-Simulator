@@ -31,8 +31,8 @@ window.onload = function () {
     function populate_success(data) {
         $("#accept-success").show(500);
         $("#loading").hide(500);
-        $("#trans-status").find('p').html(
-            'Your alert has been set successfully!'
+        $("#trans-status").find('#status-info').html(
+            data.message
         );
 
     }
@@ -40,7 +40,7 @@ window.onload = function () {
     function populate_error(error) {
         $("#accept-success").show(500);
         $("#loading").hide(500);
-        $("#trans-status").find('p').html(
+        $("#trans-status").find('#status-info').html(
             error
         );
     }
@@ -48,10 +48,9 @@ window.onload = function () {
     $("#trans-status").hide();
 
     $("#send-alert").click(function () {
-        //take all selected assets
-
         //what is the selected type?
-        let isUp = $('input:radio[name=type]:checked').val();
+        let type = $('input:radio[name=type]:checked').val();
+        console.log(type);
 
         //what is the threshold?
         let threshold = $('#quantity').val();
@@ -62,7 +61,7 @@ window.onload = function () {
             url: '',
             type: 'post',
             data: {
-                'isUp': isUp,
+                'type': type,
                 'threshold': threshold,
                 'asset': asset
             },

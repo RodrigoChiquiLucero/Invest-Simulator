@@ -3,7 +3,7 @@ from Game.interface_control import AssetComunication as ACommunication
 from Game.models import Wallet
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from Game.models import Transaction, Asset
+from Game.models import Transaction, Asset, Alarm
 from django.http import JsonResponse, HttpResponse
 
 
@@ -89,7 +89,12 @@ def set_alarm(request):
             return HttpResponse(status=400,
                                 reason="You need to select at least one asset")
         else:
-            return HttpResponse(status=200, reason="Your alarm has been set!")
+            wallet = Wallet.objects.get(user=request.user)
+            return JsonResponse(Alarm.safe_save(wallet=wallet,
+                                                aname=request.POST['asset'],
+                                                threshold=request.POST[
+                                                    'threshold'],
+                                                atype=request.POST['type']))
     else:
         asset_comunication = ACommunication(settings.API_URL)
         asset_list = [a.to_dict() for a in asset_comunication.get_assets()]
