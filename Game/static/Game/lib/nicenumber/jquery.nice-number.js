@@ -56,7 +56,9 @@
               attrMin == null
               || attrMin < parseFloat(currentInput.value)
             ) {
-              currentInput.value--;
+              let value = parseFloat(currentInput.value);
+              value--;
+              currentInput.value = value.toFixed(3);
             }
           });
 
@@ -78,7 +80,9 @@
               attrMax == null
               || attrMax > parseFloat(currentInput.value)
             ) {
-              currentInput.value++;
+                let value = parseFloat(currentInput.value);
+                value++;
+                currentInput.value = value.toFixed(3);
             }
           });
 

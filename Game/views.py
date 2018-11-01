@@ -82,7 +82,7 @@ def set_alarm(request):
     if request.method == 'POST':
         if float(request.POST['threshold']) < 0:
             return HttpResponse(status=400, reason="Incorrect threshold value")
-        elif not request.POST.getlist('assets[]'):
+        elif not request.POST.getlist('asset'):
             return HttpResponse(status=400,
                                 reason="You need to select at least one asset")
         else:

@@ -1,6 +1,22 @@
 window.onload = function () {
     prepare_token();
 
+    divs_hidden_by_default([
+        $("#quantity-form"),
+        $("#accept-form"),
+        $("#trans-status"),
+        $(".down-info"),
+    ]);
+
+    $(".set-alarm").click(
+        function () {
+            console.log("Entramos");
+            $("#asset-table").hide(400);
+            $("#quantity-form").show(500);
+            asset = $(this).attr("id");
+        }
+    );
+
     $("#accept-success").click(
         function () {
             $("#trans-status").hide(500);
@@ -25,23 +41,10 @@ window.onload = function () {
         );
     }
 
-    $("#general").click(function () {
-        $(".selected-check").each(
-            function () {
-                $(this).attr('checked', $("#general").is(':checked'))
-            }
-        );
-    });
-
     $("#trans-status").hide();
 
     $("#send-alert").click(function () {
         //take all selected assets
-        let selected = [];
-        $(".selected-check").each(function () {
-            if ($(this).is(':checked'))
-                selected.push($(this).attr('id'))
-        });
 
         //what is the selected type?
         let isUp = $('input:radio[name=type]:checked').val();
@@ -57,7 +60,7 @@ window.onload = function () {
             data: {
                 'isUp': isUp,
                 'threshold': threshold,
-                'assets': selected
+                'asset': asset
             },
             success: function (data) {
                 populate_success(data)
@@ -69,6 +72,22 @@ window.onload = function () {
         });
 
     });
+
+    $("#choice1").click(
+        function () {
+            $(".up-info").show(400);
+            $(".down-info").hide(400);
+        }
+    );
+
+    $("#choice2").click(
+        function () {
+            $(".down-info").show(400);
+            $(".up-info").hide(400);
+        }
+    );
+
+    /* --------------- RADIO ------------------*/
 
     const st = {};
 
@@ -96,6 +115,7 @@ window.onload = function () {
             setTimeout(() => {
                 st.flap.children[0].textContent = e.target.textContent;
             }, 250);
+
         }
     };
 

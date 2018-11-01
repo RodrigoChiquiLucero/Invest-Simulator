@@ -42,27 +42,44 @@
                 <input id="accept-success" type="submit" value="OK"/>
             </div>
 
-            <div id="quantity-form" class="alarm-form not-so-large overlay middle">
+            <div id="quantity-form" class="dinamic not-so-large overlay middle">
                 <p class="form-t">Set your alarm type</p>
                 <div class="type-box container">
                     <form class="toggle">
 
                         <input type="radio" id="choice1" name="type"
-                               value="true">
+                               value="true" checked="checked">
                         <label for="choice1">Up</label>
 
                         <input type="radio" id="choice2" name="type"
                                value="false">
                         <label for="choice2">Down</label>
 
-                        <div id="flap"><span class="content"></span>
+                        <div id="flap"><span class="content">Up</span>
                         </div>
 
                     </form>
                 </div>
 
-                <p class="form-t">Set your threshold</p>
+                <div class="type-info-container">
+                    <div class="type-info up-info">
+                        <p>
+                            This option will trigger the alarm when the
+                            asset buy price reaches a higher value than the
+                            threshold
+                        </p>
+                    </div>
+                    <div class="type-info down-info">
+                        <p>
+                            This option will trigger the alarm when the
+                            asset buy price reaches a lower value than the
+                            threshold
+                        </p>
+                    </div>
+                </div>
+
                 <div class="thres-box">
+                    <p class="form-t">Set your threshold</p>
                     <input id="quantity" class="number-input" type="text"
                            name="quantity middle"
                            value="1" min="1">
@@ -75,17 +92,14 @@
             </script>
 
             {% if assets %}
-                <table style="border-top-left-radius: 20px;border-top-right-radius: 20px;">
+                <table style="border-top-left-radius: 20px;border-top-right-radius: 20px;" id="asset-table">
                     <tr>
                         <th> Name</th>
                         <th> Type</th>
                         <th> Sell price</th>
                         <th> Buy</th>
                         <th>
-                            <label class="check" style="margin-left: 0">
-                                <input type="checkbox" id="general">
-                                <span class="checkmark"></span>
-                            </label>
+                            Set alarm
                         </th>
                     </tr>
                     {% for a in assets %}
@@ -95,12 +109,10 @@
                             <td id="sell">$ {{ a.sell }}</td>
                             <td id="buy">$ {{ a.buy }} </td>
                             <td>
-                                <label class="check">
-                                    <input type="checkbox"
-                                           class="selected-check"
-                                            id="{{ a.name }}">
-                                    <span class="checkmark"></span>
-                                </label>
+                                <a class="set-alarm w3-button w3-green w3-round-large "
+                                   href="#" id="{{ a.name }}">
+                                    <i class="fas fa-bullhorn"></i> Alarm
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}
