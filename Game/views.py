@@ -63,18 +63,21 @@ def history(request, name):
     else:
         return render(request, 'Game/select_dates.html')
 
+
 @login_required
 def ranking(request):
-        users = []
-        wallets = Wallet.objects.all()
-        for w in wallets:
-            users.append({'username': w.user.username, 'wallet': w.get_info(w.user)['value_wallet'], 'ranking': 1})
-        users.sort(key=lambda k: k['wallet'], reverse=1)
-        index = 0
-        for u in users:
-            index += 1
-            u['ranking'] = index
-        return render(request, 'Game/ranking.html', {'users': users})
+    users = []
+    wallets = Wallet.objects.all()
+    for w in wallets:
+        users.append({'username': w.user.username,
+                      'wallet': w.get_info(w.user)['value_wallet'],
+                      'ranking': 1})
+    users.sort(key=lambda k: k['wallet'], reverse=True)
+    index = 0
+    for u in users:
+        index += 1
+        u['ranking'] = index
+    return render(request, 'Game/ranking.html', {'users': users})
 
 
 @login_required

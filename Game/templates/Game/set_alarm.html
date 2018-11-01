@@ -31,7 +31,7 @@
              align="center">
 
             <div id="trans-status" class="dinamic short overlay">
-                <label>Your alert is being processed</label>
+                <p class="form-t">Your alert is being processed</p>
 
                 <div class="qbox">
                     <p id="status"></p>
@@ -43,6 +43,8 @@
             </div>
 
             <div id="quantity-form" class="dinamic not-so-large overlay middle">
+                <p style="font-size: 23px;" id="qform-title"></p>
+
                 <p class="form-t">Set your alarm type</p>
                 <div class="type-box container">
                     <form class="toggle">
@@ -55,7 +57,7 @@
                                value="false">
                         <label for="choice2">Down</label>
 
-                        <div id="flap"><span class="content">Up</span>
+                        <div id="flap"><span class="content">Down</span>
                         </div>
 
                     </form>
@@ -85,14 +87,18 @@
                            value="1" min="1">
                 </div>
 
-                <input id="send-alert" class="send-button" type="submit" value="Set my alert"/>
+                <input id="send-alert" class="send-button" type="submit" value="Set alert"/>
+                <input id="cancel-alert" class="send-button" type="submit" value="Cancel"/>
             </div>
             <script>
                 prepare_input_nicenumber();
             </script>
 
             {% if assets %}
-                <table style="border-top-left-radius: 20px;border-top-right-radius: 20px;" id="asset-table">
+                <table id="asset-table">
+                    <caption class="title">Select the asset you want to set
+                                        an alarm for:
+                    </caption>
                     <tr>
                         <th> Name</th>
                         <th> Type</th>

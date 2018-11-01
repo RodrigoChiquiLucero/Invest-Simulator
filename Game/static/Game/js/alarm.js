@@ -5,29 +5,33 @@ window.onload = function () {
         $("#quantity-form"),
         $("#accept-form"),
         $("#trans-status"),
-        $(".down-info"),
+        $(".up-info"),
     ]);
 
     $(".set-alarm").click(
         function () {
             console.log("Entramos");
             $("#asset-table").hide(400);
-            $("#quantity-form").show(500);
             asset = $(this).attr("id");
+            $("#quantity-form").show(500)
+                .find("#qform-title")
+                .html(
+                    `Your alarm configuration for ${asset}`
+                );
         }
     );
 
     $("#accept-success").click(
         function () {
             $("#trans-status").hide(500);
-            $("#quantity-form").show(500);
+            $("#asset-table").show(500);
         }
     );
 
     function populate_success(data) {
         $("#accept-success").show(500);
         $("#loading").hide(500);
-        $("#trans-status").find('label').html(
+        $("#trans-status").find('p').html(
             'Your alert has been set successfully!'
         );
 
@@ -36,7 +40,7 @@ window.onload = function () {
     function populate_error(error) {
         $("#accept-success").show(500);
         $("#loading").hide(500);
-        $("#trans-status").find('label').html(
+        $("#trans-status").find('p').html(
             error
         );
     }
@@ -73,6 +77,13 @@ window.onload = function () {
 
     });
 
+    $("#cancel-alert").click(
+        function () {
+            $("#quantity-form").hide(400);
+            $("#asset-table").show(500);
+        }
+    );
+
     $("#choice1").click(
         function () {
             $(".up-info").show(400);
@@ -85,7 +96,7 @@ window.onload = function () {
             $(".down-info").show(400);
             $(".up-info").hide(400);
         }
-    );
+    ).click();
 
     /* --------------- RADIO ------------------*/
 
