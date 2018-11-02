@@ -28,6 +28,19 @@ class Asset(models.Model):
             "quantity": self.quantity
         }
 
+
+    @staticmethod
+    def create_if_not_exists(name):
+        asset = Asset.safe_get(name)
+        if not asset:
+            asset_comms = ACommunication(settings.API_URL)
+            type = asset_comms.get_asset_type(name)
+            if not type:
+                return None
+            asset = Asset.objects.create(name=name, type=type)
+            asset.save()
+        return asset
+
     @staticmethod
     def safe_get(name):
         try:
@@ -203,14 +216,45 @@ class Transaction(models.Model):
 
 
 class Alarm(models.Model):
-    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
+    wallet = models.ForeignKey(Wallet, on_delete=models.DO_NOTHING)
     asset = models.ForeignKey(Asset, on_delete=models.DO_NOTHING)
-    asset_price = models.FloatField(null=False, default=-1)
-    type = models.IntegerField(null=False, default=-1)
+    threshold = models.FloatField(null=False, default=-1)
+    type = models.TextField(null=False, default='up')
+
+    @staticmethod
+    def safe_get(wallet, asset):
+        try:
+            return Alarm.objects.get(wallet=wallet, asset=asset)
+        except ObjectDoesNotExist:
+            return None
+
+    @staticmethod
+    def safe_save(wallet, aname, threshold, atype):
+        asset = Asset.create_if_not_exists(aname)
+        if not asset:
+            return {'error': True, 'message': 'Non existing asset'}
+
+        if Alarm.safe_get(wallet, asset):
+            return {'error': True,
+                    'message': 'You already have an alarm on this asset'}
+
+        Alarm.objects.create(wallet=wallet, asset=asset,
+                             threshold=threshold, type=atype).save()
+        return {'error': False,
+                'message': 'Your alarm has been set succesfully!'}
 
     @staticmethod
     def get_info(wallet):
         response = {}
-        alarms = Alarm.objects.filter(wallet=wallet, quantity__gt=0)
-        response['alarms'] = alarms
-        return alarms
+        alarms = Alarm.objects.filter(wallet=wallet)
+        if not alarms:
+            return {'error': True, 'message': "You don't have any alarm set"}
+        else:
+            return {'error': False, 'alarms': alarms}
+
+    @staticmethod
+    def safe_delete(wallet, name):
+        # TODO: hace falta manejar si el asset o la wallet no existen?
+        asset = Asset.objects.get(name=name)
+        alarm = Alarm.objects.get(asset=asset, wallet=wallet)
+        alarm.delete()

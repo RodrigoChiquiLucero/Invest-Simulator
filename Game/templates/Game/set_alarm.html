@@ -31,7 +31,7 @@
              align="center">
 
             <div id="trans-status" class="dinamic short overlay">
-                <label>Your alert is being processed</label>
+                <p class="form-t" id="status-info">Your alert is being processed</p>
 
                 <div class="qbox">
                     <p id="status"></p>
@@ -42,50 +42,70 @@
                 <input id="accept-success" type="submit" value="OK"/>
             </div>
 
-            <div id="quantity-form" class="alarm-form not-so-large overlay middle">
+            <div id="quantity-form" class="dinamic not-so-large overlay middle">
+                <p style="font-size: 23px;" id="qform-title"></p>
+
                 <p class="form-t">Set your alarm type</p>
                 <div class="type-box container">
                     <form class="toggle">
 
                         <input type="radio" id="choice1" name="type"
-                               value="true">
+                               value="up" checked="checked">
                         <label for="choice1">Up</label>
 
                         <input type="radio" id="choice2" name="type"
-                               value="false">
+                               value="down">
                         <label for="choice2">Down</label>
 
-                        <div id="flap"><span class="content"></span>
+                        <div id="flap"><span class="content">Down</span>
                         </div>
 
                     </form>
                 </div>
 
-                <p class="form-t">Set your threshold</p>
+                <div class="type-info-container">
+                    <div class="type-info up-info">
+                        <p>
+                            This option will trigger the alarm when the
+                            asset buy price reaches a higher value than the
+                            threshold
+                        </p>
+                    </div>
+                    <div class="type-info down-info">
+                        <p>
+                            This option will trigger the alarm when the
+                            asset buy price reaches a lower value than the
+                            threshold
+                        </p>
+                    </div>
+                </div>
+
                 <div class="thres-box">
+                    <p class="form-t">Set your threshold</p>
                     <input id="quantity" class="number-input" type="text"
                            name="quantity middle"
                            value="1" min="1">
                 </div>
 
-                <input id="send-alert" class="send-button" type="submit" value="Set my alert"/>
+                <input id="send-alert" class="send-button" type="submit" value="Set alert"/>
+                <input id="cancel-alert" class="send-button" type="submit" value="Cancel"/>
             </div>
             <script>
                 prepare_input_nicenumber();
             </script>
 
             {% if assets %}
-                <table style="border-top-left-radius: 20px;border-top-right-radius: 20px;">
+                <table id="asset-table">
+                    <caption class="title">Select the asset you want to set
+                                        an alarm for:
+                    </caption>
                     <tr>
                         <th> Name</th>
                         <th> Type</th>
                         <th> Sell price</th>
                         <th> Buy</th>
                         <th>
-                            <label class="check" style="margin-left: 0">
-                                <input type="checkbox" id="general">
-                                <span class="checkmark"></span>
-                            </label>
+                            Set alarm
                         </th>
                     </tr>
                     {% for a in assets %}
@@ -95,12 +115,10 @@
                             <td id="sell">$ {{ a.sell }}</td>
                             <td id="buy">$ {{ a.buy }} </td>
                             <td>
-                                <label class="check">
-                                    <input type="checkbox"
-                                           class="selected-check"
-                                            id="{{ a.name }}">
-                                    <span class="checkmark"></span>
-                                </label>
+                                <a class="set-alarm w3-button w3-green w3-round-large "
+                                   href="#" id="{{ a.name }}">
+                                    <i class="fas fa-bullhorn"></i> Set
+                                </a>
                             </td>
                         </tr>
                     {% endfor %}

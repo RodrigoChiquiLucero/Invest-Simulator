@@ -92,6 +92,13 @@ class AssetComunication:
         finally:
             return asset
 
+    def get_asset_type(self, name):
+        assets = self.get_asset_names()
+        for a in assets:
+            if name == a.name:
+                return a.type
+        return None
+
     def quote_for_assets(self, assets):
         """
         maps asset list (only names are required) with same assets with quote

@@ -8,6 +8,7 @@ urlpatterns = [
     path('transactions/', views.transactions, name='transactions'),
     path('wallet/', views.wallet, name='wallet'),
     path('history/<slug:name>/', views.history, name='history'),
+    path('alarms/', views.alarms, name='my_alarms'),
     path('alarm/set/', views.set_alarm, name='set_alarm'),
     path('ranking/', views.ranking, name='ranking'),
 

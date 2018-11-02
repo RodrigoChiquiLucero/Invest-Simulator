@@ -1,18 +1,38 @@
 window.onload = function () {
     prepare_token();
 
+    divs_hidden_by_default([
+        $("#quantity-form"),
+        $("#accept-form"),
+        $("#trans-status"),
+        $(".up-info"),
+    ]);
+
+    $(".set-alarm").click(
+        function () {
+            console.log("Entramos");
+            $("#asset-table").hide(400);
+            asset = $(this).attr("id");
+            $("#quantity-form").show(500)
+                .find("#qform-title")
+                .html(
+                    `Your alarm configuration for ${asset}`
+                );
+        }
+    );
+
     $("#accept-success").click(
         function () {
             $("#trans-status").hide(500);
-            $("#quantity-form").show(500);
+            $("#asset-table").show(500);
         }
     );
 
     function populate_success(data) {
         $("#accept-success").show(500);
         $("#loading").hide(500);
-        $("#trans-status").find('label').html(
-            'Your alert has been set successfully!'
+        $("#trans-status").find('#status-info').html(
+            data.message
         );
 
     }
@@ -20,31 +40,17 @@ window.onload = function () {
     function populate_error(error) {
         $("#accept-success").show(500);
         $("#loading").hide(500);
-        $("#trans-status").find('label').html(
+        $("#trans-status").find('#status-info').html(
             error
         );
     }
 
-    $("#general").click(function () {
-        $(".selected-check").each(
-            function () {
-                $(this).attr('checked', $("#general").is(':checked'))
-            }
-        );
-    });
-
     $("#trans-status").hide();
 
     $("#send-alert").click(function () {
-        //take all selected assets
-        let selected = [];
-        $(".selected-check").each(function () {
-            if ($(this).is(':checked'))
-                selected.push($(this).attr('id'))
-        });
-
         //what is the selected type?
-        let isUp = $('input:radio[name=type]:checked').val();
+        let type = $('input:radio[name=type]:checked').val();
+        console.log(type);
 
         //what is the threshold?
         let threshold = $('#quantity').val();
@@ -55,9 +61,9 @@ window.onload = function () {
             url: '',
             type: 'post',
             data: {
-                'isUp': isUp,
+                'type': type,
                 'threshold': threshold,
-                'assets': selected
+                'asset': asset
             },
             success: function (data) {
                 populate_success(data)
@@ -69,6 +75,29 @@ window.onload = function () {
         });
 
     });
+
+    $("#cancel-alert").click(
+        function () {
+            $("#quantity-form").hide(400);
+            $("#asset-table").show(500);
+        }
+    );
+
+    $("#choice1").click(
+        function () {
+            $(".up-info").show(400);
+            $(".down-info").hide(400);
+        }
+    );
+
+    $("#choice2").click(
+        function () {
+            $(".down-info").show(400);
+            $(".up-info").hide(400);
+        }
+    ).click();
+
+    /* --------------- RADIO ------------------*/
 
     const st = {};
 
@@ -96,6 +125,7 @@ window.onload = function () {
             setTimeout(() => {
                 st.flap.children[0].textContent = e.target.textContent;
             }, 250);
+
         }
     };
 

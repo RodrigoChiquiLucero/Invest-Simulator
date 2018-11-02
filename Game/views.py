@@ -3,7 +3,7 @@ from Game.interface_control import AssetComunication as ACommunication
 from Game.models import Wallet
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from Game.models import Transaction, Asset
+from Game.models import Transaction, Asset, Alarm
 from django.http import JsonResponse, HttpResponse
 
 
@@ -63,30 +63,49 @@ def history(request, name):
     else:
         return render(request, 'Game/select_dates.html')
 
+
 @login_required
 def ranking(request):
-        users = []
-        wallets = Wallet.objects.all()
-        for w in wallets:
-            users.append({'username': w.user.username, 'wallet': w.get_info(w.user)['value_wallet'], 'ranking': 1})
-        users.sort(key=lambda k: k['wallet'], reverse=1)
-        index = 0
-        for u in users:
-            index += 1
-            u['ranking'] = index
-        return render(request, 'Game/ranking.html', {'users': users})
+    users = []
+    wallets = Wallet.objects.all()
+    for w in wallets:
+        users.append({'username': w.user.username,
+                      'wallet': w.get_info(w.user)['value_wallet'],
+                      'ranking': 1})
+    users.sort(key=lambda k: k['wallet'], reverse=True)
+    index = 0
+    for u in users:
+        index += 1
+        u['ranking'] = index
+    return render(request, 'Game/ranking.html', {'users': users})
 
+
+@login_required
+def alarms(request):
+    if request.method == 'GET':
+        wallet = Wallet.objects.get(user=request.user)
+        return render(request, 'Game/alarms.html', Alarm.get_info(wallet))
+    else:
+        if request.POST['method'] == 'delete':
+            wallet = Wallet.objects.get(user=request.user)
+            Alarm.safe_delete(wallet=wallet, name=request.POST['name'])
+            return HttpResponse(status=200)
 
 @login_required
 def set_alarm(request):
     if request.method == 'POST':
         if float(request.POST['threshold']) < 0:
             return HttpResponse(status=400, reason="Incorrect threshold value")
-        elif not request.POST.getlist('assets[]'):
+        elif not request.POST.getlist('asset'):
             return HttpResponse(status=400,
                                 reason="You need to select at least one asset")
         else:
-            return HttpResponse(status=200, reason="Your alarm has been set!")
+            wallet = Wallet.objects.get(user=request.user)
+            return JsonResponse(Alarm.safe_save(wallet=wallet,
+                                                aname=request.POST['asset'],
+                                                threshold=request.POST[
+                                                    'threshold'],
+                                                atype=request.POST['type']))
     else:
         asset_comunication = ACommunication(settings.API_URL)
         asset_list = [a.to_dict() for a in asset_comunication.get_assets()]
