@@ -81,6 +81,17 @@ def ranking(request):
 
 
 @login_required
+def alarms(request):
+    if request.method == 'GET':
+        wallet = Wallet.objects.get(user=request.user)
+        return render(request, 'Game/alarms.html', Alarm.get_info(wallet))
+    else:
+        if request.POST['method'] == 'delete':
+            wallet = Wallet.objects.get(user=request.user)
+            Alarm.safe_delete(wallet=wallet, name=request.POST['name'])
+            return HttpResponse(status=200)
+
+@login_required
 def set_alarm(request):
     if request.method == 'POST':
         if float(request.POST['threshold']) < 0:

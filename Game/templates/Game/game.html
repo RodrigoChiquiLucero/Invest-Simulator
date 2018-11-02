@@ -4,8 +4,12 @@
 {% block body %}
     {% block alert %}
     {% endblock %}
+
+    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+    <script src="{% static 'Game/js/home.js' %}"></script>
+
     <body>
-        <div class="w3-center w3-animate-zoom">
+        <div class="w3-center w3-animate-zoom" id="all">
             <div class="w3-container" style="margin: 5% auto auto auto">
                 <a href="/user/profile/"> <button class="w3-button w3-black w3-round-large" style="width: 15%; height: 12%; margin: 10px">
                     <i class="fas fa-user"></i> Profile
@@ -18,7 +22,7 @@
                 <a href="/game/assets/"> <button href="/game/assets" class="w3-button w3-black w3-round-large" style="width: 15%; height: 12%; margin: 10px">
                     <i class="fas fa-chart-line"></i> Market
                 </button> </a>
-                <a href="/game/alarm/set/"> <button class="w3-button w3-black w3-round-large" style="width: 15%; height: 12%; margin: 10px">
+                <a href="#"> <button class="w3-button w3-black w3-round-large" id="alert" style="width: 15%; height: 12%; margin: 10px">
                     <i class="fas fa-bullhorn"></i> Alerts
                 </button> </a>
             </div>
@@ -38,5 +42,22 @@
                 <img height="15%" src="{% static 'Home/images/Colorete.gif' %}">
             </div>
         </div>
+
+        <div class="w3-center w3-animate-zoom" id="alert-options">
+            <div class="w3-container" style="margin: 5% auto auto auto">
+                <a href="/game/alarms/"> <button class="w3-button w3-black w3-round-large" style="width: 15%; height: 12%; margin: 10px">
+                    <i class="fas fa-bullhorn"></i> Your alerts
+                </button> </a>
+                <a href="/game/alarm/set/"> <button class="w3-button w3-black w3-round-large" style="width: 15%; height: 12%; margin: 10px">
+                    <i class="fas fa-plus"></i> Set new alert
+                </button> </a>
+            </div>
+            <div class="w3-container" >
+                <a href="#"> <button class="w3-button w3-black w3-round-large" id="back" style="width: 8%; height: 6%; margin: 10px">
+                    <i class="fas fa-arrow-left"></i> Go back
+                </button> </a>
+            </div>
+        </div>
+
     </body>
 {% endblock %}

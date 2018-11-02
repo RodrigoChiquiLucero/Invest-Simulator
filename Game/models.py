@@ -28,6 +28,19 @@ class Asset(models.Model):
             "quantity": self.quantity
         }
 
+
+    @staticmethod
+    def create_if_not_exists(name):
+        asset = Asset.safe_get(name)
+        if not asset:
+            asset_comms = ACommunication(settings.API_URL)
+            type = asset_comms.get_asset_type(name)
+            if not type:
+                return None
+            asset = Asset.objects.create(name=name, type=type)
+            asset.save()
+        return asset
+
     @staticmethod
     def safe_get(name):
         try:
@@ -208,7 +221,6 @@ class Alarm(models.Model):
     threshold = models.FloatField(null=False, default=-1)
     type = models.TextField(null=False, default='up')
 
-
     @staticmethod
     def safe_get(wallet, asset):
         try:
@@ -216,10 +228,9 @@ class Alarm(models.Model):
         except ObjectDoesNotExist:
             return None
 
-
     @staticmethod
     def safe_save(wallet, aname, threshold, atype):
-        asset = Asset.safe_get(aname)
+        asset = Asset.create_if_not_exists(aname)
         if not asset:
             return {'error': True, 'message': 'Non existing asset'}
 
@@ -235,6 +246,15 @@ class Alarm(models.Model):
     @staticmethod
     def get_info(wallet):
         response = {}
-        alarms = Alarm.objects.filter(wallet=wallet, quantity__gt=0)
-        response['alarms'] = alarms
-        return alarms
+        alarms = Alarm.objects.filter(wallet=wallet)
+        if not alarms:
+            return {'error': True, 'message': "You don't have any alarm set"}
+        else:
+            return {'error': False, 'alarms': alarms}
+
+    @staticmethod
+    def safe_delete(wallet, name):
+        # TODO: hace falta manejar si el asset o la wallet no existen?
+        asset = Asset.objects.get(name=name)
+        alarm = Alarm.objects.get(asset=asset, wallet=wallet)
+        alarm.delete()
