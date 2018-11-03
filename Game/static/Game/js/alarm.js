@@ -62,7 +62,7 @@ window.onload = function () {
             type: 'post',
             data: {
                 'type': type,
-                'asset_price' :'buy',
+                'price' :'buy',
                 'threshold': threshold,
                 'asset': asset
             },

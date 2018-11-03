@@ -3,6 +3,8 @@ window.onload = function () {
     prepare_token();
 
     let asset = 'None';
+    let type = 'None';
+    let price = 'None';
 
     divs_hidden_by_default([
         $("#confirm-deletion-form"),
@@ -11,6 +13,8 @@ window.onload = function () {
 
     $(".alarm-deleter").click(function () {
         asset = $(this).attr('id');
+        type = $(this).attr('type');
+        price = $(this).attr('price');
         $("#confirm-deletion-form").show(500);
         let delstatus = $("#deletion-status");
         delstatus.find('label').html(
@@ -31,6 +35,8 @@ window.onload = function () {
                     type: 'POST',
                     data: {
                         'name': asset,
+                        'type': type,
+                        'price': price,
                         'method': 'delete'},
                     success: function () {
                         $("#deletion-status").hide(500);
