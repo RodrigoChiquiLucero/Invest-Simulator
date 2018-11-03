@@ -52,6 +52,10 @@ window.onload = function () {
         let type = $('input:radio[name=type]:checked').val();
         console.log(type);
 
+        //what is the price?
+        let price = $('input:radio[name=price]:checked').val();
+        console.log(price);
+
         //what is the threshold?
         let threshold = $('#quantity').val();
 
@@ -62,7 +66,7 @@ window.onload = function () {
             type: 'post',
             data: {
                 'type': type,
-                'price' :'buy',
+                'price': price,
                 'threshold': threshold,
                 'asset': asset
             },
@@ -98,41 +102,39 @@ window.onload = function () {
         }
     ).click();
 
+    $("#price_choice_1").click();
+
     /* --------------- RADIO ------------------*/
 
     const st = {};
 
-    st.flap = document.querySelector('#flap');
+    st.flaptype = document.querySelector('#flaptype');
+    st.flapprice = document.querySelector('#flapprice');
     st.toggle = document.querySelector('.toggle');
 
     st.choice1 = document.querySelector('#choice1');
     st.choice2 = document.querySelector('#choice2');
 
-    st.flap.addEventListener('transitionend', () => {
-
-        if (st.choice1.checked) {
-            st.toggle.style.transform = 'rotateY(-15deg)';
-            setTimeout(() => st.toggle.style.transform = '', 400);
-        } else {
-            st.toggle.style.transform = 'rotateY(15deg)';
-            setTimeout(() => st.toggle.style.transform = '', 400);
-        }
-
-    });
+    st.price_choice_1 = document.querySelector('#price_choice_1');
+    st.price_choice_2 = document.querySelector('#price_choice_2');
 
     st.clickHandler = (e) => {
 
-        if (e.target.tagName === 'LABEL') {
+        let new_text = e.target.textContent;
+
+        if ($(e.target).attr('class') === 'type') {
             setTimeout(() => {
-                st.flap.children[0].textContent = e.target.textContent;
+                st.flaptype.children[0].textContent = new_text;
             }, 250);
-
+        } else if ($(e.target).attr('class') === 'price') {
+            setTimeout(() => {
+                st.flapprice.children[0].textContent = new_text;
+            }, 250);
         }
-    };
 
-    document.addEventListener('DOMContentLoaded', () => {
-        st.flap.children[0].textContent = st.choice2.nextElementSibling.textContent;
-    });
+
+
+    };
 
     document.addEventListener('click', (e) => st.clickHandler(e));
 };

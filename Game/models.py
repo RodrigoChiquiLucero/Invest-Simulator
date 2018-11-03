@@ -240,7 +240,7 @@ class Alarm(models.Model):
                     'message': 'You already have an alarm on this asset'}
 
         Alarm.objects.create(wallet=wallet, asset=asset,
-                             asset_price=price,
+                             price=price,
                              threshold=threshold, type=atype).save()
         return {'error': False,
                 'message': 'Your alarm has been set succesfully!'}

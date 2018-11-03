@@ -48,18 +48,15 @@
                 <p class="form-t">Set your alarm type</p>
                 <div class="type-box container">
                     <form class="toggle">
-
                         <input type="radio" id="choice1" name="type"
                                value="up" checked="checked">
-                        <label for="choice1">Up</label>
-
+                        <label for="choice1" class="type">Up</label>
                         <input type="radio" id="choice2" name="type"
                                value="down">
-                        <label for="choice2">Down</label>
+                        <label for="choice2" class="type">Down</label>
 
-                        <div id="flap"><span class="content">Down</span>
+                        <div id="flaptype"><span class="content">Down</span>
                         </div>
-
                     </form>
                 </div>
 
@@ -77,6 +74,23 @@
                             asset buy price reaches a lower value than the
                             threshold
                         </p>
+                    </div>
+                </div>
+
+                <div class="thres-box">
+                    <p class="form-t" style="padding-top: 5px">Set your alarm price type</p>
+                    <div class="type-box container">
+                        <form class="toggle toggle2">
+                            <input type="radio" id="price_choice_1" name="price"
+                                   value="buy" checked="checked">
+                            <label for="price_choice_1" class="price">Buy</label>
+                            <input type="radio" id="price_choice_2" name="price"
+                                   value="sell">
+                            <label for="price_choice_2" class="price">Sell</label>
+
+                            <div id="flapprice"><span class="content">Buy</span>
+                            </div>
+                        </form>
                     </div>
                 </div>
 
