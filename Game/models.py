@@ -28,7 +28,6 @@ class Asset(models.Model):
             "quantity": self.quantity
         }
 
-
     @staticmethod
     def create_if_not_exists(name):
         asset = Asset.safe_get(name)
@@ -218,27 +217,30 @@ class Transaction(models.Model):
 class Alarm(models.Model):
     wallet = models.ForeignKey(Wallet, on_delete=models.DO_NOTHING)
     asset = models.ForeignKey(Asset, on_delete=models.DO_NOTHING)
+    asset_price = models.TextField(null=False, default='up')
     threshold = models.FloatField(null=False, default=-1)
     type = models.TextField(null=False, default='up')
 
     @staticmethod
-    def safe_get(wallet, asset):
+    def safe_get(wallet, asset,asset_price, type):
         try:
-            return Alarm.objects.get(wallet=wallet, asset=asset)
+            return Alarm.objects.get(wallet=wallet, asset=asset,asset_price=asset_price,type=type)
         except ObjectDoesNotExist:
             return None
 
     @staticmethod
-    def safe_save(wallet, aname, threshold, atype):
+    def safe_save(wallet, aname, threshold, atype, asset_price):
         asset = Asset.create_if_not_exists(aname)
         if not asset:
             return {'error': True, 'message': 'Non existing asset'}
 
-        if Alarm.safe_get(wallet, asset):
+        if Alarm.safe_get(wallet, asset, asset_price, atype):
             return {'error': True,
                     'message': 'You already have an alarm on this asset'}
 
+
         Alarm.objects.create(wallet=wallet, asset=asset,
+                             asset_price=asset_price,
                              threshold=threshold, type=atype).save()
         return {'error': False,
                 'message': 'Your alarm has been set succesfully!'}
@@ -253,8 +255,8 @@ class Alarm(models.Model):
             return {'error': False, 'alarms': alarms}
 
     @staticmethod
-    def safe_delete(wallet, name):
+    def safe_delete(wallet, name,type):
         # TODO: hace falta manejar si el asset o la wallet no existen?
         asset = Asset.objects.get(name=name)
-        alarm = Alarm.objects.get(asset=asset, wallet=wallet)
+        alarm = Alarm.objects.get(asset=asset, wallet=wallet,type=type)
         alarm.delete()
