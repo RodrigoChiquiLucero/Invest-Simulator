@@ -6,11 +6,19 @@ from Game.interface_control import AssetComunication as Acom
 
 
 class Command(BaseCommand):
-    help = 'Closes the specified poll for voting'
+    help = 'Periodic check for triggered alarms'
 
     def __init__(self):
         super().__init__()
         self.event = threading.Event()
+        self.SEPARATOR = '--------------------- ALARM ---------------------\n'
+        self.message = ''
+
+    def print_success(self):
+        self.stdout.write(
+            self.style.SUCCESS(
+                self.SEPARATOR + self.message + '\n' + self.SEPARATOR))
+        self.message = ''
 
     def handle(self, *args, **options):
         try:
@@ -20,13 +28,17 @@ class Command(BaseCommand):
 
     def search_for_alarms(self):
         while True:
-            self.stdout.write(
-                self.style.SUCCESS('Searching for alarms to trigger'))
+            self.message += 'Searching for triggered alarms \n'
 
             alarms = Alarm.objects.all()
             for a in alarms:
                 self.trigger(a)
-            self.event.wait(30)
+            self.event.wait(10)
+            self.print_success()
 
     def trigger(self, alarm):
-        self.stdout.write(self.style.SUCCESS(alarm.asset.name))
+        if alarm.trigger():
+            self.message += ('Alarm triggered for: ' + alarm.asset.name +
+                            '  with threshold: ' + str(alarm.threshold) +
+                            '  and type: ' + alarm.type + '\n')
+
