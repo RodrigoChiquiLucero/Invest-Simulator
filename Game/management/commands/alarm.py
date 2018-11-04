@@ -2,7 +2,10 @@ from django.core.management.base import BaseCommand, CommandError
 import threading
 import sys
 from Game.models import Alarm
-from Game.interface_control import AssetComunication as Acom
+from django.core.mail import send_mail
+from Game.interface_control import AssetComunication
+from django.conf import settings
+from django.contrib.auth.models import User
 
 
 class Command(BaseCommand):
@@ -13,6 +16,7 @@ class Command(BaseCommand):
         self.event = threading.Event()
         self.SEPARATOR = '--------------------- ALARM ---------------------\n'
         self.message = ''
+        self.acom = AssetComunication(settings.API_URL)
 
     def print_success(self):
         self.stdout.write(
@@ -39,6 +43,25 @@ class Command(BaseCommand):
     def trigger(self, alarm):
         if alarm.trigger():
             self.message += ('Alarm triggered for: ' + alarm.asset.name +
-                            '  with threshold: ' + str(alarm.threshold) +
-                            '  and type: ' + alarm.type + '\n')
+                             '  with threshold: ' + str(alarm.threshold) +
+                             '  and type: ' + alarm.type + '\n')
 
+            asset = self.acom.get_asset_quote(alarm.asset)
+            price = asset.__getattribute__(alarm.price)
+            user = User.objects.get(wallet=alarm.wallet)
+            email = user.email
+            self.message += 'sending to mail: ' + email + '\n'
+
+            send_mail(
+                'Your alarm for asset ' +
+                alarm.asset.name + ' has been triggered',
+
+                'The asset ' + asset.name +
+                ' has reached the expected value of $' + str(alarm.threshold) +
+                '\n\n' + asset.name +
+                '\nCurrent price: $' + str(price),
+                'invest.simulator.alarms@gmail.com',
+                [email],
+                fail_silently=False,
+            )
+            # TODO: congelar la alarma para que no se envie cada 5 min
