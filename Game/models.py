@@ -28,6 +28,9 @@ class Asset(models.Model):
             "quantity": self.quantity
         }
 
+    def is_valid(self):
+        return self.sell != -1 and self.buy != -1
+
     @staticmethod
     def create_if_not_exists(name):
         asset = Asset.safe_get(name)
@@ -220,6 +223,20 @@ class Alarm(models.Model):
     price = models.TextField(null=False, default='up')
     threshold = models.FloatField(null=False, default=-1)
     type = models.TextField(null=False, default='up')
+
+    def trigger(self):
+        acom = ACommunication(settings.API_URL)
+        asset = acom.get_asset_quote(self.asset)
+
+        if not asset.is_valid():
+            return False
+
+        if self.type == 'up':
+            return asset.__getattribute__(self.price) > self.threshold
+        else:
+            return asset.__getattribute__(self.price) < self.threshold
+
+
 
     @staticmethod
     def safe_get(wallet, asset, price, type):
