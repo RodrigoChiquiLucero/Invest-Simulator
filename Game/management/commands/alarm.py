@@ -41,27 +41,31 @@ class Command(BaseCommand):
             self.print_success()
 
     def trigger(self, alarm):
-        if alarm.trigger():
-            self.message += ('Alarm triggered for: ' + alarm.asset.name +
-                             '  with threshold: ' + str(alarm.threshold) +
-                             '  and type: ' + alarm.type + '\n')
+        if not alarm.triggered:
 
-            asset = self.acom.get_asset_quote(alarm.asset)
-            price = asset.__getattribute__(alarm.price)
-            user = User.objects.get(wallet=alarm.wallet)
-            email = user.email
-            self.message += 'sending to mail: ' + email + '\n'
+            if alarm.trigger():
+                self.message += ('Alarm triggered for: ' + alarm.asset.name +
+                                 '  with threshold: ' + str(alarm.threshold) +
+                                 '  and type: ' + alarm.type + '\n')
 
-            send_mail(
-                'Your alarm for asset ' +
-                alarm.asset.name + ' has been triggered',
+                asset = self.acom.get_asset_quote(alarm.asset)
+                price = asset.__getattribute__(alarm.price)
+                user = User.objects.get(wallet=alarm.wallet)
+                email = user.email
+                self.message += 'sending to mail: ' + email + '\n'
 
-                'The asset ' + asset.name +
-                ' has reached the expected value of $' + str(alarm.threshold) +
-                '\n\n' + asset.name +
-                '\nCurrent price: $' + str(price),
-                'invest.simulator.alarms@gmail.com',
-                [email],
-                fail_silently=False,
-            )
+                send_mail(
+                    'Your alarm for asset ' +
+                    alarm.asset.name + ' has been triggered',
+
+                    'The asset ' + asset.name +
+                    ' has reached the expected value of $' + str(
+                        alarm.threshold) +
+                    '\n\n' + asset.name +
+                    '\nCurrent price: $' + str(price),
+                    'invest.simulator.alarms@gmail.com',
+                    [email],
+                    fail_silently=False,
+                )
+                alarm.triggered = True
             # TODO: congelar la alarma para que no se envie cada 5 min

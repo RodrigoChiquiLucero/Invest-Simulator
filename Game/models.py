@@ -223,6 +223,7 @@ class Alarm(models.Model):
     price = models.TextField(null=False, default='up')
     threshold = models.FloatField(null=False, default=-1)
     type = models.TextField(null=False, default='up')
+    triggered = models.BooleanField(null=False, default=False)
 
     def trigger(self):
         acom = ACommunication(settings.API_URL)
@@ -235,8 +236,6 @@ class Alarm(models.Model):
             return asset.__getattribute__(self.price) > self.threshold
         else:
             return asset.__getattribute__(self.price) < self.threshold
-
-
 
     @staticmethod
     def safe_get(wallet, asset, price, type):
@@ -264,7 +263,6 @@ class Alarm(models.Model):
 
     @staticmethod
     def get_info(wallet):
-        response = {}
         alarms = Alarm.objects.filter(wallet=wallet)
         if not alarms:
             return {'error': True, 'message': "You don't have any alarm set"}
