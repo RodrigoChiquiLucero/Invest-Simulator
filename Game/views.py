@@ -88,8 +88,11 @@ def alarms(request):
     else:
         if request.POST['method'] == 'delete':
             wallet = Wallet.objects.get(user=request.user)
-            Alarm.safe_delete(wallet=wallet, name=request.POST['name'])
+            Alarm.safe_delete(wallet=wallet, name=request.POST['name'],
+                              atype=request.POST['type'],
+                              price=request.POST['price'])
             return HttpResponse(status=200)
+
 
 @login_required
 def set_alarm(request):
@@ -102,6 +105,8 @@ def set_alarm(request):
         else:
             wallet = Wallet.objects.get(user=request.user)
             return JsonResponse(Alarm.safe_save(wallet=wallet,
+                                                price=request.POST[
+                                                    'price'],
                                                 aname=request.POST['asset'],
                                                 threshold=request.POST[
                                                     'threshold'],

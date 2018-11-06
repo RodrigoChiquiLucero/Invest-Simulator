@@ -22,7 +22,7 @@
 
 .not-so-large {
     width: 40%;
-    height: 360px;
+    height: 500px;
 }
 
 .type-info {
@@ -74,15 +74,28 @@
     display: none;
 }
 
-.toggle>#choice1:checked~#flap {
+.toggle>#choice1:checked~#flaptype {
     transform: rotateY(-180deg);
 }
 
-.toggle>#choice1:checked~#flap>.content {
+.toggle>#choice1:checked~#flaptype>.content {
     transform: rotateY(-180deg);
 }
 
-.toggle>#choice2:checked~#flap {
+.toggle>#choice2:checked~#flaptype {
+    transform: rotateY(0deg);
+}
+
+
+.toggle>#price_choice_1:checked~#flapprice{
+    transform: rotateY(-180deg);
+}
+
+.toggle>#price_choice_1:checked~#flapprice>.content {
+    transform: rotateY(-180deg);
+}
+
+.toggle>#price_choice_2:checked~#flapprice{
     transform: rotateY(0deg);
 }
 
@@ -101,11 +114,11 @@
 }
 
 .toggle>label,
-.toggle>#flap {
+.toggle>#flaptype, #flapprice {
     text-transform: capitalize;
 }
 
-.toggle>#flap {
+.toggle>#flaptype, #flapprice {
     position: absolute;
     top: calc( 0px - var(--border-width));
     left: 50%;
@@ -123,7 +136,13 @@
     transition: transform cubic-bezier(0.4, 0, 0.2, 1) .5s;
 }
 
-.toggle>#flap>.content {
+.toggle>#flaptype>.content {
+    color: black;
+    transition: transform 0s linear .25s;
+    transform-style: preserve-3d;
+}
+
+.toggle>#flapprice>.content {
     color: black;
     transition: transform 0s linear .25s;
     transform-style: preserve-3d;

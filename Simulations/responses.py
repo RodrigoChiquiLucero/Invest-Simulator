@@ -35,7 +35,7 @@ quotes = {
     "DOLAR":
         {
             "sell": 500,
-            "buy": 400
+            "buy": 551
         },
     "ADIDAS":
         {

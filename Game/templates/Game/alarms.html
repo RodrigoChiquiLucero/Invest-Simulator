@@ -49,6 +49,7 @@
                     <tr>
                         <th> Asset name</th>
                         <th> Alert type</th>
+                        <th> Asset price to watch </th>
                         <th> Threshold</th>
                         <th></th>
                     </tr>
@@ -57,10 +58,13 @@
                             <td id="name">{{ a.asset.name }}</td>
                             <td id="type" style="text-transform: uppercase;">
                                 {{ a.type }}</td>
-                            <td id="sell">$ {{ a.threshold}}</td>
+                            <td id="price"> {{ a.price }}</td>
+                            <td id="threshold">$ {{ a.threshold}}</td>
                             <td>
                                 <a class="w3-button w3-green w3-round-large alarm-deleter"
-                                   href="#" id="{{ a.asset.name }}">
+                                   href="#" id="{{ a.asset.name }}"
+                                            type="{{ a.type }}"
+                                            price="{{ a.price }}">
                                     <i class="fas fa-trash-alt"></i> Delete
                                 </a></td>
                         </tr>
