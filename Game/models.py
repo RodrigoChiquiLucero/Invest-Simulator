@@ -1,4 +1,5 @@
-from Game.modelspack.asset import  Asset
-from Game.modelspack.wallet import Wallet
-from Game.modelspack.ownership import Ownership, Transaction
-from Game.modelspack.alarm import Alarm
+from Game.modelspack.Asset import  Asset
+from Game.modelspack.Wallet import Wallet
+from Game.modelspack.Ownership import Ownership, Transaction
+from Game.modelspack.Alarm import Alarm
+from Game.modelspack.LoanOffer import LoanOffer

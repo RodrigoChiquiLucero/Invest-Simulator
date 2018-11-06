@@ -1,5 +1,5 @@
 from django.urls import path
-from . import views
+from . import views, ajax
 
 urlpatterns = [
     path('', views.game, name='signup'),
@@ -12,7 +12,7 @@ urlpatterns = [
     path('alarm/set/', views.set_alarm, name='set_alarm'),
     path('ranking/', views.ranking, name='ranking'),
 
-    path('ajax/quote/<slug:name>/', views.ajax_quote, name='ajax_quote'),
-    path('ajax/buy/', views.ajax_buy, name='ajax_buy'),
-    path('ajax/sell/', views.ajax_sell, name='ajax_sell'),
+    path('ajax/quote/<slug:name>/', ajax.ajax_quote, name='ajax_quote'),
+    path('ajax/buy/', ajax.ajax_buy, name='ajax_buy'),
+    path('ajax/sell/', ajax.ajax_sell, name='ajax_sell'),
 ]
