@@ -36,12 +36,12 @@ class Command(BaseCommand):
 
             alarms = Alarm.objects.all()
             for a in alarms:
-                if not a.triggered:
-                    self.trigger(a)
-            self.event.wait(10)
+                self.trigger(a)
+            self.event.wait(5*60)
             self.print_success()
 
     def trigger(self, alarm):
+
         if not alarm.triggered:
             if alarm.trigger():
                 self.message += ('Alarm triggered for: ' + alarm.asset.name +
@@ -70,4 +70,5 @@ class Command(BaseCommand):
                     [email],
                     fail_silently=False,
                 )
-        # TODO: congelar la alarma para que no se envie cada 5 min
+        else:
+            alarm.reactivate()
