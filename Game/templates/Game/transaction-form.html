@@ -30,23 +30,25 @@
     <input id="cancel-quantity" type="submit" value="Cancel"/>
 </div>
 
-<div id="accept-form" class="dinamic large overlay">
+<div id="accept-form" class="dinamic large overlay" >
     <label>Please confirm your transaction:</label>
 
     <div class="timer">
         <p>5</p>
     </div>
 
-    <div class="qbox">
+    <div class="qbox" >
         <p class="attr">Your asset: </p>                <p id="name" class="value"></p>
         <p class="attr">Asset price: </p>               <p id="price" class="value"></p>
         <p class="attr">Total transaction value: </p>   <p id="total" class="value"></p>
-        <p class="attr">Liquid result: </p>             <p id="result" class="value">{{ liquid }}</p>
+        <p class="attr">Your money result after transaction: </p> <p id="result" class="value">{{ liquid }}</p>
     </div>
 
 
-    <input id="accept-transaction" type="submit" value="Transaction"/>
-    <input id="cancel-transaction" type="submit" value="Cancel"/>
+    <div style="position: absolute; bottom: 20px; left: 20%">
+        <input id="accept-transaction" type="submit" value="Transaction"/>
+        <input id="cancel-transaction" type="submit" value="Cancel"/>
+    </div>
 </div>
 
 <div id="trans-status" class="dinamic short overlay">
