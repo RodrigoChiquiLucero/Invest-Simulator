@@ -259,7 +259,7 @@ class Alarm(models.Model):
                              price=price,
                              threshold=threshold, type=atype).save()
         return {'error': False,
-                'message': 'Your alarm has been set succesfully!'}
+                'message': 'Your alarm has been set successfully!'}
 
     @staticmethod
     def get_info(wallet):

@@ -36,13 +36,13 @@ class Command(BaseCommand):
 
             alarms = Alarm.objects.all()
             for a in alarms:
-                self.trigger(a)
+                if not a.triggered:
+                    self.trigger(a)
             self.event.wait(10)
             self.print_success()
 
     def trigger(self, alarm):
         if not alarm.triggered:
-
             if alarm.trigger():
                 self.message += ('Alarm triggered for: ' + alarm.asset.name +
                                  '  with threshold: ' + str(alarm.threshold) +
@@ -53,6 +53,9 @@ class Command(BaseCommand):
                 user = User.objects.get(wallet=alarm.wallet)
                 email = user.email
                 self.message += 'sending to mail: ' + email + '\n'
+
+                alarm.triggered = True
+                alarm.save()
 
                 send_mail(
                     'Your alarm for asset ' +
@@ -67,5 +70,4 @@ class Command(BaseCommand):
                     [email],
                     fail_silently=False,
                 )
-                alarm.triggered = True
-            # TODO: congelar la alarma para que no se envie cada 5 min
+        # TODO: congelar la alarma para que no se envie cada 5 min
