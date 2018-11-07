@@ -10,6 +10,14 @@ class LoanOffer(models.Model):
 
     @staticmethod
     def safe_save(wallet, loan, interest, days):
+        try:
+            loan = float(loan)
+            interest = float(interest)
+            days = float(days)
+        except ValueError:
+            return {'error': True,
+                    'message': 'Incorrect data value'}
+
         if loan > wallet.liquid or loan < 0:
             return {'error': True,
                     'message': 'You have not enough liquid money available'}
