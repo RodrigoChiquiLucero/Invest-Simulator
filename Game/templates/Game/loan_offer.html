@@ -33,26 +33,27 @@
                 class="fas fa-wallet"></i>
         </button>
     </div>
-    <div id="box" class="w3-animate-zoom w3-container dinamic not-so-large overlay middle" align="center">
+    <div id="box" class="w3-animate-zoom w3-container dinamic not-so-large overlay middle" align="center"
+                style="height: 300px">
         <form method="POST" name="LoanConfiguration">
             {% csrf_token %}
 
             <h1 class="form-t">Select your loan configuration</h1>
             <div class="thres-box">
-                <p class="form-t">Set your loan liquid amount</p>
-                <input id="liquid-amount" class="number-input" type="text"
+                <label for="liquid-amount" class="form-t attr">Set your loan liquid amount</label>
+                <input id="liquid-amount" class="number-input value" type="text"
                        name="liquid-amount"
                        value="1" min="0">
             </div>
             <div class="thres-box">
-                <p class="form-t">Set your interest rate</p>
-                <input id="interest-rate" class="number-input" type="text"
+                <label for="interest-rate" class="form-t attr">Set your interest rate</label>
+                <input id="interest-rate" class="number-input value" type="text"
                        name="interest-rate"
                        value="1" min="0" max="100">
             </div>
             <div class="thres-box">
-                <p class="form-t">Set your days due</p>
-                <input id="days-due" class="number-input" type="text"
+                <label for="days-due" class="form-t attr">Set your days due</label>
+                <input id="days-due" class="number-input value" type="text"
                        name="days-due"
                        value="1" min="0">
             </div>
@@ -65,8 +66,19 @@
         </script>
     </div>
     {% else %}
-    <div id="box" class="w3-animate-zoom w3-container dinamic short overlay middle" align="center">
-        <h1 class="form-t">{{ message }}</h1>
+    <div id="box" class="w3-animate-zoom w3-container dinamic short overlay middle" align="center" style="height: 250px">
+        {% if error %}
+            <h1 class="form-t" style="color: red; padding-top: 10px">{{ message }}</h1>
+        {% else %}
+            <h1 class="form-t" style="color: green; padding-top: 10px">{{ message }}</h1>
+            <div class="qbox" style="padding-top: -10px" >
+                <p class="attr">Loaned: </p>                <p class="value">{{ loaned }}</p>
+                <p class="attr">New liquid money available: </p> <p class="value">{{ available }}</p>
+            </div>
+        {% endif %}
+        <a href="/game/loan/set">
+            <input type="submit" value="OK"/>
+        </a>
     </div>
     {% endif %}
 
