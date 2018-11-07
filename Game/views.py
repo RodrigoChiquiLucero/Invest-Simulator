@@ -3,7 +3,7 @@ from Game.interface_control import AssetComunication as ACommunication
 from Game.models import Wallet
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from Game.models import Transaction, Asset, Alarm
+from Game.models import Transaction, Asset, Alarm, LoanOffer
 from django.http import JsonResponse, HttpResponse
 
 
@@ -116,3 +116,23 @@ def set_alarm(request):
         asset_list = [a.to_dict() for a in asset_comunication.get_assets()]
         context = {'assets': asset_list}
         return render(request, 'Game/set_alarm.html', context)
+
+
+@login_required
+def loan_offer(request):
+    if request.method == 'GET':
+        # user info
+        context = {}
+        wallet = Wallet.get_info(request.user)
+        context['value_wallet'] = wallet['value_wallet']
+        context['liquid'] = wallet['liquid']
+        return render(request, 'Game/loan_offer.html', context)
+    else:
+        loan = float(request.POST['liquid-amount'])
+        interest_rate = float(request.POST['interest-rate'])
+        days_due = float(request.POST['days-due'])
+        wallet = Wallet.objects.get(user=request.user)
+
+        return render(request, 'Game/loan_offer.html', LoanOffer.safe_save(
+            wallet, loan, interest_rate, days_due))
+

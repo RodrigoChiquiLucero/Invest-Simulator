@@ -12,6 +12,9 @@ class Asset(models.Model):
     sell = -1
     quantity = -1
 
+    def is_valid(self):
+        return self.buy != -1 and self.sell != -1
+
     def to_dict(self):
         return {
             "name": self.name,

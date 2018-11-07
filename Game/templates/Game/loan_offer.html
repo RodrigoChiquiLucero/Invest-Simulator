@@ -1,0 +1,73 @@
+{% extends 'Game/base.html' %}
+{% load static from staticfiles %}
+
+{% block body %}
+
+    {# LINKS AND SCRIPTS #}
+    {#    //font-awesome#}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    {#   JQUERY #}
+    <script src="{% static 'Game/lib/jquery.js' %}"></script>
+    {#    NICE NUMBER#}
+    <link rel="stylesheet" href="{% static 'Game/lib/nicenumber/jquery.nice-number.css' %}">
+    <script src="{% static 'Game/lib/nicenumber/jquery.nice-number.js' %}"></script>
+    <script src="{% static 'Game/js/ajax.transactions.js' %}"></script>
+    <script src="{% static 'Game/js/set_offer.js' %}"></script>
+
+    {#    STYLE#}
+    <link rel="stylesheet" href="{% static 'Game/css/transaction-form.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/alarm.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
+
+    {% if not message %}
+    {# CONTENT #}
+    <div align="center">
+        <button class="w3-button w3-green w3-round-large w3-animate-zoom"
+                style="width: 12%; height: 7%; margin: 10px">
+            <i class="fas fa-dollar-sign"></i> {{ liquid }} <i
+                class="fas fa-piggy-bank"></i>
+        </button>
+        <button class="w3-button w3-green w3-round-large w3-animate-zoom"
+                style="width: 12%; height: 7%; margin: 10px">
+            <i class="fas fa-dollar-sign"></i> {{ value_wallet }} <i
+                class="fas fa-wallet"></i>
+        </button>
+    </div>
+    <div id="box" class="w3-animate-zoom w3-container dinamic not-so-large overlay middle" align="center">
+        <form method="POST" name="LoanConfiguration">
+            {% csrf_token %}
+
+            <h1 class="form-t">Select your loan configuration</h1>
+            <div class="thres-box">
+                <p class="form-t">Set your loan liquid amount</p>
+                <input id="liquid-amount" class="number-input" type="text"
+                       name="liquid-amount"
+                       value="1" min="0">
+            </div>
+            <div class="thres-box">
+                <p class="form-t">Set your interest rate</p>
+                <input id="interest-rate" class="number-input" type="text"
+                       name="interest-rate"
+                       value="1" min="0" max="100">
+            </div>
+            <div class="thres-box">
+                <p class="form-t">Set your days due</p>
+                <input id="days-due" class="number-input" type="text"
+                       name="days-due"
+                       value="1" min="0">
+            </div>
+            <div class="thres-box">
+                <input type="submit" name="signup_submit" value="Send"/>
+            </div>
+        </form>
+        <script>
+            prepare_inputs_loan();
+        </script>
+    </div>
+    {% else %}
+    <div id="box" class="w3-animate-zoom w3-container dinamic short overlay middle" align="center">
+        <h1 class="form-t">{{ message }}</h1>
+    </div>
+    {% endif %}
+
+{% endblock %}

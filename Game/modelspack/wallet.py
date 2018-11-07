@@ -15,6 +15,12 @@ class Wallet(models.Model):
     image = models.ImageField(upload_to='profile_image',
                               default='profile_image/no_image.jpg')
 
+    @property
+    def liquid_with_loans(self):
+        from Game.models import LoanOffer
+        loan_offers = LoanOffer.objects.filter(wallet=self)
+        return self.liquid - sum(l.loan for l in loan_offers)
+
     @staticmethod
     def get_info(user):
         from Game.models import Ownership
@@ -25,8 +31,8 @@ class Wallet(models.Model):
         """
         response = {}
         wallet = Wallet.objects.get(user=user)
-        response['liquid'] = wallet.liquid
-        value_wallet = wallet.liquid
+        response['liquid'] = wallet.liquid_with_loans
+        value_wallet = wallet.liquid_with_loans
         ownerships = Ownership.objects.filter(wallet=wallet, quantity__gt=0)
         assets = []
         asset_communication = ACommunication(settings.API_URL)
@@ -49,7 +55,7 @@ class Wallet(models.Model):
         """
         asset_comms = ACommunication(settings.API_URL)
         asset = asset_comms.get_asset_quote(asset)
-        price = (asset.buy * asset.quantity)
+        total = (asset.buy * asset.quantity)
         buy = asset.buy
         sell = asset.sell
         quantity = asset.quantity
@@ -60,7 +66,7 @@ class Wallet(models.Model):
             return {"error": True,
                     "message": "You need to buy at least one asset"}
 
-        if self.liquid >= price:
+        if self.liquid_with_loans >= total:
             asset = Asset.safe_get(name=asset.name)
             # if not asset then create one
             if not asset:
@@ -86,7 +92,7 @@ class Wallet(models.Model):
                         date=datetime.datetime.now(), quantity=quantity,
                         is_purchase=True).save()
 
-            self.liquid -= price
+            self.liquid -= total
             self.liquid = round(self.liquid, 3)
             self.save()
             return {"error": False, "message": "Purchase has been successful"}
@@ -94,6 +100,7 @@ class Wallet(models.Model):
             return {"error": True, "message": "Not enough cash"}
 
     def sell_asset(self, asset):
+        from Game.models import Ownership, Transaction
         """
         remove an asset to the user wallet and
         add the transaction to user history.
@@ -102,7 +109,7 @@ class Wallet(models.Model):
         """
         asset_comms = ACommunication(settings.API_URL)
         asset = asset_comms.get_asset_quote(asset)
-        price = (asset.sell * asset.quantity)
+        total = (asset.sell * asset.quantity)
         quantity = asset.quantity
 
         if quantity <= 0:
@@ -128,9 +135,7 @@ class Wallet(models.Model):
                     date=datetime.datetime.now(), quantity=asset.quantity,
                     is_purchase=False).save()
 
-        self.liquid += price
+        self.liquid += total
         ownership.quantity = round(self.liquid, 3)
         self.save()
         return {"error": False, "message": "Sale has been succesfull"}
-
-
