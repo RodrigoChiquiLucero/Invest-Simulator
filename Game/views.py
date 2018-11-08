@@ -156,3 +156,14 @@ def get_all_loan_offers(request):
         borrower = Wallet.objects.get(user=request.user)
         Loan.safe_save(borrower=borrower, loaned=loaned, offer=offer)
         return HttpResponse(200, 'Your loan has been taken successfully')
+
+
+@login_required
+def get_taken_loans(request):
+    if request.method == 'GET':
+        taken = Loan.objects.filter(borrower__user=request.user)
+        wallet_info = Wallet.get_info(request.user)
+        context = {'taken': taken,
+                   'liquid': wallet_info['liquid'],
+                   'value_wallet': wallet_info['value_wallet']}
+        return render(request, 'Game/taken_loans.html', context)
