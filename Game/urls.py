@@ -11,7 +11,8 @@ urlpatterns = [
     path('alarms/', views.alarms, name='my_alarms'),
     path('alarm/set/', views.set_alarm, name='set_alarm'),
     path('ranking/', views.ranking, name='ranking'),
-    path('loan/set/', views.loan_offer, name='loan_offer'),
+    path('loan/set/', views.set_loan_offer, name='loan_offer'),
+    path('loans/', views.get_all_loan_offers, name='all_loans'),
 
 
     path('ajax/quote/<slug:name>/', ajax.ajax_quote, name='ajax_quote'),

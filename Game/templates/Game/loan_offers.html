@@ -1,0 +1,52 @@
+{% extends 'Game/base.html' %}
+{% load static from staticfiles %}
+
+{% block body %}
+
+    {# LINKS AND SCRIPTS #}
+    {#    //font-awesome#}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
+    {#    PERSONAL#}
+    <link rel="stylesheet" href="{% static 'Game/css/transaction-form.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
+    <script src="{% static 'Game/js/ajax.transactions.js' %}"></script>
+
+
+
+    <div align="center" class="middle assets inner">
+
+        {% csrf_token %}
+        <div id="assets" class="w3-container w3-animate-zoom assets"
+             align="center">
+            {% if loan_offers %}
+                <table id="dinamic-table">
+                    <caption class="title">Available loan offers are:
+                    </caption>
+                    <tr>
+                        <th></th>
+                        <th> Lender name</th>
+                        <th> Loan</th>
+                        <th> Days due </th>
+                    </tr>
+                    {% for lo in loan_offers %}
+                        <tr class="dinamic-row">
+                            <td id="photo"> ACA VA LA FOTO </td>
+                            <td id="name"> {{ lo.lender.user.name }}  {{ lo.lender.user.surname }}</td>
+                            <td id="loan"> $ {{ lo.loan }} </td>
+                            <td id="days"> {{ lo.days }} </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <div class="error_message">
+                    <h1> There are no loan_offers available </h1>
+                </div>
+            {% endif %}
+            <ul>
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}

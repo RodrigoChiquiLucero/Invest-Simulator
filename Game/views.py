@@ -3,7 +3,7 @@ from Game.interface_control import AssetComunication as ACommunication
 from Game.models import Wallet
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from Game.models import Transaction, Asset, Alarm, LoanOffer
+from Game.models import Transaction, Alarm, LoanOffer, Loan
 from django.http import JsonResponse, HttpResponse
 
 
@@ -123,7 +123,7 @@ def set_alarm(request):
 
 
 @login_required
-def loan_offer(request):
+def set_loan_offer(request):
     if request.method == 'GET':
         # user info
         context = {}
@@ -139,4 +139,12 @@ def loan_offer(request):
 
         return render(request, 'Game/loan_offer.html', LoanOffer.safe_save(
             wallet, loan, interest_rate, days_due))
+
+
+@login_required
+def get_all_loan_offers(request):
+    if request.method == 'GET':
+        loan_offers = LoanOffer.objects.exclude(lender__user=request.user)
+        context = {'loan_offers': loan_offers}
+        return render(request, 'Game/loan_offers.html', context)
 
