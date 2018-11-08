@@ -3,7 +3,6 @@ from django.contrib.auth.models import User
 from Game.interface_control import AssetComunication as ACommunication
 import datetime
 from django.conf import settings
-from django.core.exceptions import ObjectDoesNotExist
 
 
 class Wallet(models.Model):
@@ -19,7 +18,7 @@ class Wallet(models.Model):
     def liquid_with_loans(self):
         from Game.models import LoanOffer
         loan_offers = LoanOffer.objects.filter(lender=self)
-        return self.liquid - sum(l.loaned for l in loan_offers)
+        return self.liquid - sum(l.offered for l in loan_offers)
 
     @staticmethod
     def get_info(user):

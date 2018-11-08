@@ -1,12 +1,25 @@
 from django.db import models
+from django.forms.models import model_to_dict
 
 
 class LoanOffer(models.Model):
     from Game.models import Wallet
     lender = models.ForeignKey(Wallet, on_delete=models.DO_NOTHING)
-    loaned = models.FloatField(null=False, default=-1)
+    offered = models.FloatField(null=False, default=-1)
     interest_rate = models.FloatField(null=False, default=-1)
     days = models.IntegerField(null=False, default=-1)
+
+    @property
+    def to_json(self):
+        json = model_to_dict(self)
+        json['offered_with_loans'] = self.offered_with_loans
+        return json
+
+    @property
+    def offered_with_loans(self):
+        from Game.models import Loan
+        loans = Loan.objects.filter(offer=self)
+        return self.offered - sum(l.loaned for l in loans)
 
     @staticmethod
     def safe_save(wallet, loaned, interest, days):

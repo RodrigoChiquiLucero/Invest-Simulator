@@ -145,6 +145,14 @@ def set_loan_offer(request):
 def get_all_loan_offers(request):
     if request.method == 'GET':
         loan_offers = LoanOffer.objects.exclude(lender__user=request.user)
+        loan_offers = list(
+            filter(lambda lo: lo.offered_with_loans > 0, loan_offers))
         context = {'loan_offers': loan_offers}
         return render(request, 'Game/loan_offers.html', context)
-
+    elif request.is_ajax():
+        offer_id = int(request.POST['id'])
+        loaned = float(request.POST['loaned'])
+        offer = LoanOffer.objects.get(id=offer_id)
+        borrower = Wallet.objects.get(user=request.user)
+        Loan.safe_save(borrower=borrower, loaned=loaned, offer=offer)
+        return HttpResponse(200, 'Your loan has been taken successfully')

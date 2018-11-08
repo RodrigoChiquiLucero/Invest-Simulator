@@ -13,6 +13,8 @@ class Loan(models.Model):
     @staticmethod
     def safe_save(borrower, offer, loaned):
         # calculate the due date with LoanOffer.days
+        borrower.liquid += loaned
+        borrower.save()
         due_date = dt.now() + timedelta(days=offer.days)
         Loan(borrower=borrower, offer=offer,
              loaned=loaned, due_date=due_date).save()
