@@ -13,6 +13,7 @@ urlpatterns = [
     path('ranking/', views.ranking, name='ranking'),
     path('loan/set/', views.set_loan_offer, name='loan_offer'),
     path('loans/', views.get_all_loan_offers, name='all_loans'),
+    path('loans/offered', views.get_offered_loans, name='offered_loans'),
 
 
     path('ajax/quote/<slug:name>/', ajax.ajax_quote, name='ajax_quote'),

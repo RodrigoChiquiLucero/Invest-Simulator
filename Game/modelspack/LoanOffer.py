@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
 
 
 class LoanOffer(models.Model):
@@ -32,3 +33,28 @@ class LoanOffer(models.Model):
                 'message': 'Your loan offer has been created succesfully',
                 'loaned': loaned,
                 'available': wallet.liquid_with_loans}
+
+    @staticmethod
+    def safe_get(lender):
+        try:
+            return LoanOffer.objects.get(lender=lender)
+        except ObjectDoesNotExist:
+            return None
+
+    @staticmethod
+    def get_info(lender):
+        offered_loans = LoanOffer.objects.filter(lender=lender,
+                                                 quantity__gt=0)
+        if not offered_loans:
+            return {'error': True,
+                    'message': "You don't have any loan offer set"}
+        else:
+            return {'error': False, 'offered_loans': offered_loans}
+
+    @staticmethod
+    def safe_delete(lender, loaned, interest_rate, days):
+        offered_loans = LoanOffer.objects.safe_get(lender=lender,
+                                                   loaned=loaned,
+                                                   interest_rate=interest_rate,
+                                                   days=days)
+        offered_loans.delete()

@@ -148,3 +148,10 @@ def get_all_loan_offers(request):
         context = {'loan_offers': loan_offers}
         return render(request, 'Game/loan_offers.html', context)
 
+
+@login_required
+def get_offered_loans(request):
+    if request.method == 'GET':
+        loan_offers = LoanOffer.objects.filter(lender__user=request.user)
+        context = {'loan_offers': loan_offers}
+        return render(request, 'Game/offered_loans.html', context)
