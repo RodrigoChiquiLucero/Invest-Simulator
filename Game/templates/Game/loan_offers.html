@@ -11,6 +11,7 @@
     {#    PERSONAL#}
     <link rel="stylesheet" href="{% static 'Game/css/transaction-form.css' %}">
     <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/loans.css' %}">
     <script src="{% static 'Game/js/ajax.transactions.js' %}"></script>
 
 
@@ -32,9 +33,11 @@
                     </tr>
                     {% for lo in loan_offers %}
                         <tr class="dinamic-row">
-                            <td id="photo"> ACA VA LA FOTO </td>
-                            <td id="name"> {{ lo.lender.user.name }}  {{ lo.lender.user.surname }}</td>
-                            <td id="loan"> $ {{ lo.loan }} </td>
+                            <td id="photo">
+                                <img class="user_img" src="{{ lo.lender.image.url }}">
+                            </td>
+                            <td id="name"> {{ lo.lender.user.username }}  {{ lo.lender.user.surname }}</td>
+                            <td id="loan"> $ {{ lo.loaned }} </td>
                             <td id="days"> {{ lo.days }} </td>
                         </tr>
                     {% endfor %}

@@ -138,7 +138,7 @@ def set_loan_offer(request):
         wallet = Wallet.objects.get(user=request.user)
 
         return render(request, 'Game/loan_offer.html', LoanOffer.safe_save(
-            wallet, loan, interest_rate, days_due))
+            wallet=wallet, loaned=loan, interest=interest_rate, days=days_due))
 
 
 @login_required

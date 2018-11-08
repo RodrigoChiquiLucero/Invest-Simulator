@@ -9,15 +9,15 @@ class LoanOffer(models.Model):
     days = models.IntegerField(null=False, default=-1)
 
     @staticmethod
-    def safe_save(wallet, loan, interest, days):
+    def safe_save(wallet, loaned, interest, days):
         try:
-            loan = float(loan)
+            loaned = float(loaned)
             interest = float(interest)
             days = int(days)
         except ValueError:
             return {'error': True,
                     'message': 'Incorrect data value'}
-        if loan > wallet.liquid or loan < 0:
+        if loaned > wallet.liquid or loaned < 0:
             return {'error': True,
                     'message': 'You have not enough liquid money available'}
         if interest > 100 or interest < 0:
@@ -26,9 +26,9 @@ class LoanOffer(models.Model):
         if days < 0:
             return {'error': True,
                     'message': 'The days amount cannot be negative'}
-        LoanOffer.objects.create(loaned=loan, interest_rate=interest,
+        LoanOffer.objects.create(loaned=loaned, interest_rate=interest,
                                  days=days, lender=wallet).save()
         return {'error': False,
                 'message': 'Your loan offer has been created succesfully',
-                'loaned': loan,
+                'loaned': loaned,
                 'available': wallet.liquid_with_loans}

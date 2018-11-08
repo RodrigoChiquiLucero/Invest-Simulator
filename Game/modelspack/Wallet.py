@@ -18,8 +18,8 @@ class Wallet(models.Model):
     @property
     def liquid_with_loans(self):
         from Game.models import LoanOffer
-        loan_offers = LoanOffer.objects.filter(wallet=self)
-        return self.liquid - sum(l.loan for l in loan_offers)
+        loan_offers = LoanOffer.objects.filter(lender=self)
+        return self.liquid - sum(l.loaned for l in loan_offers)
 
     @staticmethod
     def get_info(user):
