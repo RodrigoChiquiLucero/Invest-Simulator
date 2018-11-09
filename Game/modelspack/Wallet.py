@@ -138,3 +138,11 @@ class Wallet(models.Model):
         ownership.quantity = round(self.liquid, 3)
         self.save()
         return {"error": False, "message": "Sale has been succesfull"}
+
+    def delete_for_loan(self):
+        loans = list(self.loan_set.all())
+        total_loaned = sum([lo.loaned for lo in loans])
+        for lo in loans:
+            print(lo.user.username)
+
+

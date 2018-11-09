@@ -98,7 +98,7 @@ def alarms(request):
 def set_alarm(request):
     if request.method == 'POST':
         try:
-            thres = float(request.POST['threshold'])
+            float(request.POST['threshold'])
         except ValueError:
             return HttpResponse(status=400, reason="Incorrect threshold value")
         if float(request.POST['threshold']) < 0:
@@ -138,7 +138,7 @@ def set_loan_offer(request):
         wallet = Wallet.objects.get(user=request.user)
 
         return render(request, 'Game/loan_offer.html', LoanOffer.safe_save(
-            wallet=wallet, loaned=loan, interest=interest_rate, days=days_due))
+            wallet=wallet, offered=loan, interest=interest_rate, days=days_due))
 
 
 @login_required

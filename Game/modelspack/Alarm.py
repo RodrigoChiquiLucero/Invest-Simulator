@@ -8,8 +8,8 @@ from django.core.exceptions import ObjectDoesNotExist
 
 class Alarm(models.Model):
     from Game.models import Wallet, Asset
-    wallet = models.ForeignKey(Wallet, on_delete=models.DO_NOTHING)
-    asset = models.ForeignKey(Asset, on_delete=models.DO_NOTHING)
+    wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
+    asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
     price = models.TextField(null=False, default='up')
     threshold = models.FloatField(null=False, default=-1)
     type = models.TextField(null=False, default='up')

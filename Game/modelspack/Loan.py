@@ -6,8 +6,8 @@ from django.forms.models import model_to_dict
 
 class Loan(models.Model):
     from Game.models import Wallet, LoanOffer
-    borrower = models.ForeignKey(Wallet, on_delete=models.DO_NOTHING)
-    offer = models.ForeignKey(LoanOffer, on_delete=models.DO_NOTHING)
+    borrower = models.ForeignKey(Wallet, on_delete=models.CASCADE)
+    offer = models.ForeignKey(LoanOffer, on_delete=models.CASCADE)
     loaned = models.FloatField(null=False, default=-1)
     due_date = models.DateField()
 
@@ -17,6 +17,18 @@ class Loan(models.Model):
         offer_json = model_to_dict(self.offer)
         json['offer'] = offer_json
         return json
+
+    def charge_borrower(self):
+        total = self.loaned + (self.loaned * self.offer.interest_rate / 100)
+        if total > self.borrower.liquid_with_loans:
+            return False
+        else:
+            self.borrower.liquid -= total
+            self.offer.lender.liquid += total
+            self.borrower.save()
+            self.offer.lender.save()
+            self.delete()
+            return True
 
     @staticmethod
     def safe_save(borrower, offer, loaned):

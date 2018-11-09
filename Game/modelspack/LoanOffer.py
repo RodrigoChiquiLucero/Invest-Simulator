@@ -4,7 +4,7 @@ from django.forms.models import model_to_dict
 
 class LoanOffer(models.Model):
     from Game.models import Wallet
-    lender = models.ForeignKey(Wallet, on_delete=models.DO_NOTHING)
+    lender = models.ForeignKey(Wallet, on_delete=models.CASCADE)
     offered = models.FloatField(null=False, default=-1)
     interest_rate = models.FloatField(null=False, default=-1)
     days = models.IntegerField(null=False, default=-1)
@@ -22,15 +22,15 @@ class LoanOffer(models.Model):
         return self.offered - sum(l.loaned for l in loans)
 
     @staticmethod
-    def safe_save(wallet, loaned, interest, days):
+    def safe_save(wallet, offered, interest, days):
         try:
-            loaned = float(loaned)
+            offered = float(offered)
             interest = float(interest)
             days = int(days)
         except ValueError:
             return {'error': True,
                     'message': 'Incorrect data value'}
-        if loaned > wallet.liquid or loaned < 0:
+        if offered > wallet.liquid or offered < 0:
             return {'error': True,
                     'message': 'You have not enough liquid money available'}
         if interest > 100 or interest < 0:
@@ -39,9 +39,9 @@ class LoanOffer(models.Model):
         if days < 0:
             return {'error': True,
                     'message': 'The days amount cannot be negative'}
-        LoanOffer.objects.create(loaned=loaned, interest_rate=interest,
+        LoanOffer.objects.create(offered=offered, interest_rate=interest,
                                  days=days, lender=wallet).save()
         return {'error': False,
                 'message': 'Your loan offer has been created succesfully',
-                'loaned': loaned,
+                'loaned': offered,
                 'available': wallet.liquid_with_loans}

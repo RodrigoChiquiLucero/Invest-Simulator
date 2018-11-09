@@ -25,7 +25,7 @@ class Ownership(models.Model):
 class Transaction(models.Model):
     from Game.models import Wallet, Asset
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
-    asset = models.ForeignKey(Asset, on_delete=models.DO_NOTHING)
+    asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
     asset_price_buy = models.FloatField(null=False, default=-1)
     asset_price_sell = models.FloatField(null=False, default=-1)
     date = models.DateField(default=datetime.date.today)
