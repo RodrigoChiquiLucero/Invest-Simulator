@@ -30,7 +30,7 @@ class LoanOffer(models.Model):
         LoanOffer.objects.create(loaned=loaned, interest_rate=interest,
                                  days=days, lender=wallet).save()
         return {'error': False,
-                'message': 'Your loan offer has been created succesfully',
+                'message': 'Your loan offer has been created successfully',
                 'loaned': loaned,
                 'available': wallet.liquid_with_loans}
 

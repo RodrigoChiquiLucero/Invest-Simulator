@@ -22,6 +22,7 @@
 
     <script src="{% static 'Game/js/ajax.transactions.js' %}"></script>
     <script src="{% static 'Game/js/offered_loans.js' %}"></script>
+    <script src="{% static 'Game/js/delete_offered_loans.js' %}"></script>
 
 
 
@@ -41,12 +42,29 @@
             <input id="cancel-quantity" type="submit" value="Cancel"/>
         </div>
 
-        <div id="confirm-deletion-form" class="dinamic short overlay middle" style="height: 150px; width: 25%">
-            <p style="padding: 5px; font-size: 20px">Are you sure you want to delete this alarm?</p>
-            <p style="padding: 3px; font-size: 17px">This action cannot be reverted</p>
+        <div id="confirm-deletion-form" class="dinamic short overlay middle"
+             style="height: 150px; width: 25%">
+            <p style="padding: 5px; font-size: 20px">Are you sure you want to
+                delete this offered loan?</p>
+            <p style="padding: 3px; font-size: 17px">This action cannot be
+                reverted</p>
 
             <input id="send-confirm-deletion" type="submit" value="YES"/>
             <input id="send-cancel-deletion" type="submit" value="NO"/>
+        </div>
+
+        <div id="deletion-status" class="dinamic short overlay"
+             style="width: 25%">
+            <label>Offered loan is being deleted</label>
+
+            <div class="qbox">
+                <p id="status"></p>
+                <i class="fa fa-spinner fa-spin" id="loading"
+                   style="font-size:36px;"></i>
+            </div>
+
+            <input id="cancel-deletion-onloading" type="submit"
+                   value="CANCEL"/>
         </div>
 
         <div id="assets" class="w3-container w3-animate-zoom assets"
@@ -77,12 +95,12 @@
                             <td>
                                 <a class="action w3-button w3-green w3-round-large modify"
                                    href="#"
-                                   id="{{ lo.id}}"
+                                   id="{{ lo.id }}"
                                    loan="{{ lo.loaned }}">
                                     <i class="fas fa-trash-alt"></i> Modify
                                 </a></td>
                             <td>
-                                <a class="action w3-button w3-green w3-round-large"
+                                <a class="action w3-button w3-green w3-round-large offered_loans-deleter"
                                    href="#" id="{{ lo.lender.user.username }}"
                                    loan="{{ lo.loaned }}"
                                    days="{{ lo.days }}">
@@ -93,7 +111,7 @@
                 </table>
             {% else %}
                 <div class="error_message">
-                    <h1> There are no loan_offers available </h1>
+                    <h1> There are no offered loans available </h1>
                 </div>
             {% endif %}
             <ul>
