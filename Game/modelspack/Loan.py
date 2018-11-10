@@ -22,13 +22,12 @@ class Loan(models.Model):
         total = self.loaned + (self.loaned * self.offer.interest_rate / 100)
         if total > self.borrower.liquid_with_loans:
             return False
-        else:
-            self.borrower.liquid -= total
-            self.offer.lender.liquid += total
-            self.borrower.save()
-            self.offer.lender.save()
-            self.delete()
-            return True
+        self.borrower.liquid -= total
+        self.offer.lender.liquid += total
+        self.borrower.save()
+        self.offer.lender.save()
+        self.delete()
+        return True
 
     @staticmethod
     def safe_save(borrower, offer, loaned):

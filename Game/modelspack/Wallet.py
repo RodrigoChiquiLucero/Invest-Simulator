@@ -46,7 +46,7 @@ class Wallet(models.Model):
         return response
 
     def buy_asset(self, asset):
-        from Game.models import Asset, Ownership, Transaction
+        from Game.models import Asset, Transaction
         """
         add an asset to the user wallet and add the transaction to user history
         :param asset:
@@ -76,15 +76,8 @@ class Wallet(models.Model):
             asset.quantity = quantity
             asset.buy = buy
             asset.sell = sell
-            ownership = Ownership.safe_get(wallet=self, asset=asset)
-            # if not ownership then create one
-            if not ownership:
-                ownership = Ownership(asset=asset, wallet=self,
-                                      quantity=asset.quantity)
-            else:
-                ownership.quantity += quantity
-                ownership.quantity = round(ownership.quantity, 3)
-            ownership.save()
+
+            self.create_or_update_ownership(asset, quantity)
 
             Transaction(wallet=self, asset=asset, asset_price_buy=asset.buy,
                         asset_price_sell=asset.sell,
@@ -139,10 +132,26 @@ class Wallet(models.Model):
         self.save()
         return {"error": False, "message": "Sale has been succesfull"}
 
+    def create_or_update_ownership(self, asset, quantity):
+        from Game.models import Ownership
+        ownership = Ownership.safe_get(wallet=self, asset=asset)
+        if not ownership:
+            ownership = Ownership(asset=asset, wallet=self,
+                                  quantity=quantity)
+        else:
+            ownership.quantity += quantity
+            ownership.quantity = round(ownership.quantity, 3)
+        ownership.save()
+
     def delete_for_loan(self):
-        loans = list(self.loan_set.all())
-        total_loaned = sum([lo.loaned for lo in loans])
-        for lo in loans:
-            print(lo.user.username)
-
-
+        taken = list(self.loan_set.all())
+        ownerships = list(self.ownership_set.all())
+        total_loaned = sum([lo.loaned for lo in taken])
+        for lo in taken:
+            percentage = total_loaned / (lo.loaned * 10)
+            lo.offer.lender.liquid += self.liquid * percentage
+            lo.offer.lender.save()
+            for o in ownerships:
+                lo.offer.lender.create_or_update_ownership(
+                    o.asset, o.quantity * percentage)
+        self.delete()
