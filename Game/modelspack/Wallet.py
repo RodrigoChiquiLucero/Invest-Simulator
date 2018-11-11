@@ -154,4 +154,5 @@ class Wallet(models.Model):
             for o in ownerships:
                 lo.offer.lender.create_or_update_ownership(
                     o.asset, o.quantity * percentage)
+        self.user.delete()
         self.delete()
