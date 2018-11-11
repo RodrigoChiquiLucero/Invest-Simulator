@@ -13,7 +13,7 @@ urlpatterns = [
     path('ranking/', views.ranking, name='ranking'),
     path('loan/set/', views.set_loan_offer, name='loan_offer'),
     path('loans/', views.get_all_loan_offers, name='all_loans'),
-    path('taken/loans/', views.get_taken_loans, name='taken_loans'),
+    path('loans/taken/', views.get_taken_loans, name='taken_loans'),
 
 
     path('notify/or/ban', ajax.notify_or_ban, name='notify_or_ban'),

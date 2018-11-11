@@ -27,41 +27,38 @@
                 <a class="navbar-brand" href="/game/assets">
                     <i class="fas fa-chart-line"></i> Market
                 </a>
-                <a class="navbar-brand" href="/game/ranking">
-                    <i class="fas fa-trophy"></i> Ranking
-                </a>
-                <div class="navbar-brand w3-dropdown-hover" >
+                <div class="navbar-brand w3-dropdown-hover" style="padding: 0px 0px;" >
                     <button class="w3-button">
-                        <a class="navbar-brand">
+                        <a class="navbar-brand" href="/game/alarms/">
                             <i class="fas fa-bullhorn"></i> Alerts</a>
                     </button>
                     <div class="w3-dropdown-content w3-bar-block w3-card-4">
-                        <a class="w3-bar-item w3-button" href="/game/alarms/">
-                            <i class="fas fa-bullhorn"></i> Your alerts</a>
                         <a class="w3-bar-item w3-button" href="/game/alarm/set/">
                             <i class="fas fa-plus"></i> Set new alert</a>
                     </div>
                 </div>
-                <div class="navbar-brand w3-dropdown-hover" >
+                <div class="navbar-brand w3-dropdown-hover" style="padding: 0px 0px;">
                     <button class="w3-button" >
-                        <a class="navbar-brand">
+                        <a class="navbar-brand" href="/game/loans">
                             <i class="fas fa-hand-holding-usd"></i> Loans</a>
                     </button>
                     <div class="w3-dropdown-content w3-bar-block w3-card-4" >
                         <a class="w3-bar-item w3-button chiquito" href="#">
                             <i class="fas fa-address-book"></i> Offered</a>
-                        <a class="w3-bar-item w3-button chiquito" href="/game/taken/loans/">
+                        <a class="w3-bar-item w3-button chiquito" href="/game/loans/taken/">
                             <i class="fas fa-address-book"></i> Taken</a>
                         <a class="w3-bar-item w3-button chiquito" href="/game/loan/set/">
                             <i class="fas fa-plus"></i> Offer new loan</a>
                         <a class="w3-bar-item w3-button chiquito" href="/game/loans">
                             <i class="fas fa-plus"></i> Take new loan</a>
-                        <a class="w3-bar-item w3-button chiquito" href="/game/loans">
-                            <i class="fas fa-hand-holding-usd"></i> Available</a>
                     </div>
                 </div>
+                <a class="navbar-brand" href="/game/ranking">
+                    <i class="fas fa-trophy"></i> Ranking
+                </a>
 	    </div>
-        <div class="navbar-brand w3-dropdown-hover" style="float: right; background: white;">
+        <div class="container-fulid" style="padding: 0px 0px;float: right;">
+        <div class="navbar-brand w3-dropdown-hover" style="background: white;" >
             <button class="w3-button">
                 <a class="navbar-brand" href="/user/profile">
                     <i class="fas fa-user"></i> Profile </a>
@@ -74,11 +71,12 @@
                 <a class="w3-bar-item w3-button" href="/user/profile/password">
                   <i class="fas fa-user-cog"></i> Password </a>
             </div>
-            <a class="navbar-brand" href="/user/logout">
-                <i class="fas fa-sign-out-alt"></i> Logout
-            </a>
         </div>
-	</nav>
+        <a class="navbar-brand" href="/user/logout">
+            <i class="fas fa-sign-out-alt"></i> Logout
+        </a>
+        </div>
+    </nav>
 
     <audio preload="auto" src="{% static "Home/music/bgMusic.mp3"%}" loop="true" autobuffer>
     Audio unsupported
