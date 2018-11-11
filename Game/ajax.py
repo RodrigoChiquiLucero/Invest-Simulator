@@ -2,7 +2,7 @@ from django.conf import settings
 from django.contrib.auth.decorators import login_required
 from django.http import JsonResponse, HttpResponse
 from Game.interface_control import AssetComunication as ACommunication
-from Game.models import Asset, Wallet
+from Game.models import Asset, Wallet, Notification
 
 
 # AJAX JSON RESPONSES
@@ -48,3 +48,8 @@ def ajax_sell(request):
         return JsonResponse(wallet.sell_asset(asset))
     else:
         return HttpResponse(status=400, reason="No GET method")
+
+
+def notify_or_ban(request):
+    wallet = Wallet.objects.get(user=request.user)
+    return JsonResponse(Notification.notifity(wallet))

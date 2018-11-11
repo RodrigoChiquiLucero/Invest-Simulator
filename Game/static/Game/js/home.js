@@ -1,6 +1,4 @@
 window.onload = function () {
-    console.log('ENTRAMOS');
-
     //hide by default
     $('#alert-options').hide();
 

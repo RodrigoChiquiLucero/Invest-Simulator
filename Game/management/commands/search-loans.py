@@ -4,7 +4,7 @@ import sys
 from django.core.mail import send_mail
 from datetime import datetime as dt
 from datetime import timedelta
-from Game.models import Loan
+from Game.models import Loan, Notification
 
 
 class Command(BaseCommand):
@@ -40,8 +40,8 @@ class Command(BaseCommand):
             self.charge(expired)
             self.notify(almost)
 
-            self.event.wait(24 * 60 * 60)
             self.print_success()
+            self.event.wait(24 * 60 * 60)
 
     def charge(self, expired):
         for lo in expired:
@@ -51,7 +51,16 @@ class Command(BaseCommand):
                 lo.borrower.delete_for_loan()
 
     def notify(self, almost):
-        self.message += 'Almost expired:'
+        self.message += 'Almost expired: '
         for lo in almost:
-            # send notification
-            return
+            self.message += 'Almost: ' + lo.borrower.user.username
+            notif = Notification(wallet=lo.borrower,
+                                 message_short=
+                                 "You have a pending loan which dues tomorrow",
+                                 message_large=
+                                 "You have borrowed " + str(lo.loaned) +
+                                 " from " +
+                                 lo.offer.lender.user.username + ", if you " +
+                                 "don't pay by this time tomorrow you will " +
+                                 "be banned")
+            notif.save()

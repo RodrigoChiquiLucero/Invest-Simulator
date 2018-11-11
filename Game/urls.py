@@ -16,6 +16,7 @@ urlpatterns = [
     path('taken/loans/', views.get_taken_loans, name='taken_loans'),
 
 
+    path('notify/or/ban', ajax.notify_or_ban, name='notify_or_ban'),
     path('ajax/quote/<slug:name>/', ajax.ajax_quote, name='ajax_quote'),
     path('ajax/buy/', ajax.ajax_buy, name='ajax_buy'),
     path('ajax/sell/', ajax.ajax_sell, name='ajax_sell'),
