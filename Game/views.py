@@ -156,11 +156,20 @@ def get_offered_loans(request):
         context = {'loan_offers': loan_offers}
         return render(request, 'Game/offered_loans.html', context)
     else:
+        wallet = Wallet.objects.get(user=request.user)
         if request.POST['method'] == 'delete':
-            wallet = Wallet.objects.get(user=request.user)
             LoanOffer.safe_delete(lender=wallet,
                                   loaned=request.POST['loaned'],
                                   interest_rate=request.POST.get(
                                       'interest_rate'),
                                   days=request.POST['days'])
+            return HttpResponse(status=200)
+        if request.POST['method'] == 'modify':
+            loan_offers = LoanOffer.objects.filter(id=)
+            loan_offers.safe_modification(lender=wallet,
+                                        loaned=request.POST['loaned'],
+                                        interest_rate=request.POST[
+                                            'interest_rate'],
+                                        days=request.POST['days'],
+                                        new_loan=request.POST['new_loan'])
             return HttpResponse(status=200)

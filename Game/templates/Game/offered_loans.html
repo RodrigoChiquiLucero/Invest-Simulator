@@ -22,7 +22,6 @@
 
     <script src="{% static 'Game/js/ajax.transactions.js' %}"></script>
     <script src="{% static 'Game/js/offered_loans.js' %}"></script>
-    <script src="{% static 'Game/js/delete_offered_loans.js' %}"></script>
 
 
 
@@ -40,6 +39,9 @@
             </div>
             <input id="send-quantity" type="submit" value="Withdraw"/>
             <input id="cancel-quantity" type="submit" value="Cancel"/>
+            <script>
+                prepare_input_nicenumber();
+            </script>
         </div>
 
         <div id="confirm-deletion-form" class="dinamic short overlay middle"
@@ -56,6 +58,20 @@
         <div id="deletion-status" class="dinamic short overlay"
              style="width: 25%">
             <label>Offered loan is being deleted</label>
+
+            <div class="qbox">
+                <p id="status"></p>
+                <i class="fa fa-spinner fa-spin" id="loading"
+                   style="font-size:36px;"></i>
+            </div>
+
+            <input id="cancel-deletion-onloading" type="submit"
+                   value="CANCEL"/>
+        </div>
+
+        <div id="modification-status" class="dinamic short overlay"
+             style="width: 25%">
+            <label>Offered loaned money is being modified</label>
 
             <div class="qbox">
                 <p id="status"></p>
@@ -93,19 +109,24 @@
                             <td id="interest_rate"> {{ lo.interest_rate }}</td>
                             <td id="days"> {{ lo.days }} </td>
                             <td>
-                                <a class="action w3-button w3-green w3-round-large modify"
+                                <a class="action w3-button w3-green w3-round-large offered_loans-modifier"
                                    href="#"
-                                   id="{{ lo.id }}"
-                                   loan="{{ lo.loaned }}">
-                                    <i class="fas fa-trash-alt"></i> Modify
-                                </a></td>
+                                   id="{{ lo.loaned }}"
+                                   new_loan="{{ lo.new_loan }}"
+                                   interest_rate="{{ lo.interest_rate }}"
+                                   days="{{ lo.days }}">
+                                    <i class="fas fa-check"></i> Modify
+                                </a>
+                            </td>
                             <td>
                                 <a class="action w3-button w3-green w3-round-large offered_loans-deleter"
-                                   href="#" id="{{ lo.loaned }}"
+                                   href="#"
+                                   id="{{ lo.loaned }}"
                                    interest_rate="{{ lo.interest_rate }}"
                                    days="{{ lo.days }}">
                                     <i class="fas fa-trash-alt"></i> Delete
-                                </a></td>
+                                </a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </table>

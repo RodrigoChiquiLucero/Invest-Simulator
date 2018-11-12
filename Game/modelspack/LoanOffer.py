@@ -53,9 +53,25 @@ class LoanOffer(models.Model):
 
     @staticmethod
     def safe_delete(lender, loaned, interest_rate, days):
-        from Game.models import Wallet
-        wallet = Wallet.objects.get(user=lender.user)
         offered_loans = LoanOffer.objects.get(lender=lender, loaned=loaned,
                                               interest_rate=interest_rate,
                                               days=days)
         offered_loans.delete()
+
+    @staticmethod
+    def safe_modification(lender, loaned, interest_rate, days, new_loan):
+        from Game.models import Wallet
+        print("AAA")
+        print(loaned)
+        print(new_loan)
+        print("AAA")
+        if float(new_loan) > float(loaned):
+            return {'error': True,
+                    'message': "You haven't loaned that much money"}
+        else:
+            offered_loans = LoanOffer.objects.get(lender=lender, loaned=loaned,
+                                                  interest_rate=interest_rate,
+                                                  days=days)
+            withdrawn_money = offered_loans.loaned - float(new_loan)
+            offered_loans.loaned = withdrawn_money
+            offered_loans.save()
