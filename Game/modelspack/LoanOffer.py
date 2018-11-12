@@ -53,8 +53,9 @@ class LoanOffer(models.Model):
 
     @staticmethod
     def safe_delete(lender, loaned, interest_rate, days):
-        offered_loans = LoanOffer.objects.safe_get(lender=lender,
-                                                   loaned=loaned,
-                                                   interest_rate=interest_rate,
-                                                   days=days)
+        from Game.models import Wallet
+        wallet = Wallet.objects.get(user=lender.user)
+        offered_loans = LoanOffer.objects.get(lender=lender, loaned=loaned,
+                                              interest_rate=interest_rate,
+                                              days=days)
         offered_loans.delete()

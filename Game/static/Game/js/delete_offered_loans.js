@@ -2,8 +2,8 @@ window.onload = function () {
 
     prepare_token();
 
-    let username = 'None';
     let loaned = 'None';
+    let interest_rate = 'None';
     let days = 'None';
 
     divs_hidden_by_default([
@@ -12,8 +12,8 @@ window.onload = function () {
     ]);
 
     $(".offered_loans-deleter").click(function () {
-        username = $(this).attr('id');
-        loaned = $(this).attr('loan');
+        loaned = $(this).attr('id');
+        interest_rate = $(this).attr('interest_rate');
         days = $(this).attr('days');
         $("#confirm-deletion-form").show(500);
         let delstatus = $("#deletion-status");
@@ -34,8 +34,8 @@ window.onload = function () {
                     url: '',
                     type: 'POST',
                     data: {
-                        'name': username,
                         'loaned': loaned,
+                        'interest_rate': interest_rate,
                         'days': days,
                         'method': 'delete'},
                     success: function () {
