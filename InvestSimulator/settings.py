@@ -126,7 +126,7 @@ USE_TZ = True
 
 STATIC_URL = '/static/'
 
-API_URL = 'http://localhost/simulations/'
+API_URL = 'http://localhost:8000/simulations/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'InvestSimulator/media')
 MEDIA_URL = '/media/'
