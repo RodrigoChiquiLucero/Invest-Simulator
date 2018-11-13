@@ -55,7 +55,6 @@ function notify_or_ban() {
         url: '/game/notify/or/ban',
         method: 'POST',
         success: function (data) {
-            console.log(data);
             if (data['must_notifiy']) {
                 notif_message_large = data['message_large'];
                 notify(data['message_short']);

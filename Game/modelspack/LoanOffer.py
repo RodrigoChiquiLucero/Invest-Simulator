@@ -36,7 +36,7 @@ class LoanOffer(models.Model):
         if interest > 100 or interest < 0:
             return {'error': True,
                     'message': 'The interest rate is not a valid percentage'}
-        if days < 0:
+        if days < 1:
             return {'error': True,
                     'message': 'The days amount cannot be negative'}
         LoanOffer.objects.create(offered=offered, interest_rate=interest,
