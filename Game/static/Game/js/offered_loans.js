@@ -115,7 +115,7 @@ window.onload = function () {
         div.find('.cancel').click(function () {
             div.hide(400);
             location.href = '';
-        }).html('OK');
+        }).val('OK');
     }
 
 };

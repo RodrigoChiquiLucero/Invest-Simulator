@@ -91,6 +91,8 @@ class LoanOffer(models.Model):
         if new_offer > offered_loan.offered:
             return {'error': True,
                     'message': "You haven't loaned that much money"}
+        elif new_offer == offered_loan.offered:
+            return LoanOffer.safe_delete(lender, id)
         else:
             offered_loan.offered -= new_offer
             offered_loan.save()
