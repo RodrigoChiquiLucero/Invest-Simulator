@@ -2,7 +2,7 @@ window.onload = function () {
 
     prepare_token();
 
-    let loaned = 'None';
+    let id = 'None';
     let interest_rate = 'None';
     let days = 'None';
     let new_loan = 'None';
@@ -16,22 +16,18 @@ window.onload = function () {
     ]);
 
     $(".offered_loans-deleter").click(function () {
-        loaned = $(this).attr('id');
-        interest_rate = $(this).attr('interest_rate');
-        days = $(this).attr('days');
+        id = $(this).attr('id');
         $("#confirm-deletion-form").show(500);
         let delstatus = $("#deletion-status");
         delstatus.find('label').html(
             'Offered loan is being deleted'
         );
+        delstatus.find('#cancel-deletion-onloading').val('CANCEL');
         delstatus.find('#loading').show();
     });
 
     $(".offered_loans-modifier").click(function () {
-        loaned = $(this).attr('id');
-        new_loan = $("#quantity").val();
-        interest_rate = $(this).attr('interest_rate');
-        days = $(this).attr('days');
+        id = $(this).attr('id');
         $("#quantity-form").show(500);
     });
 
@@ -46,28 +42,20 @@ window.onload = function () {
                     url: '',
                     type: 'POST',
                     data: {
-                        'loaned': loaned,
-                        'interest_rate': interest_rate,
-                        'days': days,
+                        'id': id,
                         'method': 'delete'
                     },
-                    success: function () {
-                        $("#deletion-status").hide(500);
-                        location.href = "";
+                    success: function (data) {
+                        populate_response(data['error'], data['message'], $('#deletion-status'));
                     },
-                    error: function () {
-                        let delstatus = $("#deletion-status");
-                        delstatus.find('label').html(
-                            'An error ocurred while deleting offered loan'
-                        );
-                        delstatus.find('#loading').hide();
-                        delstatus.find('#cancel-deletion-onloading').val('OK');
+                    error: function (jqXHR, status, errorThrown) {
+                        populate_response(true, errorThrown, $('#deletion-status'));
                     }
                 })
             }, 3000
         );
 
-        $("#cancel-deletion-onloading").click(function () {
+        $("#cancel-deletion").click(function () {
             clearTimeout(delete_timeout);
             $("#deletion-status").hide(500);
         });
@@ -85,31 +73,23 @@ window.onload = function () {
                     url: '',
                     type: 'POST',
                     data: {
-                        'loaned': loaned,
-                        'interest_rate': interest_rate,
-                        'days': days,
-                        'new_loan': new_loan,
+                        'id': id,
+                        'new_offer': $('#quantity').val(),
                         'method': 'modify'
                     },
-                    success: function () {
-                        $("#modification-status").show(500);
-                        location.href = "";
+                    success: function (data) {
+                        populate_response(data['error'], data['message'], $('#modification-status'));
                     },
-                    error: function () {
-                        let delstatus = $("#deletion-status");
-                        delstatus.find('label').html(
-                            'An error ocurred while modifying offered loan'
-                        );
-                        delstatus.find('#loading').hide();
-                        delstatus.find('#cancel-deletion-onloading').val('OK');
+                    error: function (jqXHR, status, errorThrown) {
+                        populate_response(true, errorThrown, $('#modification-status'));
                     }
                 })
             }, 3000
         );
 
-        $("#cancel-deletion-onloading").click(function () {
+        $("#cancel-modification").click(function () {
             clearTimeout(modify_loaned_money);
-            $("#deletion-status").hide(500);
+            $("#modification-status").hide(500);
         });
 
     });
@@ -121,5 +101,21 @@ window.onload = function () {
     $("#send-cancel-deletion").click(function () {
         $("#confirm-deletion-form").hide(400);
     });
+
+    function populate_response(error, message, div) {
+        div.find('#loading').hide();
+        let label = div.find('label');
+        label.css('font-weight', '2px');
+        if (error) {
+            label.css('color', 'red')
+        } else {
+            label.css('color', 'green')
+        }
+        label.html(message);
+        div.find('.cancel').click(function () {
+            div.hide(400);
+            location.href = '';
+        }).html('OK');
+    }
 
 };

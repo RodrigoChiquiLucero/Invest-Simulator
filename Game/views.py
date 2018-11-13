@@ -158,18 +158,12 @@ def get_offered_loans(request):
     else:
         wallet = Wallet.objects.get(user=request.user)
         if request.POST['method'] == 'delete':
-            LoanOffer.safe_delete(lender=wallet,
-                                  loaned=request.POST['loaned'],
-                                  interest_rate=request.POST.get(
-                                      'interest_rate'),
-                                  days=request.POST['days'])
-            return HttpResponse(status=200)
+            return JsonResponse(
+                LoanOffer.safe_delete(lender=wallet,
+                                      id=request.POST['id']))
         if request.POST['method'] == 'modify':
-            loan_offers = LoanOffer.objects.filter(id=)
-            loan_offers.safe_modification(lender=wallet,
-                                        loaned=request.POST['loaned'],
-                                        interest_rate=request.POST[
-                                            'interest_rate'],
-                                        days=request.POST['days'],
-                                        new_loan=request.POST['new_loan'])
-            return HttpResponse(status=200)
+            return JsonResponse(
+                LoanOffer.safe_modification(lender=wallet,
+                                            id=request.POST['id'],
+                                            new_offer=request.POST[
+                                                'new_offer']))

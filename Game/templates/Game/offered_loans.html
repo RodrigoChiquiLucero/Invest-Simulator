@@ -65,7 +65,7 @@
                    style="font-size:36px;"></i>
             </div>
 
-            <input id="cancel-deletion-onloading" type="submit"
+            <input id="cancel-deletion" class="cancel" type="submit"
                    value="CANCEL"/>
         </div>
 
@@ -79,7 +79,7 @@
                    style="font-size:36px;"></i>
             </div>
 
-            <input id="cancel-deletion-onloading" type="submit"
+            <input id="cancel-modification" class="cancel" type="submit"
                    value="CANCEL"/>
         </div>
 
@@ -92,7 +92,7 @@
                     <tr>
                         <th></th>
                         <th> Lender name</th>
-                        <th> Loan</th>
+                        <th> Offered</th>
                         <th> Interest rate</th>
                         <th> Days due</th>
                         <th></th>
@@ -105,25 +105,18 @@
                                      src="{{ lo.lender.image.url }}">
                             </td>
                             <td id="name"> {{ lo.lender.user.username }} {{ lo.lender.user.surname }}</td>
-                            <td id="loan"> $ {{ lo.loaned }} </td>
+                            <td id="loan"> $ {{ lo.offered }} </td>
                             <td id="interest_rate"> {{ lo.interest_rate }}</td>
                             <td id="days"> {{ lo.days }} </td>
                             <td>
                                 <a class="action w3-button w3-green w3-round-large offered_loans-modifier"
-                                   href="#"
-                                   id="{{ lo.loaned }}"
-                                   new_loan="{{ lo.new_loan }}"
-                                   interest_rate="{{ lo.interest_rate }}"
-                                   days="{{ lo.days }}">
-                                    <i class="fas fa-check"></i> Modify
+                                   href="#" id="{{ lo.id }}" >
+                                    <i class="fas fa-wrench"></i> Withdraw
                                 </a>
                             </td>
                             <td>
                                 <a class="action w3-button w3-green w3-round-large offered_loans-deleter"
-                                   href="#"
-                                   id="{{ lo.loaned }}"
-                                   interest_rate="{{ lo.interest_rate }}"
-                                   days="{{ lo.days }}">
+                                   href="#" id="{{ lo.id }}" >
                                     <i class="fas fa-trash-alt"></i> Delete
                                 </a>
                             </td>

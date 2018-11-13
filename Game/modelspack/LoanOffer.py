@@ -4,8 +4,8 @@ from django.core.exceptions import ObjectDoesNotExist
 
 class LoanOffer(models.Model):
     from Game.models import Wallet
-    lender = models.ForeignKey(Wallet, on_delete=models.DO_NOTHING)
-    loaned = models.FloatField(null=False, default=-1)
+    lender = models.ForeignKey(Wallet, on_delete=models.CASCADE)
+    offered = models.FloatField(null=False, default=-1)
     interest_rate = models.FloatField(null=False, default=-1)
     days = models.IntegerField(null=False, default=-1)
 
@@ -52,26 +52,34 @@ class LoanOffer(models.Model):
             return {'error': False, 'offered_loans': offered_loans}
 
     @staticmethod
-    def safe_delete(lender, loaned, interest_rate, days):
-        offered_loans = LoanOffer.objects.get(lender=lender, loaned=loaned,
-                                              interest_rate=interest_rate,
-                                              days=days)
-        offered_loans.delete()
+    def safe_delete(lender, id):
+        try:
+            offered_loan = LoanOffer.objects.get(lender=lender, id=int(id))
+            offered_loan.delete()
+            return {'error': False,
+                    'message': "Your offer has been deleted successfully"}
+        except (ObjectDoesNotExist, ValueError):
+            return {'error': True,
+                    'message': 'An error ocurred while trying to '
+                               'delete the offer'}
 
     @staticmethod
-    def safe_modification(lender, loaned, interest_rate, days, new_loan):
-        from Game.models import Wallet
-        print("AAA")
-        print(loaned)
-        print(new_loan)
-        print("AAA")
-        if float(new_loan) > float(loaned):
+    def safe_modification(lender, id, new_offer):
+        try:
+            new_offer = float(new_offer)
+            offered_loan = LoanOffer.objects.get(lender=lender, id=int(id))
+        except ObjectDoesNotExist:
+            return {'error': True,
+                    'message': "This offer isn't yours"}
+        except ValueError:
+            return {'error': True,
+                    'message': "Incorrect data"}
+
+        if new_offer > offered_loan.offered:
             return {'error': True,
                     'message': "You haven't loaned that much money"}
         else:
-            offered_loans = LoanOffer.objects.get(lender=lender, loaned=loaned,
-                                                  interest_rate=interest_rate,
-                                                  days=days)
-            withdrawn_money = offered_loans.loaned - float(new_loan)
-            offered_loans.loaned = withdrawn_money
-            offered_loans.save()
+            offered_loan.offered -= new_offer
+            offered_loan.save()
+            return {'error': False,
+                    'message': "Your offer has been changed successfully"}
