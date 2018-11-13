@@ -55,17 +55,13 @@
                                 <a class="w3-button w3-green w3-round-large "
                                    href="/game/history/{{ a.name }} ">
                                     <i class="fas fa-history"></i> History
-                                </a></td>
+                                </a>
+                            </td>
                         </tr>
                     {% endfor %}
                 </table>
                 <script src="{% static 'Game/js/assets-reload.js' %}"></script>
                 <script>reload_all();</script>
-                <script>
-                    prepare_token();
-                    prepare_input_nicenumber();
-                    prepare_transaction(transaction_types.buy, "{{ liquid }}")
-                </script>
             {% else %}
                 <div class="error_message">
                     <h1> There are no available assets </h1>
@@ -74,6 +70,11 @@
             <ul>
             </ul>
         </div>
+        <script>
+            prepare_token();
+            prepare_input_nicenumber();
+            prepare_transaction(transaction_types.buy, "{{ liquid }}")
+        </script>
     </div>
 
 {% endblock %}

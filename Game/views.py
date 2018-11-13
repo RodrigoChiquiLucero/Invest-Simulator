@@ -3,7 +3,7 @@ from Game.interface_control import AssetComunication as ACommunication
 from Game.models import Wallet
 from django.contrib.auth.decorators import login_required
 from django.conf import settings
-from Game.models import Transaction, Asset, Alarm
+from Game.models import Transaction, Alarm, LoanOffer, Loan
 from django.http import JsonResponse, HttpResponse
 
 
@@ -97,6 +97,10 @@ def alarms(request):
 @login_required
 def set_alarm(request):
     if request.method == 'POST':
+        try:
+            float(request.POST['threshold'])
+        except ValueError:
+            return HttpResponse(status=400, reason="Incorrect threshold value")
         if float(request.POST['threshold']) < 0:
             return HttpResponse(status=400, reason="Incorrect threshold value")
         elif not request.POST.getlist('asset'):
@@ -118,46 +122,67 @@ def set_alarm(request):
         return render(request, 'Game/set_alarm.html', context)
 
 
-# AJAX JSON RESPONSES
 @login_required
-def ajax_quote(request, name):
-    asset_comunication = ACommunication(settings.API_URL)
-    asset = asset_comunication.get_asset_quote(Asset(name=name))
-    if asset.buy != -1 and asset.sell != -1:
-        return JsonResponse(asset.to_dict())
+def set_loan_offer(request):
+    if request.method == 'GET':
+        # user info
+        context = {}
+        wallet = Wallet.get_info(request.user)
+        context['value_wallet'] = wallet['value_wallet']
+        context['liquid'] = wallet['liquid']
+        return render(request, 'Game/loan_offer.html', context)
     else:
-        return HttpResponse(status=403, reason="No asset quote")
+        loan = request.POST['liquid-amount']
+        interest_rate = request.POST['interest-rate']
+        days_due = request.POST['days-due']
+        wallet = Wallet.objects.get(user=request.user)
 
-
-@login_required
-def ajax_buy(request):
-    if request.method == 'POST':
-        name = request.POST['name']
-        type = request.POST['type']
-        quantity = float(request.POST['quantity'])
-        asset = Asset(name=name, type=type)
-        asset.quantity = quantity
-
-        user = request.user
-        wallet = Wallet.objects.get(user=user)
-
-        return JsonResponse(wallet.buy_asset(asset))
-    else:
-        return HttpResponse(status=400, reason="No GET method")
+        return render(request, 'Game/loan_offer.html', LoanOffer.safe_save(
+            wallet=wallet, offered=loan, interest=interest_rate, days=days_due))
 
 
 @login_required
-def ajax_sell(request):
-    if request.method == 'POST':
-        name = request.POST['name']
-        type = request.POST['type']
-        quantity = float(request.POST['quantity'])
-        asset = Asset(name=name, type=type)
-        asset.quantity = quantity
+def get_all_loan_offers(request):
+    if request.method == 'GET':
+        loan_offers = LoanOffer.objects.exclude(lender__user=request.user)
+        loan_offers = list(
+            filter(lambda lo: lo.offered_with_loans > 0, loan_offers))
+        context = {'loan_offers': loan_offers}
+        return render(request, 'Game/loan_offers.html', context)
+    elif request.is_ajax():
+        offer_id = int(request.POST['id'])
+        loaned = float(request.POST['loaned'])
+        offer = LoanOffer.objects.get(id=offer_id)
+        borrower = Wallet.objects.get(user=request.user)
+        Loan.safe_save(borrower=borrower, loaned=loaned, offer=offer)
+        return HttpResponse(200, 'Your loan has been taken successfully')
 
-        user = request.user
-        wallet = Wallet.objects.get(user=user)
 
-        return JsonResponse(wallet.sell_asset(asset))
+@login_required
+def get_taken_loans(request):
+    if request.method == 'GET':
+        taken = Loan.objects.filter(borrower__user=request.user)
+        wallet_info = Wallet.get_info(request.user)
+        context = {'taken': taken,
+                   'liquid': wallet_info['liquid'],
+                   'value_wallet': wallet_info['value_wallet']}
+        return render(request, 'Game/taken_loans.html', context)
+
+@login_required
+def get_offered_loans(request):
+    if request.method == 'GET':
+        loan_offers = LoanOffer.objects.filter(lender__user=request.user)
+        context = {'loan_offers': loan_offers}
+        return render(request, 'Game/offered_loans.html', context)
     else:
-        return HttpResponse(status=400, reason="No GET method")
+        wallet = Wallet.objects.get(user=request.user)
+        if request.POST['method'] == 'delete':
+            return JsonResponse(
+                LoanOffer.safe_delete(lender=wallet,
+                                      id=request.POST['id']))
+        if request.POST['method'] == 'modify':
+            return JsonResponse(
+                LoanOffer.safe_modification(lender=wallet,
+                                            id=request.POST['id'],
+                                            new_offer=request.POST[
+                                                'new_offer']))

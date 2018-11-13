@@ -1,0 +1,103 @@
+{% extends 'Game/base.html' %}
+{% load static from staticfiles %}
+
+{% block body %}
+
+    {# LINKS AND SCRIPTS #}
+    {#    //font-awesome#}
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+
+    {#    NICE NUMBER#}
+    <link rel="stylesheet" href="{% static 'Game/lib/nicenumber/jquery.nice-number.css' %}">
+    <script src="{% static 'Game/lib/nicenumber/jquery.nice-number.js' %}"></script>
+
+    {#    PERSONAL#}
+    <link rel="stylesheet" href="{% static 'Game/css/transaction-form.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/loans.css' %}">
+    <script src="{% static 'Game/js/ajax.transactions.js' %}"></script>
+    <script src="{% static 'Game/js/take-loan.js' %}"></script>
+
+    <div align="center" class="middle assets inner">
+
+        {% csrf_token %}
+        <div id="loan-liquid-form" class="dinamic short overlay middle">
+            <label for="quantity">How much liquid do you want to borrow ?</label>
+            <div class="qbox">
+                <span>
+                <input id="quantity" class="number-input" type="text"
+                       name="quantity middle"
+                       value="1" min="1" />
+                $</span>
+            </div>
+            <input id="send-quantity" type="submit" value="Send"/>
+            <input id="cancel-quantity" type="submit" value="Cancel"/>
+        </div>
+
+        <div id="accept-loan-form" class="dinamic short overlay middle">
+            <div class="qbox">
+                <span style="font-size: 20px; color: red">
+                    Are you sure you want to take this loan?
+                </span>
+                <p style="font-size: 15px; text-align: justify">
+                    If you press <b>accept</b> you will have to return
+                    the money you borrow by DATE, if you fail to return it,
+                    you will be kicked out the game, and you will lose all your
+                    wallet purchases.
+                </p>
+                <input id="accept-loan" type="submit" value="Send"/>
+                <input id="cancel-loan" type="submit" value="Cancel"/>
+            </div>
+        </div>
+        <div id="result" class="dinamic short overlay middle" style="height: 150px">
+            <div class="qbox">
+                <span style="font-size: 20px; color: red" id="result-content">
+                    You can't borrow that amount of money.
+                </span>
+                <i class="fa fa-spinner fa-spin" id="loading"
+                   style="font-size:36px;"></i>
+            </div>
+            <input id="accept-result" type="submit" value="Ok"/>
+        </div>
+
+        <div id="loan-offers" class="w3-container w3-animate-zoom assets"
+             align="center">
+            {% if loan_offers %}
+                <table id="dinamic-table">
+                    <caption class="title">Available loan offers are:
+                    </caption>
+                    <tr>
+                        <th> Lender name</th>
+                        <th> Loan</th>
+                        <th> Days due </th>
+                        <th> Interest </th>
+                        <th></th>
+                    </tr>
+                    {% for lo in loan_offers %}
+                        <tr class="dinamic-row">
+                            <td id="photo">
+                                <img class="user_img" src="{{ lo.lender.image.url }}">
+                            {{ lo.lender.user.username }}  {{ lo.lender.user.surname }}</td>
+                            <td id="loan"> $ {{ lo.offered_with_loans }} </td>
+                            <td id="days"> {{ lo.days }} </td>
+                            <td id="days"> {{ lo.interest_rate }}% </td>
+                            <td id="{{ lo.to_json }}" class="take">
+                                <a class="w3-button w3-green w3-round-large ">
+                                    <i class="fas fa-plus"></i> Take loan
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <div class="error_message">
+                    <h1> There are no loan_offers available </h1>
+                </div>
+            {% endif %}
+            <ul>
+            </ul>
+        </div>
+    </div>
+
+{% endblock %}
