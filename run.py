@@ -1,27 +1,39 @@
 # Python3
 
 # ESSENTIALS
-from subprocess import Popen, PIPE
-
-# COMMANDS
-MANAGE = ['python', 'manage.py']
-RUNSERVER = MANAGE + ['runserver']
-SEARCH_ALARMS = MANAGE + ['search-alarms']
-SEARCH_LOANS = MANAGE + ['search-loans']
+from subprocess import Popen
+import traceback
 
 
-def run_both():
-    runserver = Popen(RUNSERVER, stdin=None)
-    search_alarms = Popen(SEARCH_ALARMS, stdin=None)
-    search_loans = Popen(SEARCH_LOANS, stdin=None)
+class Run:
+    # COMMANDS
+    MANAGE = ['python', 'manage.py']
+    RUNSERVER = MANAGE + ['runserver']
+    CRONTAB = MANAGE + ['crontab']
+    CRONTAB_RUN = CRONTAB + ['add']
+    CRONTAB_RM = CRONTAB + ['remove']
 
-    runserver.wait()
-    search_alarms.wait()
-    search_loans.wait()
+    def __init__(self):
+        self.runserver = Popen(self.RUNSERVER, stdin=None)
+        self.crontab_run = Popen(self.CRONTAB_RUN, stdin=None)
+
+    def run(self):
+        self.runserver.wait()
+        self.crontab_run.wait()
+
+    def kill(self):
+        self.runserver.kill()
+        crontab_rm = Popen(self.CRONTAB_RM, stdin=None)
+        crontab_rm.wait()
+        print("You killed all jobs")
 
 
 if __name__ == '__main__':
+    run = Run()
     try:
-        run_both()
+        run.run()
     except KeyboardInterrupt:
-        print("You killed all programs")
+        run.kill()
+    except:
+        traceback.print_exc()
+        run.kill()
