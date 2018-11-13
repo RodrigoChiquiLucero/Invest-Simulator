@@ -34,6 +34,9 @@ class LoanOffer(models.Model):
         if offered > wallet.liquid or offered < 0:
             return {'error': True,
                     'message': 'You have not enough liquid money available'}
+        if offered <= 0:
+            return {'error': True,
+                    'message': 'You cannot set a new nil offer'}
         if interest > 100 or interest < 0:
             return {'error': True,
                     'message': 'The interest rate is not a valid percentage'}
@@ -43,7 +46,7 @@ class LoanOffer(models.Model):
         LoanOffer.objects.create(offered=offered, interest_rate=interest,
                                  days=days, lender=wallet).save()
         return {'error': False,
-                'message': 'Your loan offer has been created succesfully',
+                'message': 'Your loan offer has been created successfully',
                 'loaned': offered,
                 'available': wallet.liquid_with_loans}
 
@@ -73,7 +76,7 @@ class LoanOffer(models.Model):
                     'message': "Your offer has been deleted successfully"}
         except (ObjectDoesNotExist, ValueError):
             return {'error': True,
-                    'message': 'An error ocurred while trying to '
+                    'message': 'An error occurred while trying to '
                                'delete the offer'}
 
     @staticmethod
