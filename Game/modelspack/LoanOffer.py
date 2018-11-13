@@ -1,4 +1,5 @@
 from django.db import models
+from django.core.exceptions import ObjectDoesNotExist
 from django.forms.models import model_to_dict
 
 
@@ -45,3 +46,53 @@ class LoanOffer(models.Model):
                 'message': 'Your loan offer has been created succesfully',
                 'loaned': offered,
                 'available': wallet.liquid_with_loans}
+
+    @staticmethod
+    def safe_get(lender):
+        try:
+            return LoanOffer.objects.get(lender=lender)
+        except ObjectDoesNotExist:
+            return None
+
+    @staticmethod
+    def get_info(lender):
+        offered_loans = LoanOffer.objects.filter(lender=lender,
+                                                 quantity__gt=0)
+        if not offered_loans:
+            return {'error': True,
+                    'message': "You don't have any loan offer set"}
+        else:
+            return {'error': False, 'offered_loans': offered_loans}
+
+    @staticmethod
+    def safe_delete(lender, id):
+        try:
+            offered_loan = LoanOffer.objects.get(lender=lender, id=int(id))
+            offered_loan.delete()
+            return {'error': False,
+                    'message': "Your offer has been deleted successfully"}
+        except (ObjectDoesNotExist, ValueError):
+            return {'error': True,
+                    'message': 'An error ocurred while trying to '
+                               'delete the offer'}
+
+    @staticmethod
+    def safe_modification(lender, id, new_offer):
+        try:
+            new_offer = float(new_offer)
+            offered_loan = LoanOffer.objects.get(lender=lender, id=int(id))
+        except ObjectDoesNotExist:
+            return {'error': True,
+                    'message': "This offer isn't yours"}
+        except ValueError:
+            return {'error': True,
+                    'message': "Incorrect data"}
+
+        if new_offer > offered_loan.offered:
+            return {'error': True,
+                    'message': "You haven't loaned that much money"}
+        else:
+            offered_loan.offered -= new_offer
+            offered_loan.save()
+            return {'error': False,
+                    'message': "Your offer has been changed successfully"}

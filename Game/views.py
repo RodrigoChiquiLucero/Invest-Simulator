@@ -167,3 +167,22 @@ def get_taken_loans(request):
                    'liquid': wallet_info['liquid'],
                    'value_wallet': wallet_info['value_wallet']}
         return render(request, 'Game/taken_loans.html', context)
+
+@login_required
+def get_offered_loans(request):
+    if request.method == 'GET':
+        loan_offers = LoanOffer.objects.filter(lender__user=request.user)
+        context = {'loan_offers': loan_offers}
+        return render(request, 'Game/offered_loans.html', context)
+    else:
+        wallet = Wallet.objects.get(user=request.user)
+        if request.POST['method'] == 'delete':
+            return JsonResponse(
+                LoanOffer.safe_delete(lender=wallet,
+                                      id=request.POST['id']))
+        if request.POST['method'] == 'modify':
+            return JsonResponse(
+                LoanOffer.safe_modification(lender=wallet,
+                                            id=request.POST['id'],
+                                            new_offer=request.POST[
+                                                'new_offer']))
