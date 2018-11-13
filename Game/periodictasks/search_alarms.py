@@ -1,47 +1,32 @@
-from django.core.management.base import BaseCommand, CommandError
-import threading
-import sys
-from Game.models import Alarm
 from django.core.mail import send_mail
-from Game.interface_control import AssetComunication
-from django.conf import settings
 from django.contrib.auth.models import User
 
 
-class Command(BaseCommand):
+class AlarmSearch:
     help = 'Periodic check for triggered alarms'
 
-    def __init__(self):
-        super().__init__()
-        self.event = threading.Event()
-        self.SEPARATOR = '--------------------- ALARM ---------------------\n'
+    def __init__(self, acom):
+        self.BEGIN = \
+            '--------------------- ALARM SEARCH ---------------------\n'
+        self.END = \
+            '------------------- END ALARM SEARCH -------------------\n'
         self.message = ''
-        self.acom = AssetComunication(settings.API_URL)
+        self.acom = acom
 
     def print_success(self):
-        self.stdout.write(
-            self.style.SUCCESS(
-                self.SEPARATOR + self.message + '\n' + self.SEPARATOR))
+        print(self.BEGIN + self.message + '\n' + self.END)
         self.message = ''
 
-    def handle(self, *args, **options):
-        try:
-            self.search_for_alarms()
-        except KeyboardInterrupt:
-            sys.exit()
-
     def search_for_alarms(self):
-        while True:
-            self.message += 'Searching for triggered alarms \n'
+        from Game.models import Alarm
+        self.message += 'Searching for triggered alarms \n'
 
-            alarms = Alarm.objects.all()
-            for a in alarms:
-                self.trigger(a)
-            self.event.wait(5*60)
-            self.print_success()
+        alarms = Alarm.objects.all()
+        for a in alarms:
+            self.trigger(a)
+        self.print_success()
 
     def trigger(self, alarm):
-
         if not alarm.triggered:
             if alarm.trigger():
                 self.message += ('Alarm triggered for: ' + alarm.asset.name +
