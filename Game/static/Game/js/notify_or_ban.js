@@ -67,4 +67,4 @@ function notify_or_ban() {
 }
 
 notify_or_ban();
-setInterval(notify_or_ban, 10000);
+setInterval(notify_or_ban, 1000 * 60 * 5);

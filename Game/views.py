@@ -69,7 +69,8 @@ def ranking(request):
     users = []
     wallets = Wallet.objects.all()
     for w in wallets:
-        users.append({'username': w.user.username,
+        users.append({'img': w.image.url,
+                      'username': w.user.username,
                       'wallet': w.get_info(w.user)['value_wallet'],
                       'ranking': 1})
     users.sort(key=lambda k: k['wallet'], reverse=True)
@@ -138,7 +139,8 @@ def set_loan_offer(request):
         wallet = Wallet.objects.get(user=request.user)
 
         return render(request, 'Game/loan_offer.html', LoanOffer.safe_save(
-            wallet=wallet, offered=loan, interest=interest_rate, days=days_due))
+            wallet=wallet, offered=loan, interest=interest_rate,
+            days=days_due))
 
 
 @login_required
@@ -167,6 +169,7 @@ def get_taken_loans(request):
                    'liquid': wallet_info['liquid'],
                    'value_wallet': wallet_info['value_wallet']}
         return render(request, 'Game/taken_loans.html', context)
+
 
 @login_required
 def get_offered_loans(request):

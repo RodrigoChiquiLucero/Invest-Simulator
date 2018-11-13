@@ -4,6 +4,7 @@
 {% block body %}
 
     <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/loans.css' %}">
     <div align="center" class="outer w3-container w3-animate-zoom middle assets inner">
         {% if users %}
             <table>
@@ -14,8 +15,11 @@
                 </tr>
                 {% for u in users %}
                     <tr>
-                        <td> {{ u.ranking }} </td>
-                        <td> {{ u.username }} </td>
+                        <td style="font-size: 23px; font-weight: bold">
+                            {{ u.ranking }}
+                        </td>
+                        <td><img class="user_img" src="{{ u.img }}">
+                            {{ u.username }} </td>
                         <td> {{ u.wallet }} </td>
                     </tr>
                 {% endfor %}
