@@ -87,11 +87,9 @@
              align="center">
             {% if loan_offers %}
                 <table id="dinamic-table">
-                    <caption class="title">Available loan offers are:
+                    <caption class="title">Your loan offers are:
                     </caption>
                     <tr>
-                        <th></th>
-                        <th> Lender name</th>
                         <th> Offered</th>
                         <th> Interest rate</th>
                         <th> Days due</th>
@@ -100,11 +98,6 @@
                     </tr>
                     {% for lo in loan_offers %}
                         <tr class="dinamic-row">
-                            <td id="photo">
-                                <img class="user_img"
-                                     src="{{ lo.lender.image.url }}">
-                            </td>
-                            <td id="name"> {{ lo.lender.user.username }} {{ lo.lender.user.surname }}</td>
                             <td id="loan"> $ {{ lo.offered }} </td>
                             <td id="interest_rate"> {{ lo.interest_rate }}</td>
                             <td id="days"> {{ lo.days }} </td>
