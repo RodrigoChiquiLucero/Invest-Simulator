@@ -43,11 +43,28 @@ def wallet(request):
 
 @login_required
 def transactions(request):
-    user = request.user
-    user_wallet = Wallet.objects.get(user=user)
-    user_transactions = Transaction.get_info(user_wallet)
-    return render(request, 'Game/transactions.html', user_transactions)
+    if request.method == 'GET':
+        user = request.user
+        user_wallet = Wallet.objects.get(user=user)
+        user_transactions = Transaction.get_info(user_wallet)
+        return render(request, 'Game/transactions.html', user_transactions)
+    else:
+        if request.POST['method'] == 'change':
+            transaction = Transaction.objects.get(id=request.POST['id'])
+            print(transaction)
+            if transaction.visibility:
+                transaction.visibility = False
+            else:
+                transaction.visibility = True
+            transaction.save()
+        return render(request, 'Game/transactions.html', {'transaction': transaction})
 
+
+@login_required
+def get_other_transactions(request):
+    users = Wallet.objects.exclude(user=request.user)
+    # transactions = Transaction.objects.all()
+    return render(request, 'Game/other_transactions.html', {'users': users})
 
 @login_required
 def history(request, name):

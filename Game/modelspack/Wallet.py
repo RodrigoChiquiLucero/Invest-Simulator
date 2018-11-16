@@ -82,7 +82,7 @@ class Wallet(models.Model):
             Transaction(wallet=self, asset=asset, asset_price_buy=asset.buy,
                         asset_price_sell=asset.sell,
                         date=datetime.datetime.now(), quantity=quantity,
-                        is_purchase=True).save()
+                        is_purchase=True, visibility=False).save()
 
             self.liquid -= total
             self.liquid = round(self.liquid, 3)
@@ -125,7 +125,7 @@ class Wallet(models.Model):
         Transaction(wallet=self, asset=asset, asset_price_buy=asset.buy,
                     asset_price_sell=asset.sell,
                     date=datetime.datetime.now(), quantity=asset.quantity,
-                    is_purchase=False).save()
+                    is_purchase=False, visibility=False).save()
 
         self.liquid += total
         ownership.quantity = round(self.liquid, 3)

@@ -1,0 +1,57 @@
+{% extends 'Game/base.html' %}
+{% load static from staticfiles %}
+
+{% block body %}
+
+    <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
+    <div align="center"
+         class="outer w3-container w3-animate-zoom middle assets inner">
+        {% if users %}
+            <table id="tableId" border="1">
+                <tr>
+                    <th>Profile picture</th>
+                    <th>Username</th>
+                    <th>Ranking position</th>
+                </tr>
+                {% for u in users %}
+                    <tr>
+                        <td><img class="user_img" src="{{ u.image }}">
+                        <td>{{ u.user }} </td>
+                        <td>{{ u.ranking }} </td>
+                    </tr>
+                {% endfor %}
+                {% if transactions %}
+                    <tr>
+                        <th> Date</th>
+                        <th> Asset</th>
+                        <th> Type</th>
+                        <th> Buy price</th>
+                        <th> Sell price</th>
+                        <th> Quantity</th>
+                    </tr>
+                    {% for t in transactions %}
+                        <tr>
+                            <td>{{ t.date }}</td>
+                            <td>{{ t.asset.name }} </td>
+                                {% if t.is_purchase %}
+                                  <td> bought</td>
+                                {% else %}
+                                    <td> sold</td>
+                               {% endif %}
+                            <td>{{ t.asset_price_buy }} </td>
+                            <td>{{ t.asset_price_sell }} </td>
+                            <td>{{ t.quantity }} </td>
+                       </tr>
+                     {% endfor %}
+                {% endif %}
+            </table>
+        {% else %}
+            <div class="error_message">
+                <h1> There are not other players records </h1>
+            </div>
+        {% endif %}
+        <ul>
+        </ul>
+    </div>
+
+{% endblock %}
