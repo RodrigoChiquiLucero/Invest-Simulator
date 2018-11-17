@@ -1,7 +1,5 @@
 from django.db import models
-from django.contrib.auth.models import User
 from Game.interface_control import AssetComunication as ACommunication
-import datetime
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 
@@ -16,10 +14,7 @@ class Alarm(models.Model):
     triggered = models.BooleanField(null=False, default=False)
     old_price = models.FloatField(null=False, default=-1)
 
-    def trigger(self):
-        acom = ACommunication(settings.API_URL)
-        asset = acom.get_asset_quote(self.asset)
-
+    def trigger(self, asset):
         if not asset.is_valid():
             return False
 
@@ -28,9 +23,7 @@ class Alarm(models.Model):
         else:
             return asset.__getattribute__(self.price) < self.threshold
 
-    def reactivate(self):
-        acom = ACommunication(settings.API_URL)
-        asset = acom.get_asset_quote(self.asset)
+    def reactivate(self, asset):
         if self.type == 'up':
             self.triggered = asset.__getattribute__(
                 self.price) >= self.threshold
