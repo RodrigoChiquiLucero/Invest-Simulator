@@ -81,13 +81,13 @@ class AssetComunication:
         :param asset:
         :return asset:
         """
-        self.alarm_search.search_for_alarms()
         url = self.API_URL + self.GET_QUOTE + asset.name
         asset_quote = self.url_to_json(url)
         try:
             if asset_quote != 0:
                 asset.buy = asset_quote['buy']
                 asset.sell = asset_quote['sell']
+                self.alarm_search.search_for_alarms(asset=asset)
         except KeyError:
             # rollback
             asset.buy = -1

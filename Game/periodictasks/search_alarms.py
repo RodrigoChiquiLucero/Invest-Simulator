@@ -6,34 +6,28 @@ class AlarmSearch:
     help = 'Periodic check for triggered alarms'
 
     def __init__(self, acom):
-        self.BEGIN = \
-            '--------------------- ALARM SEARCH ---------------------\n'
-        self.END = \
-            '------------------- END ALARM SEARCH -------------------\n'
         self.message = ''
         self.acom = acom
 
     def print_success(self):
-        print(self.BEGIN + self.message + '\n' + self.END)
+        print(self.message)
         self.message = ''
 
-    def search_for_alarms(self):
+    def search_for_alarms(self, asset):
         from Game.models import Alarm
-        self.message += 'Searching for triggered alarms \n'
 
-        alarms = Alarm.objects.all()
+        alarms = Alarm.objects.filter(asset__name=asset.name)
         for a in alarms:
-            self.trigger(a)
+            self.trigger(a, asset)
         self.print_success()
 
-    def trigger(self, alarm):
+    def trigger(self, alarm, asset):
         if not alarm.triggered:
-            if alarm.trigger():
+            if alarm.trigger(asset):
                 self.message += ('Alarm triggered for: ' + alarm.asset.name +
                                  '  with threshold: ' + str(alarm.threshold) +
                                  '  and type: ' + alarm.type + '\n')
 
-                asset = self.acom.get_asset_quote(alarm.asset)
                 price = asset.__getattribute__(alarm.price)
                 user = User.objects.get(wallet=alarm.wallet)
                 email = user.email
@@ -56,4 +50,4 @@ class AlarmSearch:
                     fail_silently=False,
                 )
         else:
-            alarm.reactivate()
+            alarm.reactivate(asset)
