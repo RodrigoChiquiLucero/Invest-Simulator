@@ -87,12 +87,12 @@ class AssetComunication:
             if asset_quote != 0:
                 asset.buy = asset_quote['buy']
                 asset.sell = asset_quote['sell']
-                self.alarm_search.search_for_alarms(asset=asset)
         except KeyError:
             # rollback
             asset.buy = -1
             asset.sell = -1
         finally:
+            self.alarm_search.search_for_alarms(asset=asset)
             return asset
 
     def get_asset_type(self, name):
