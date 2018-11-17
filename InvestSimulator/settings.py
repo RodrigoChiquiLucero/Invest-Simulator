@@ -139,5 +139,5 @@ EMAIL_HOST_PASSWORD = 'holaholagg'
 EMAIL_PORT = 587
 
 CRONJOBS = [
-    ('* * * * *', 'Game.periodictasks.search_loans.search_loans')
+    ('0 0 * * *', 'Game.periodictasks.search_loans.search_loans')
 ]
