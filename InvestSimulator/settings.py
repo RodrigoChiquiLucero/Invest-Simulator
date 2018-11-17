@@ -138,7 +138,7 @@ STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
 STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
-API_URL = 'http://127.0.0.1/simulations/'
+API_URL = 'http://invest-simulator-23.herokuapp.com/simulations/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'InvestSimulator/media')
 MEDIA_URL = '/media/'
