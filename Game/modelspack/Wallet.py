@@ -7,7 +7,6 @@ from django.conf import settings
 
 class Wallet(models.Model):
     from Game.models import Asset
-    id = models.IntegerField(primary_key=True)
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     liquid = models.FloatField(null=False, default=10000)
     assets = models.ManyToManyField(Asset, through='Ownership')
