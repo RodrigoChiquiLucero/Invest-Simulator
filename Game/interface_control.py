@@ -2,6 +2,7 @@ import urllib3.request
 import json
 import datetime as dt
 from urllib3 import exceptions as urlex
+from Game.periodictasks.search_alarms import AlarmSearch
 
 DATE_FORMAT = '%Y-%m-%d'
 
@@ -22,6 +23,7 @@ class AssetComunication:
 
     def __init__(self, url):
         self.API_URL = url
+        self.alarm_search = AlarmSearch(acom=self)
 
     @staticmethod
     def has_quote(asset):
@@ -90,6 +92,7 @@ class AssetComunication:
             asset.buy = -1
             asset.sell = -1
         finally:
+            self.alarm_search.search_for_alarms(asset=asset)
             return asset
 
     def get_asset_type(self, name):
