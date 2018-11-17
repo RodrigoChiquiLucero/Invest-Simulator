@@ -165,5 +165,5 @@ LOGGING = {
     },
 }
 CRONJOBS = [
-    ('* * * * *', 'Game.periodictasks.search_loans.search_loans')
+    ('0 0 * * *', 'Game.periodictasks.search_loans.search_loans')
 ]
