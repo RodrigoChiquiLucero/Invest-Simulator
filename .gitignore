@@ -2,10 +2,11 @@
 venv
 #ignorar la carpeta generada por jetbrains
 .idea
-#ejecutables de python
-*.pyc
 #base de datos
 *.sqlite3
 #iconos
 .coverage
 /InvestSimulator/media/profile_image/
+#HEROKU
+__pycache__
+local_settings.py
