@@ -1,3 +1,4 @@
+dj-config-url
 Django==2.1.2
 django-common-helpers==0.9.2
 django-cron==0.5.1
