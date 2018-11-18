@@ -8,7 +8,7 @@ class LoanSearch:
     Searchs and operates on taken Loans,
     this project has a cron job scheduled to run everyday at 00:00,
     to run this cron job execute:
-        python manage.py crontab run
+        python manage.py crontab add
     on your command line.
     This class also creates logs that will be stored in
         /tmp/invest_simulator.logs
