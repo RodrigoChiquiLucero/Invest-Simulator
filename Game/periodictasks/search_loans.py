@@ -85,11 +85,10 @@ class LoanSearch:
             self.message += 'NOTIFIED :: ' + lo.borrower.user.username
             self.message += '\n'
             notif = Notification(wallet=lo.borrower,
-                                 message_short=
-                                 "You have a pending loan which dues tomorrow",
-                                 message_large=
-                                 "You have borrowed " + str(lo.loaned) +
-                                 " from " +
+                                 message_short="You have a pending"
+                                               " loan which dues tomorrow",
+                                 message_large="You have borrowed " +
+                                               str(lo.loaned) + " from " +
                                  lo.offer.lender.user.username + ", if you " +
                                  "don't pay by this time tomorrow you will " +
                                  "be banned")
