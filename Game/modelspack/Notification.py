@@ -2,6 +2,9 @@ from django.db import models
 
 
 class Notification(models.Model):
+    """
+    Saves a message to show to the User
+    """
     from Game.models import Wallet
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
     message_short = models.TextField(null=False, default='')
@@ -10,6 +13,12 @@ class Notification(models.Model):
 
     @staticmethod
     def notifity(wallet):
+        """
+        Returns first available notification for a wallet,
+        a notification can be used only three times, after this it will be
+        deleted
+        :rtype: dict
+        """
         try:
             notif = Notification.objects.filter(wallet=wallet)[0]
             notif.times -= 1

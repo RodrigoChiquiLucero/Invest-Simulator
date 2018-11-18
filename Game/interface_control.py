@@ -78,6 +78,7 @@ class AssetComunication:
         """
         given an asset (only name is required)
         returns same asset with buy and sell price if both exists
+        also searchs for alarms for the given asset.
         :param asset:
         :return asset:
         """

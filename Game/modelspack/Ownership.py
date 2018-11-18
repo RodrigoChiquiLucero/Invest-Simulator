@@ -4,6 +4,10 @@ import datetime
 
 
 class Ownership(models.Model):
+    """
+    Saves the relationship between a wallet and an asset, using the extra
+    field quantity
+    """
     from Game.models import Wallet, Asset
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
     asset = models.ForeignKey(Asset, on_delete=models.CASCADE)

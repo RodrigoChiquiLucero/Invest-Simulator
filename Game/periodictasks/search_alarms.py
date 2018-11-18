@@ -4,6 +4,9 @@ import datetime as dt
 
 
 class AlarmSearch:
+    """
+    Encapsulate all the logic to search and trigger alarms
+    """
     help = 'Check for triggered alarms'
     DATE_FORMAT = '%Y-%m-%d'
 
@@ -16,16 +19,25 @@ class AlarmSearch:
         self.message = ''
 
     def search_for_alarms(self, asset):
+        """
+        given an asset, searchs for all Alarms and triggers them
+        if then have met the condition
+        :rtype: None
+        """
         from Game.models import Alarm
 
         alarms = Alarm.objects.filter(asset__name=asset.name)
         for a in alarms:
-            self.trigger(a, asset)
+            self.trigger_and_mail_if_has_reached(a, asset)
         self.print_success()
 
-    def trigger(self, alarm, asset):
+    def trigger_and_mail_if_has_reached(self, alarm, asset):
+        """
+        Sends mail if alarm meets the conditions
+        :rtype: None
+        """
         if not alarm.triggered:
-            if alarm.trigger(asset):
+            if alarm.must_trigger(asset):
                 self.message += ('Alarm triggered for: ' + alarm.asset.name +
                                  '  with threshold: ' + str(alarm.threshold) +
                                  '  and type: ' + alarm.type + '\n')

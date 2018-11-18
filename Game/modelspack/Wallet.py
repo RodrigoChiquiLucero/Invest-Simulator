@@ -6,6 +6,9 @@ from django.conf import settings
 
 
 class Wallet(models.Model):
+    """
+    Represents the investment wallet for a User
+    """
     from Game.models import Asset
     user = models.ForeignKey(User, on_delete=models.CASCADE)
     liquid = models.FloatField(null=False, default=10000)
@@ -15,18 +18,23 @@ class Wallet(models.Model):
 
     @property
     def liquid_with_loans(self):
+        """
+        returns self liquid, without the money that has been offered
+        for loan
+        :rtype: float
+        """
         from Game.models import LoanOffer
         loan_offers = LoanOffer.objects.filter(lender=self)
         return self.liquid - sum(l.offered for l in loan_offers)
 
     @staticmethod
     def get_info(user):
-        from Game.models import Ownership
         """
         full wallet info given user
         :param user:
         :return dict {assets: [Asset], value_wallet: Float, error: Bool}
         """
+        from Game.models import Ownership
         response = {}
         wallet = Wallet.objects.get(user=user)
         response['liquid'] = wallet.liquid_with_loans
@@ -45,12 +53,12 @@ class Wallet(models.Model):
         return response
 
     def buy_asset(self, asset):
-        from Game.models import Asset, Transaction
         """
         add an asset to the user wallet and add the transaction to user history
         :param asset:
         :return: dict {error: Bool, message: String}
         """
+        from Game.models import Asset, Transaction
         asset_comms = ACommunication(settings.API_URL)
         asset = asset_comms.get_asset_quote(asset)
         total = (asset.buy * asset.quantity)
