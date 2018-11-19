@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from Game.models import Wallet, Asset, Ownership
+from Game.models import Wallet, Asset, Ownership, Loan, LoanOffer
 from Game.interface_control import AssetComunication as AComunication
 
 
@@ -224,7 +224,6 @@ class InterfaceControlTest(TestCase):
 
         # create and save assets
         assets = self.asset_communication.get_assets()
-
         asset_a = assets[0]
         asset_a.quantity = 20000000
 
@@ -315,3 +314,42 @@ class InterfaceControlTest(TestCase):
         self.assertEqual(expected_money_result, wallet.liquid)
         self.assertEqual(expected_ownership_result,
                          list(Ownership.objects.all()))
+
+    def test_offerloan_regular_values(self):
+        # get user
+        user = User.objects.get(username='test_user')
+        wallet = Wallet.objects.get(user=user)
+    
+        # create and save a loan offer
+        loanoffer = LoanOffer(lender=wallet, offered=1000,
+                             interest_rate=2.0, days=10)
+        
+        # check object saves correctly.
+        self.assertEqual(loanoffer.offered, 1000)
+        self.assertEqual(loanoffer.lender, wallet)
+        self.assertEqual(loanoffer.interest_rate, 2.0)
+        self.assertEqual(loanoffer.days, 10)
+    
+    def test_offerloan_then_modify(self):
+        # get user
+        user = User.objects.get(username='test_user')
+        wallet = Wallet.objects.get(user=user)
+    
+        # create and save a loan offer
+        loanoffer = LoanOffer(lender=wallet, offered=1000,
+                             interest_rate=2.0, days=10)
+        
+        # record previous money amount
+        oldliq = wallet.liquid
+
+        # modify loan
+        loanoffer.safe_modification(lender=user, id=str(loanoffer.id), new_offer=500)
+        
+        # check modification.
+        self.assertEqual(loanoffer.offered, 500)
+        self.assertEqual(loanoffer.lender, wallet)
+        self.assertEqual(loanoffer.interest_rate, 2.0)
+        self.assertEqual(loanoffer.days, 10)
+
+        # check user has its money back.
+        self.assertEqual(wallet.liquid_with_loans, oldliq - 500)
