@@ -41,12 +41,21 @@
                             <td>{{ t.asset_price_sell }} </td>
                             <td>{{ t.quantity }} </td>
                             <td>{{ t.visibility }}</td>
+                            {% if t.visibility == False %}
                             <td>
                                 <a class="action w3-button w3-green w3-round-large visibility-modifier"
                                    href="#" id="{{ t.id }}">
                                     <i class="fas fa-wrench"></i>
                                 </a>
                             </td>
+                            {% else %}
+                                <td>
+                                <a class="action w3-red w3-round-large"
+                                   href="#">
+                                    <i class="fas"> Already visible </i>
+                                </a>
+                            </td>
+                            {% endif %}
                         </tr>
                     {% endfor %}
                 </table>

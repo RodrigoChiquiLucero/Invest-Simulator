@@ -19,10 +19,6 @@ def get_available_assets(request):
                 "type": "stock",
             },
             {
-                "name": "NUEVO",
-                "type": "stock",
-            },
-            {
                 "name": "MARSHALL",
                 "type": "currency",
             },
@@ -35,22 +31,17 @@ quotes = {
     "DOLAR":
         {
             "sell": 500,
-            "buy": 551
+            "buy": 400
         },
     "ADIDAS":
         {
             "sell": 900,
-            "buy": 930
+            "buy": 90
         },
     "LXA":
         {
             "sell": 40000,
-            "buy": 22
-        },
-    "NUEVO":
-        {
-            "sell": 40000,
-            "buy": 22
+            "buy": 22323
         },
     "MARSHALL":
         {

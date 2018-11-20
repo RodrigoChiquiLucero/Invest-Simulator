@@ -74,7 +74,6 @@ def transactions(request):
     else:
         if request.POST['method'] == 'change':
             transaction = Transaction.objects.get(id=request.POST['id'])
-            print(transaction)
             if transaction.visibility:
                 transaction.visibility = False
             else:
@@ -135,8 +134,9 @@ def other_transactions(request, name):
     transactions = Transaction.objects.filter(wallet=wallet)
     data = []
     for t in transactions:
-        if t.visibility:
-            data.append(t)
+        if t.is_purchase:
+            if t.visibility:
+                data.append(t)
     return render(request, 'Game/other_transactions.html',
                   {'transactions': data})
 
