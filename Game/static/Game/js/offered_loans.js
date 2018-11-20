@@ -3,10 +3,6 @@ window.onload = function () {
     prepare_token();
 
     let id = 'None';
-    let interest_rate = 'None';
-    let days = 'None';
-    let new_loan = 'None';
-
 
     divs_hidden_by_default([
         $("#confirm-deletion-form"),

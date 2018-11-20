@@ -160,9 +160,9 @@ class InterfaceControlTest(TestCase):
 
         # create and save transactions
         own1 = Ownership.objects.create(asset=asset_a, quantity=3,
-                                           wallet=wallet)
+                                        wallet=wallet)
         own2 = Ownership.objects.create(asset=asset_c, quantity=5,
-                                           wallet=wallet)
+                                        wallet=wallet)
 
         asset_a.quantity = 2.3
         asset_c.quantity = 1.4
@@ -255,7 +255,8 @@ class InterfaceControlTest(TestCase):
         asset_a.quantity = 0
 
         # create and save transactions
-        own = Ownership.objects.create(asset=asset_a, quantity=3, wallet=wallet)
+        own = Ownership.objects.create(asset=asset_a, quantity=3,
+                                       wallet=wallet)
 
         # expected results
         expected_money_result = 10000

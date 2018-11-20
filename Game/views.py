@@ -9,16 +9,28 @@ from django.http import JsonResponse, HttpResponse
 
 @login_required
 def loggedin(request):
+    """
+    simple view to notify the user he has been logged in successfully
+    :rtype: HttpResponse
+    """
     return render(request, 'Game/loggedin.html')
 
 
 @login_required
 def game(request):
+    """
+    Game main page
+    :rtype: HttpResponse
+    """
     return render(request, 'Game/game.html')
 
 
 @login_required
 def assets(request):
+    """
+    Shows every available asset
+    :rtype: HttpResponse
+    """
     asset_comunication = ACommunication(settings.API_URL)
     asset_list = [a.to_dict() for a in asset_comunication.get_assets()]
     context = {'assets': asset_list}
@@ -36,6 +48,13 @@ def assets(request):
 
 @login_required
 def wallet(request):
+    """
+    Shows all wallet information:
+        - purchased assets
+        - liquid money
+        - wallet value
+    :rtype: HttpResponse
+    """
     user = request.user
     wallet_info = Wallet.get_info(user)
     return render(request, 'Game/wallet.html', wallet_info)
@@ -43,14 +62,34 @@ def wallet(request):
 
 @login_required
 def transactions(request):
-    user = request.user
-    user_wallet = Wallet.objects.get(user=user)
-    user_transactions = Transaction.get_info(user_wallet)
-    return render(request, 'Game/transactions.html', user_transactions)
+    """
+    Shows all available transaction for a given user
+    :rtype: HttpResponse
+    """
+    if request.method == 'GET':
+        user = request.user
+        user_wallet = Wallet.objects.get(user=user)
+        user_transactions = Transaction.get_info(user_wallet)
+        return render(request, 'Game/transactions.html', user_transactions)
+    else:
+        if request.POST['method'] == 'change':
+            transaction = Transaction.objects.get(id=request.POST['id'])
+            print(transaction)
+            if transaction.visibility:
+                transaction.visibility = False
+            else:
+                transaction.visibility = True
+            transaction.save()
+        return render(request, 'Game/transactions.html',
+                      {'transaction': transaction})
 
 
 @login_required
 def history(request, name):
+    """
+    Shows the historic value for an asset in a range of dates
+    :rtype: HttpResponse
+    """
     if request.method == 'POST':
 
         start = request.POST['start']
@@ -65,7 +104,49 @@ def history(request, name):
 
 
 @login_required
+def players_list(request):
+    wallets = Wallet.objects.all()
+    user_data = Wallet.objects.get(user=request.user)
+    users = []
+
+    for w in wallets:
+        users.append({'img': w.image.url,
+                      'username': w.user.username,
+                      'wallet': w.get_info(w.user)['value_wallet'],
+                      'ranking': 1})
+    users.sort(key=lambda k: k['wallet'], reverse=True)
+
+    index = 0
+    for u in users:
+        index += 1
+        u['ranking'] = index
+
+    pos = 0
+    for u in users:
+        pos += 1
+        if u['username'] == str(user_data.user):
+            users.remove(u)
+    return render(request, 'Game/players_list.html', {'users': users})
+
+
+@login_required
+def other_transactions(request, name):
+    wallet = Wallet.objects.get(user__username=name)
+    transactions = Transaction.objects.filter(wallet=wallet)
+    data = []
+    for t in transactions:
+        if t.visibility:
+            data.append(t)
+    return render(request, 'Game/other_transactions.html',
+                  {'transactions': data})
+
+
+@login_required
 def ranking(request):
+    """
+    Shows all the players ordered by their wallet_value
+    :rtype: HttpResponse
+    """
     users = []
     wallets = Wallet.objects.all()
     for w in wallets:
@@ -83,6 +164,11 @@ def ranking(request):
 
 @login_required
 def alarms(request):
+    """
+    Shows a list of the alarms of a user,
+    also has a POST method to delete such alarms
+    :rtype: HttpResponse
+    """
     if request.method == 'GET':
         wallet = Wallet.objects.get(user=request.user)
         return render(request, 'Game/alarms.html', Alarm.get_info(wallet))
@@ -97,6 +183,11 @@ def alarms(request):
 
 @login_required
 def set_alarm(request):
+    """
+    Shows every available asset and gives a POST method to set
+    an alarm on the asset.
+    :rtype: HttpResponse
+    """
     if request.method == 'POST':
         try:
             float(request.POST['threshold'])
@@ -125,6 +216,11 @@ def set_alarm(request):
 
 @login_required
 def set_loan_offer(request):
+    """
+    Shows a form to save a Loan Offer,
+    method POST used to save the form
+    :rtype: HttpResponse
+    """
     if request.method == 'GET':
         # user info
         context = {}
@@ -145,6 +241,11 @@ def set_loan_offer(request):
 
 @login_required
 def get_all_loan_offers(request):
+    """
+    Shows all available LoanOffers from other users,
+    method POST taken given LoanOffer and creates a Loan
+    :rtype: HttpResponse
+    """
     if request.method == 'GET':
         loan_offers = LoanOffer.objects.exclude(lender__user=request.user)
         loan_offers = list(
@@ -162,6 +263,10 @@ def get_all_loan_offers(request):
 
 @login_required
 def get_taken_loans(request):
+    """
+    Shows every taken Loan for a given user
+    :rtype: HttpResponse
+    """
     if request.method == 'GET':
         taken = Loan.objects.filter(borrower__user=request.user)
         wallet_info = Wallet.get_info(request.user)
@@ -173,6 +278,12 @@ def get_taken_loans(request):
 
 @login_required
 def get_offered_loans(request):
+    """
+    Shows every offered Loans from a user
+    and gives two POST methods to delete and
+    update the selected LoanOffer
+    :rtype: HttpResponse
+    """
     if request.method == 'GET':
         loan_offers = LoanOffer.objects.filter(lender__user=request.user)
         context = {'loan_offers': loan_offers}

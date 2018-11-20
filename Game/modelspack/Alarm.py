@@ -1,12 +1,13 @@
 from django.db import models
-from django.contrib.auth.models import User
 from Game.interface_control import AssetComunication as ACommunication
-import datetime
 from django.conf import settings
 from django.core.exceptions import ObjectDoesNotExist
 
 
 class Alarm(models.Model):
+    """
+    Represents an Alarm request from a User
+    """
     from Game.models import Wallet, Asset
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
     asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
@@ -16,10 +17,11 @@ class Alarm(models.Model):
     triggered = models.BooleanField(null=False, default=False)
     old_price = models.FloatField(null=False, default=-1)
 
-    def trigger(self):
-        acom = ACommunication(settings.API_URL)
-        asset = acom.get_asset_quote(self.asset)
-
+    def must_trigger(self, asset):
+        """
+        Return True if the alarm should trigger
+        :rtype: bool
+        """
         if not asset.is_valid():
             return False
 
@@ -28,9 +30,7 @@ class Alarm(models.Model):
         else:
             return asset.__getattribute__(self.price) < self.threshold
 
-    def reactivate(self):
-        acom = ACommunication(settings.API_URL)
-        asset = acom.get_asset_quote(self.asset)
+    def reactivate(self, asset):
         if self.type == 'up':
             self.triggered = asset.__getattribute__(
                 self.price) >= self.threshold
@@ -41,14 +41,22 @@ class Alarm(models.Model):
 
     @staticmethod
     def safe_get(wallet, asset, price, type):
+        """
+        If alarm exists return Alarm, else None
+        :rtype: Alarm or None
+        """
         try:
-            return Alarm.objects.get(wallet=wallet, asset=asset, price=price,
-                                     type=type)
+            return Alarm.objects.get(wallet=wallet, asset=asset,
+                                     price=price, type=type)
         except ObjectDoesNotExist:
             return None
 
     @staticmethod
     def safe_save(wallet, aname, threshold, atype, price):
+        """
+        Saves a new alarm and returns a dictionary with information.
+        :rtype: Dict
+        """
         from Game.models import Asset
         acom = ACommunication(settings.API_URL)
         asset = Asset.create_if_not_exists(aname)
@@ -70,6 +78,11 @@ class Alarm(models.Model):
 
     @staticmethod
     def get_info(wallet):
+        """
+        Returns a list with all the available alarms if any,
+        an explaining message otherwise
+        :rtype: Dict
+        """
         alarms = Alarm.objects.filter(wallet=wallet)
         if not alarms:
             return {'error': True, 'message': "You don't have any alarm set"}
@@ -78,6 +91,10 @@ class Alarm(models.Model):
 
     @staticmethod
     def safe_delete(wallet, name, atype, price):
+        """
+        Deletes alarm
+        :rtype: None
+        """
         from Game.models import Asset
         asset = Asset.objects.get(name=name)
         alarm = Alarm.objects.get(asset=asset, wallet=wallet,

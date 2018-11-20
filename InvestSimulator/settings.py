@@ -44,6 +44,7 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django_crontab',
 ]
 
 MIDDLEWARE = [
@@ -136,3 +137,7 @@ EMAIL_HOST = 'smtp.gmail.com'
 EMAIL_HOST_USER = 'invest.simulator.alarms@gmail.com'
 EMAIL_HOST_PASSWORD = 'holaholagg'
 EMAIL_PORT = 587
+
+CRONJOBS = [
+    ('0 0 * * *', 'Game.periodictasks.search_loans.search_loans')
+]
