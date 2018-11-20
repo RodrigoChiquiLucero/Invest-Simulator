@@ -35,6 +35,7 @@ class Transaction(models.Model):
     date = models.DateField(default=datetime.date.today)
     quantity = models.FloatField()
     is_purchase = models.BooleanField(null=False)
+    visibility = models.BooleanField(null=False, default=False)
 
     @staticmethod
     def get_info(wallet):

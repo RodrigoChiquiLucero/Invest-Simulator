@@ -3,40 +3,83 @@
 
 {% block body %}
 
-    <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
-    <div align="center" class="outer w3-container w3-animate-zoom middle assets inner">
-        {% if transactions %}
-            <table>
-                <tr>
-                    <th> Date </th>
-                    <th> Asset </th>
-                    <th> Type </th>
-                    <th> Price_Buy </th>
-                    <th> Price_Sell</th>
-                    <th> Quantity </th>
-                </tr>
-                {% for t in transactions %}
+    <link rel="stylesheet" href="{% static 'Game/css/transaction-form.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/transactions.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/loans.css' %}">
+
+    <script src="{% static 'Game/js/ajax.transactions.js' %}"></script>
+    <script src="{% static 'Game/js/transaction-check-visibility.js' %}"></script>
+
+
+    <div align="center" class="middle assets inner">
+
+        {% csrf_token %}
+
+        <div class="outer w3-container w3-animate-zoom middle assets inner">
+            {% if transactions %}
+                <table>
                     <tr>
-                        <td>{{ t.date }}</td>
-                        <td>{{ t.asset.name }} </td>
-                        {% if t.is_purchase %}
-                            <td> bought </td>
-                        {% else %}
-                            <td> sold </td>
-                        {%  endif %}
-                        <td>{{ t.asset_price_buy }} </td>
-                        <td>{{ t.asset_price_sell }} </td>
-                        <td>{{ t.quantity }} </td>
+                        <th> Date</th>
+                        <th> Asset</th>
+                        <th> Type</th>
+                        <th> Buy price</th>
+                        <th> Sell price</th>
+                        <th> Quantity</th>
+                        <th> Visibility</th>
+                        <th> Change visibility</th>
                     </tr>
-                {% endfor %}
-            </table>
-        {% else %}
-            <div class="error_message">
-                <h1> You don't have any transactions </h1>
+                    {% for t in transactions %}
+                        <tr>
+                            <td>{{ t.date }}</td>
+                            <td>{{ t.asset.name }} </td>
+                            {% if t.is_purchase %}
+                                <td> bought</td>
+                            {% else %}
+                                <td> sold</td>
+                            {% endif %}
+                            <td>{{ t.asset_price_buy }} </td>
+                            <td>{{ t.asset_price_sell }} </td>
+                            <td>{{ t.quantity }} </td>
+                            <td>{{ t.visibility }}</td>
+                            <td>
+                                <a class="action w3-button w3-green w3-round-large visibility-modifier"
+                                   href="#" id="{{ t.id }}">
+                                    <i class="fas fa-wrench"></i>
+                                </a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                </table>
+            {% else %}
+                <div class="error_message">
+                    <h1> You don't have any transactions </h1>
+                </div>
+            {% endif %}
+            <ul>
+            </ul>
+        </div>
+
+        <div id="visibility-change" class="dinamic short overlay middle"
+             style="height: 150px; width: 25%">
+            <p style="padding: 5px; font-size: 20px">Are you sure you want to
+                make this transaction visible for other users?</p>
+            <input id="send-confirm-change" type="submit" value="YES"/>
+            <input id="send-cancel-change" type="submit" value="NO"/>
+        </div>
+
+        <div id="change-status" class="dinamic short overlay"
+             style="width: 25%">
+            <label>Transaction visibility is being changed</label>
+
+            <div class="qbox">
+                <p id="status"></p>
+                <i class="fa fa-spinner fa-spin" id="loading"
+                   style="font-size:36px;"></i>
             </div>
-        {% endif %}
-        <ul>
-        </ul>
+
+            <input id="cancel-deletion" class="cancel" type="submit"
+                   value="CANCEL"/>
+        </div>
     </div>
 
 {% endblock %}

@@ -66,10 +66,22 @@ def transactions(request):
     Shows all available transaction for a given user
     :rtype: HttpResponse
     """
-    user = request.user
-    user_wallet = Wallet.objects.get(user=user)
-    user_transactions = Transaction.get_info(user_wallet)
-    return render(request, 'Game/transactions.html', user_transactions)
+    if request.method == 'GET':
+        user = request.user
+        user_wallet = Wallet.objects.get(user=user)
+        user_transactions = Transaction.get_info(user_wallet)
+        return render(request, 'Game/transactions.html', user_transactions)
+    else:
+        if request.POST['method'] == 'change':
+            transaction = Transaction.objects.get(id=request.POST['id'])
+            print(transaction)
+            if transaction.visibility:
+                transaction.visibility = False
+            else:
+                transaction.visibility = True
+            transaction.save()
+        return render(request, 'Game/transactions.html',
+                      {'transaction': transaction})
 
 
 @login_required
@@ -90,6 +102,49 @@ def history(request, name):
     else:
         return render(request, 'Game/select_dates.html')
 
+@login_required
+def players_list(request):
+    wallets = Wallet.objects.all()
+    user_data = Wallet.objects.get(user=request.user)
+    print(user_data.user)
+    users = []
+
+    for w in wallets:
+        users.append({'img': w.image.url,
+                      'username': w.user.username,
+                      'wallet': w.get_info(w.user)['value_wallet'],
+                      'ranking': 1})
+    users.sort(key=lambda k: k['wallet'], reverse=True)
+
+    index = 0
+    for u in users:
+        index += 1
+        u['ranking'] = index
+
+    pos = 0
+    for u in users:
+        pos += 1
+        if u['username'] == str(user_data.user):
+            print("Found")
+            users.remove(u)
+
+    print(users)
+    return render(request, 'Game/players_list.html', {'users': users})
+
+
+@login_required
+def other_transactions(request, name):
+    wallet = Wallet.objects.get(user__username=name)
+    print(wallet.user)
+    transactions = Transaction.objects.filter(wallet=wallet)
+    data = []
+
+    for t in transactions:
+        if t.visibility:
+            print("Transaction added")
+            data.append(t)
+
+    return render(request, 'Game/other_transactions.html', {'transactions': data})
 
 @login_required
 def ranking(request):
