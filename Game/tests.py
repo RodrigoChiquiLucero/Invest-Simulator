@@ -1,5 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
+from Game.models import Alarm
 from Game.models import Wallet, Asset, Ownership, Loan, LoanOffer
 from Game.interface_control import AssetComunication as AComunication
 
@@ -356,3 +357,32 @@ class InterfaceControlTest(TestCase):
 
         # check user has its money back.
         self.assertEqual(wallet.liquid_with_loans, oldliq - 500)
+
+    def test_set_alarm_of_asset(self):
+        # get user
+        user = User.objects.get(username='test_user')
+        wallet = Wallet.objects.get(user=user)
+
+        # create asset
+
+        assets = self.asset_communication.get_assets()
+        asset_a_alarm = assets[0]
+        asset_a_alarm.save()
+
+        # create and save alarm
+
+        Alarm.objects.create(wallet=wallet, asset=asset_a_alarm,
+                                     price='buy',
+                                     old_price=asset_a_alarm.__getattribute__('buy'),
+                                     threshold=200, type='down').save()
+
+        # check object saves correctly.
+
+        alarm = Alarm.objects.all()[0]
+
+        self.assertEqual(alarm.wallet, wallet)
+        self.assertEqual(alarm.asset, asset_a_alarm)
+        self.assertEqual(alarm.price, 'buy')
+        self.assertEqual(alarm.threshold, 200)
+        self.assertEqual(alarm.type, 'down')
+
