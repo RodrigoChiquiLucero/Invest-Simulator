@@ -15,10 +15,12 @@ window.onload = function () {
 
     $("#send-cancel-change").click(function () {
         $("#visibility-change").hide(400);
+
     });
 
     $("#send-confirm-change").click(function () {
         $("#visibility-change").hide(400);
+        $("#visibility-modifier").hide(400);
 
         $("#change-status").show(500);
 
@@ -33,18 +35,17 @@ window.onload = function () {
                     },
                     success: function (data) {
                         populate_response(data['error'], data['message'], $('#change-status'));
+                        $("#change-status").hide(400);
+                        location.href = ""
                     },
                     error: function (jqXHR, status, errorThrown) {
                         populate_response(true, errorThrown, $('#change-status'));
+                        $("#change-status").hide(400);
                     }
                 })
             }, 3000
         );
 
-        $("#cancel-deletion").click(function () {
-            clearTimeout(delete_timeout);
-            $("#change-status").hide(500);
-        });
 
     });
 
@@ -64,5 +65,3 @@ window.onload = function () {
         }).val('OK');
     }
 };
-
-

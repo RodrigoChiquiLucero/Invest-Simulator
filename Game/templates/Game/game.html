@@ -30,7 +30,7 @@
                 <a href="#"> <button class="w3-button w3-black w3-round-large" id="alert" style="width: 15%; height: 12%; margin: 10px">
                     <i class="fas fa-bullhorn"></i> Alerts
                 </button> </a>
-                <a href="/game/transactions/"> <button class="w3-button w3-black w3-round-large" style="width: 15%; height: 12%; margin: 10px">
+                <a href="#"> <button class="w3-button w3-black w3-round-large" id="transactions" style="width: 15%; height: 12%; margin: 10px">
                     <i class="fas fa-history"></i> Transaction History
                 </button> </a>
             </div>
@@ -40,6 +40,22 @@
                     <i class="fas fa-trophy"></i> Ranking
                 </button> </a>
                 <img height="15%" src="{% static 'Home/images/Colorete.gif' %}">
+            </div>
+        </div>
+
+        <div class="w3-center w3-animate-zoom" id="transactions-options">
+            <div class="w3-container" style="margin: 5% auto auto auto">
+                <a href="/game/transactions"> <button class="w3-button w3-black w3-round-large" style="width: 15%; height: 12%; margin: 10px">
+                    <i class="fas fa-history"></i> Your transactions
+                </button> </a>
+                <a href="/game/players_list"> <button class="w3-button w3-black w3-round-large" style="width: 15%; height: 12%; margin: 10px">
+                    <i class="fas fa-users"></i> Players transactions
+                </button> </a>
+            </div>
+            <div class="w3-container" >
+                <a href=""> <button class="w3-button w3-black w3-round-large" id="transaction_back" style="width: 8%; height: 6%; margin: 10px">
+                    <i class="fas fa-arrow-left"></i> Go back
+                </button> </a>
             </div>
         </div>
 
