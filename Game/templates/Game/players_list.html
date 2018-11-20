@@ -1,0 +1,44 @@
+{% extends 'Game/base.html' %}
+{% load static from staticfiles %}
+
+{% block body %}
+
+    <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
+
+    <script src="{% static 'Game/js/ajax.transactions.js' %}"></script>
+    <script src="{% static 'Game/js/transaction-check-visibility.js' %}"></script>
+
+    <div align="center"
+         class="outer w3-container w3-animate-zoom middle assets inner">
+        {% if users %}
+            <table id="tableId" border="1">
+                <tr>
+                    <th>Profile picture</th>
+                    <th>Username</th>
+                    <th>Ranking position</th>
+                    <th>Check transactions</th>
+                </tr>
+                {% for u in users %}
+                    <tr>
+                        <td><img class="user_img" src="{{ u.img }}">
+                        <td>{{ u.username }} </td>
+                        <td>{{ u.ranking }} </td>
+                        <td>
+                            <a class="action w3-button w3-green w3-round-large check-transactions"
+                               href="/game/players_list/{{ u.username }}">
+                                <i class="fas fa-check"> Check </i>
+                            </a>
+                        </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <div class="error_message">
+                <h1> There are not other players records </h1>
+            </div>
+        {% endif %}
+        <ul>
+        </ul>
+    </div>
+
+{% endblock %}

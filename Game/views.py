@@ -57,28 +57,53 @@ def transactions(request):
             else:
                 transaction.visibility = True
             transaction.save()
-        return render(request, 'Game/transactions.html', {'transaction': transaction})
+        return render(request, 'Game/transactions.html',
+                      {'transaction': transaction})
 
 
 @login_required
-def get_other_transactions(request):
-    users = Wallet.objects.exclude(user=request.user)
-    # transactions = Transaction.objects.all()
-    return render(request, 'Game/other_transactions.html', {'users': users})
+def players_list(request):
+    wallets = Wallet.objects.all()
+    user_data = Wallet.objects.get(user=request.user)
+    print(user_data.user)
+    users = []
+
+    for w in wallets:
+        users.append({'img': w.image.url,
+                      'username': w.user.username,
+                      'wallet': w.get_info(w.user)['value_wallet'],
+                      'ranking': 1})
+    users.sort(key=lambda k: k['wallet'], reverse=True)
+
+    index = 0
+    for u in users:
+        index += 1
+        u['ranking'] = index
+
+    pos = 0
+    for u in users:
+        pos += 1
+        if u['username'] == str(user_data.user):
+            print("Found")
+            users.remove(u)
+
+    print(users)
+    return render(request, 'Game/players_list.html', {'users': users})
+
 
 @login_required
-def history(request, name):
-    if request.method == 'POST':
+def other_transactions(request, name):
+    wallet = Wallet.objects.get(user__username=name)
+    print(wallet.user)
+    transactions = Transaction.objects.filter(wallet=wallet)
+    data = []
 
-        start = request.POST['start']
-        end = request.POST['end']
+    for t in transactions:
+        if t.visibility:
+            print("Transaction added")
+            data.append(t)
 
-        asset_comunication = ACommunication(settings.API_URL)
-        prices = asset_comunication.get_asset_history(name, start, end)
-        prices['name'] = name
-        return render(request, 'Game/history.html', prices)
-    else:
-        return render(request, 'Game/select_dates.html')
+    return render(request, 'Game/other_transactions.html', {'transactions': data})
 
 
 @login_required
@@ -96,6 +121,21 @@ def ranking(request):
         index += 1
         u['ranking'] = index
     return render(request, 'Game/ranking.html', {'users': users})
+
+
+@login_required
+def history(request, name):
+    if request.method == 'POST':
+
+        start = request.POST['start']
+        end = request.POST['end']
+
+        asset_comunication = ACommunication(settings.API_URL)
+        prices = asset_comunication.get_asset_history(name, start, end)
+        prices['name'] = name
+        return render(request, 'Game/history.html', prices)
+    else:
+        return render(request, 'Game/select_dates.html')
 
 
 @login_required
