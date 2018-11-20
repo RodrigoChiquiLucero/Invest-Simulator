@@ -1,4 +1,4 @@
-window.onload = function () {
+window.onload = function() {
     let loan = null;
 
     prepare_token();
@@ -10,18 +10,18 @@ window.onload = function () {
         $('#result'),
     ]);
 
-    $('.take').click(function () {
+    $('.take').click(function() {
         loan = JSON.parse($(this).attr('id').replace(/'/g, '"'));
         $('#loan-offers').hide(400);
         $('#loan-liquid-form').show(500);
     });
-    $('#cancel-quantity').click(function () {
+    $('#cancel-quantity').click(function() {
         loan_id = null;
         $('#loan-offers').show(500);
         $('#loan-liquid-form').hide(400);
     });
 
-    $('#send-quantity').click(function () {
+    $('#send-quantity').click(function() {
         $('#loan-liquid-form').hide(400);
         let quantity = parseFloat($('#quantity').val());
         let loaned = parseFloat(loan.offered_with_loans);
@@ -29,14 +29,14 @@ window.onload = function () {
 
         console.log(loan);
 
-        if (quantity > loaned){
+        if (quantity > loaned) {
             $('#result').show(500)
                 .find('#loading').hide();
             return;
         }
 
-        quantity = quantity
-            + (quantity * interest/100);
+        quantity = quantity +
+            (quantity * interest / 100);
 
         let someDate = new Date();
         let numberOfDaysToAdd = loan.days;
@@ -53,38 +53,44 @@ window.onload = function () {
         );
     });
 
-    $('#accept-result').click(function () {
+    $('#accept-result').click(function() {
         $('#result').hide(400);
         $('#loan-liquid-form').show(500);
     });
 
-    $('#cancel-loan').click(function () {
+    $('#cancel-loan').click(function() {
         $('#accept-loan-form').hide(400);
         $('#loan-liquid-form').show(500);
     });
 
 
-    $('#accept-loan').click(function () {
+    $('#accept-loan').click(function() {
         console.log('Entramos');
         $('#accept-loan-form').hide(400);
         $('#result').show(500)
             .find('#loading').hide();
         $.ajax({
             url: '',
-            type:'POST',
+            type: 'POST',
             data: {
                 'id': loan.id,
-                'loaned': parseFloat($('#quantity').val())},
-            success: function (data) {
-                $('#loading').hide();
-                $('#result-content').html("Your loan has been taken successfully!");
-                $('#accept-result').click(function () {
-                    $('#result').hide(400);
-                    $('#loan-offers').show(500);
-                    location.href = "";
-                });
+                'loaned': parseFloat($('#quantity').val())
             },
-            error: function (jqXHR, status, errorThrown) {
+            success: function(data) {
+                if (data['error']) {
+                    $('#loading').hide();
+                    $('#result-content').html(data["message"]);
+                } else {
+                    $('#loading').hide();
+                    $('#result-content').html("Your loan has been taken successfully!");
+                    $('#accept-result').click(function() {
+                        $('#result').hide(400);
+                        $('#loan-offers').show(500);
+                        location.href = "";
+                    });
+                }
+            },
+            error: function(jqXHR, status, errorThrown) {
                 $('#loading').hide();
                 $('#result-content').html(errorThrown);
             }
