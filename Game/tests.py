@@ -320,33 +320,35 @@ class InterfaceControlTest(TestCase):
         # get user
         user = User.objects.get(username='test_user')
         wallet = Wallet.objects.get(user=user)
-    
+
         # create and save a loan offer
         loanoffer = LoanOffer(lender=wallet, offered=1000,
-                             interest_rate=2.0, days=10)
-        
+                              interest_rate=2.0, days=10)
+
         # check object saves correctly.
         self.assertEqual(loanoffer.offered, 1000)
         self.assertEqual(loanoffer.lender, wallet)
         self.assertEqual(loanoffer.interest_rate, 2.0)
         self.assertEqual(loanoffer.days, 10)
-    
+
     def test_offerloan_then_modify(self):
         # get user
         user = User.objects.get(username='test_user')
         wallet = Wallet.objects.get(user=user)
-    
+
         # create and save a loan offer
         loanoffer = LoanOffer(lender=wallet, offered=1000,
-                             interest_rate=2.0, days=10)
-        
+                              interest_rate=2.0, days=10)
+        loanoffer.save()
+
         # record previous money amount
         oldliq = wallet.liquid
-
         # modify loan
-        loanoffer.safe_modification(lender=user, id=str(loanoffer.id), new_offer=500)
-        
+        res = LoanOffer.safe_modification(lender=wallet, id=str(loanoffer.id),
+                                          new_offer=500)
+        loanoffer = LoanOffer.objects.get(id=loanoffer.id)
         # check modification.
+        self.assertEqual(res['error'], False)
         self.assertEqual(loanoffer.offered, 500)
         self.assertEqual(loanoffer.lender, wallet)
         self.assertEqual(loanoffer.interest_rate, 2.0)
