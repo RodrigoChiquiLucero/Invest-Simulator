@@ -1,6 +1,6 @@
 from django.test import TestCase
 from django.contrib.auth.models import User
-from Game.models import Wallet, Asset, Ownership, Loan, LoanOffer
+from Game.models import Wallet, Asset, Ownership, Loan, LoanOffer, Alarm
 from Game.interface_control import AssetComunication as AComunication
 
 
@@ -11,6 +11,8 @@ class InterfaceControlTest(TestCase):
             'http://localhost:8000/simulations/')
         user = User.objects.create(username='test_user')
         Wallet.objects.create(user=user)
+        user2 = User.objects.create(username='test_user2')
+        Wallet.objects.create(user=user2)
 
     def test_asset_communication_sanity(self):
         # search for the names
@@ -316,6 +318,34 @@ class InterfaceControlTest(TestCase):
         self.assertEqual(expected_ownership_result,
                          list(Ownership.objects.all()))
 
+    def test_alarm_not_exist_asset(self):
+        #get user
+        user = User.objects.get(username='test_user')
+        wallet = Wallet.objects.get(user=user)
+
+        #create alarm
+        res = Alarm.safe_save(wallet= wallet, aname= None, threshold= 200, atype= 'type', price= 100)
+
+        self.assertEqual(res, {'error': True, 'message': 'Non existing asset'})
+
+    def test_delete_alarm(self):
+        # get user
+        user = User.objects.get(username='test_user')
+        wallet = Wallet.objects.get(user=user)
+
+        #take asset
+        assets = self.asset_communication.get_assets()
+        asset = assets[0]
+        asset.save()
+
+        # create alarm
+        Alarm.safe_save(wallet=wallet, aname=asset.name, threshold=200, atype='down', price="buy")
+        # delete alarm
+        Alarm.safe_delete(wallet=wallet, name=asset.name, atype="down", price="buy")
+
+        self.assertEqual(None, Alarm.safe_get(wallet=wallet, asset=asset, price="buy", type="down"))
+
+
     def test_offerloan_regular_values(self):
         # get user
         user = User.objects.get(username='test_user')
@@ -356,3 +386,76 @@ class InterfaceControlTest(TestCase):
 
         # check user has its money back.
         self.assertEqual(wallet.liquid_with_loans, oldliq - 500)
+
+    def test_make_loan_and_someone_takesit(self):
+        # get users
+        user1 = User.objects.get(username='test_user')
+        user2 = User.objects.get(username='test_user2')
+        wallet1 = Wallet.objects.get(user=user1)
+        wallet2 = Wallet.objects.get(user=user2)
+
+        # create and save an offer
+        loanoffer = LoanOffer(lender=wallet1, offered=500,
+                              interest_rate=2.0, days=10)
+        loanoffer.save()
+
+        # record previous amount of money
+        oldliq = wallet1.liquid
+        oldliq2 = wallet2.liquid
+
+        loanoffer = LoanOffer.objects.get(id=loanoffer.id)
+
+        # take loan
+        loaned = loanoffer.offered
+        Loan.safe_save(borrower=wallet2, loaned=loaned, offer=loanoffer)
+
+        self.assertEqual(oldliq2 + 500, wallet2.liquid_with_loans)
+        self.assertEqual(oldliq - 500, wallet1.liquid_with_loans)
+
+    def test_offer_loan_but_not_eough_money(self):
+        # get users
+        user1 = User.objects.get(username='test_user')
+        wallet1 = Wallet.objects.get(user=user1)
+
+        # create and save an offer
+        res = LoanOffer.safe_save(wallet=wallet1, offered=10001,
+                                  interest=2.0, days=10)
+
+        self.assertEqual(res, {'error': True, 'message': 'You have not enough liquid money available'})
+
+    def test_offer_loan_but_negative_money(self):
+        # get users
+        user1 = User.objects.get(username='test_user')
+        wallet1 = Wallet.objects.get(user=user1)
+
+        # create and save an offer
+        res = LoanOffer.safe_save(wallet=wallet1, offered=-1000,
+                                  interest=2.0, days=10)
+
+        self.assertEqual(res, {'error': True,
+                               'message': 'You have not enough liquid money available'})
+
+    def test_offer_loan_but_invalid_interest(self):
+        # get users
+        user1 = User.objects.get(username='test_user')
+        wallet1 = Wallet.objects.get(user=user1)
+
+        # create and save an offer
+        res = LoanOffer.safe_save(wallet=wallet1, offered=1000,
+                                  interest=101, days=10)
+
+        self.assertEqual(res, {'error': True,
+                               'message': 'The interest rate is not a valid percentage'})
+
+    def test_offer_loan_but_invalid_daysdue(self):
+        # get users
+        user1 = User.objects.get(username='test_user')
+        wallet1 = Wallet.objects.get(user=user1)
+
+        # create and save an offer
+        res = LoanOffer.safe_save(wallet=wallet1, offered=1000,
+                                  interest=2.0, days=0)
+
+        self.assertEqual(res, {'error': True,
+                               'message': 'The days amount cannot be negative'})
+
