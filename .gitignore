@@ -9,3 +9,5 @@ venv
 #iconos
 .coverage
 /InvestSimulator/media/profile_image/
+#carpeta de visual studio
+.vscode/

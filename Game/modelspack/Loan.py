@@ -15,6 +15,10 @@ class Loan(models.Model):
     due_date = models.DateField()
 
     @property
+    def get_total_to_pay(self):
+        return self.loaned + (self.loaned * self.offer.interest_rate / 100)
+
+    @property
     def to_json(self):
         """
         Returns self information inside json string

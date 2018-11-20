@@ -1,72 +1,60 @@
-{% extends 'Game/base.html' %}
-{% load static from staticfiles %}
+{% extends 'Game/base.html' %} {% load static from staticfiles %} {% block body %} {# LINKS AND SCRIPTS #} {# //font-awesome#}
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
 
-{% block body %}
+{# NICE NUMBER#}
+<link rel="stylesheet" href="{% static 'Game/lib/nicenumber/jquery.nice-number.css' %}">
+<script src="{% static 'Game/lib/nicenumber/jquery.nice-number.js' %}"></script>
 
-    {# LINKS AND SCRIPTS #}
-    {#    //font-awesome#}
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
-    <script class="jsbin" src="http://ajax.googleapis.com/ajax/libs/jquery/1/jquery.min.js"></script>
+{# PERSONAL#}
+<link rel="stylesheet" href="{% static 'Game/css/transaction-form.css' %}">
+<link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
+<link rel="stylesheet" href="{% static 'Game/css/loans.css' %}">
+<script src="{% static 'Game/js/ajax.transactions.js' %}"></script>
 
-    {#    NICE NUMBER#}
-    <link rel="stylesheet" href="{% static 'Game/lib/nicenumber/jquery.nice-number.css' %}">
-    <script src="{% static 'Game/lib/nicenumber/jquery.nice-number.js' %}"></script>
+<div align="center" class="middle assets inner">
 
-    {#    PERSONAL#}
-    <link rel="stylesheet" href="{% static 'Game/css/transaction-form.css' %}">
-    <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
-    <link rel="stylesheet" href="{% static 'Game/css/loans.css' %}">
-    <script src="{% static 'Game/js/ajax.transactions.js' %}"></script>
+    {# PAY STATUS #} {% csrf_token %}
+    <div id="taken-loans" class="w3-container w3-animate-zoom assets" align="center">
 
-    <div align="center" class="middle assets inner">
-
-        {# PAY STATUS #}
-
-        {% csrf_token %}
-        <div id="taken-loans" class="w3-container w3-animate-zoom assets"
-             align="center">
-
-            {# CONTENT #}
-            <button class="w3-button w3-green w3-round-large w3-animate-zoom"
-                    style="width: 12%; height: 7%; margin: 10px">
+        {# CONTENT #}
+        <button class="w3-button w3-green w3-round-large w3-animate-zoom" style="width: 12%; height: 7%; margin: 10px">
                 <i class="fas fa-dollar-sign"></i> {{ liquid }} <i
                     class="fas fa-piggy-bank"></i>
             </button>
-            <button class="w3-button w3-green w3-round-large w3-animate-zoom"
-                    style="width: 12%; height: 7%; margin: 10px">
+        <button class="w3-button w3-green w3-round-large w3-animate-zoom" style="width: 12%; height: 7%; margin: 10px">
                 <i class="fas fa-dollar-sign"></i> {{ value_wallet }} <i
                     class="fas fa-wallet"></i>
-            </button>
-
-            {% if taken %}
-                <table id="dinamic-table">
-                    <caption class="title">Your taken loans:
-                    </caption>
-                    <tr>
-                        <th> Lender name</th>
-                        <th> Loan</th>
-                        <th> Pay date </th>
-                        <th> Interest </th>
-                    </tr>
-                    {% for lo in taken %}
-                        <tr class="dinamic-row">
-                            <td id="photo">
-                                <img class="user_img" src="{{ lo.offer.lender.image.url }}">
-                            {{ lo.offer.lender.user.username }}  {{ lo.offer.lender.user.surname }}</td>
-                            <td id="loan"> $ {{ lo.loaned }} </td>
-                            <td id="date"> {{ lo.due_date }} </td>
-                            <td id="interest"> {{ lo.offer.interest_rate }}% </td>
-                        </tr>
-                    {% endfor %}
-                </table>
-            {% else %}
-                <div class="error_message">
-                    <h1> You haven't taken any loan </h1>
-                </div>
-            {% endif %}
-            <ul>
-            </ul>
+            </button> {% if taken %}
+        <table id="dinamic-table">
+            <caption class="title">Your taken loans:
+            </caption>
+            <tr>
+                <th> Lender name</th>
+                <th> Loan</th>
+                <th> Pay date </th>
+                <th> Interest </th>
+                <th> Total amount </th>
+            </tr>
+            {% for lo in taken %}
+            <tr class="dinamic-row">
+                <td id="photo">
+                    <img class="user_img" src="{{ lo.offer.lender.image.url }}"> {{ lo.offer.lender.user.username }} {{ lo.offer.lender.user.surname }}</td>
+                <td id="loan"> $ {{ lo.loaned }} </td>
+                <td id="date"> {{ lo.due_date }} </td>
+                <td id="interest"> {{ lo.offer.interest_rate }}% </td>
+                <td id="total"> {{lo.get_total_to_pay}} </td>
+            </tr>
+            {% endfor %}
+        </table>
+        {% else %}
+        <div class="error_message">
+            <h1> You haven't taken any loan </h1>
         </div>
+        {% endif %}
+        <ul>
+        </ul>
     </div>
+</div>
 
 {% endblock %}
