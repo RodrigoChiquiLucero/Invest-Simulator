@@ -102,11 +102,11 @@ def history(request, name):
     else:
         return render(request, 'Game/select_dates.html')
 
+
 @login_required
 def players_list(request):
     wallets = Wallet.objects.all()
     user_data = Wallet.objects.get(user=request.user)
-    print(user_data.user)
     users = []
 
     for w in wallets:
@@ -125,26 +125,21 @@ def players_list(request):
     for u in users:
         pos += 1
         if u['username'] == str(user_data.user):
-            print("Found")
             users.remove(u)
-
-    print(users)
     return render(request, 'Game/players_list.html', {'users': users})
 
 
 @login_required
 def other_transactions(request, name):
     wallet = Wallet.objects.get(user__username=name)
-    print(wallet.user)
     transactions = Transaction.objects.filter(wallet=wallet)
     data = []
-
     for t in transactions:
         if t.visibility:
-            print("Transaction added")
             data.append(t)
+    return render(request, 'Game/other_transactions.html',
+                  {'transactions': data})
 
-    return render(request, 'Game/other_transactions.html', {'transactions': data})
 
 @login_required
 def ranking(request):
