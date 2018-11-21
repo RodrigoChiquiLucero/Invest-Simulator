@@ -14,7 +14,7 @@ function populate_chart(data, thres, price, actual_price) {
         data: {
             datasets: [{
                 label: 'Threshold',
-                data: [{x: thres, y: 0}],
+                data: [{x: thres, y: thres}],
                 backgtoFixedColor:
                     'rgba(  255,    99,     132,    0.2)',
                 borderColor:
@@ -25,7 +25,7 @@ function populate_chart(data, thres, price, actual_price) {
                 showLine: true
             }, {
                 label: price + ' average price',
-                data: [{x: avg, y: 0}],
+                data: [{x: avg, y: avg}],
                 backgtoFixedColor:
                     'rgba(  50,  0,     255,    0.2)',
                 borderColor:
@@ -33,7 +33,7 @@ function populate_chart(data, thres, price, actual_price) {
                 borderWidth: 1
             }, {
                 label: price + ' price first quartile',
-                data: [{x: first, y: 0}],
+                data: [{x: first, y: first}],
                 backgtoFixedColor:
                     'rgba(  132,  99,     255,    0.2)',
                 borderColor:
@@ -41,7 +41,7 @@ function populate_chart(data, thres, price, actual_price) {
                 borderWidth: 1
             }, {
                 label: price + ' price third quartile',
-                data: [{x: third, y: 0}],
+                data: [{x: third, y: third}],
                 backgtoFixedColor:
                     'rgba(  132,  99,     255,    0.2)',
                 borderColor:
@@ -49,7 +49,7 @@ function populate_chart(data, thres, price, actual_price) {
                 borderWidth: 1
             }, {
                 label: 'Actual price',
-                data: [{x: actual_price, y: 0}],
+                data: [{x: actual_price, y: actual_price}],
                 backgtoFixedColor:
                     'rgba( 50 , 255, 0,    0.2)',
                 borderColor:
@@ -62,7 +62,7 @@ function populate_chart(data, thres, price, actual_price) {
                 callbacks: {
                     label: function (tooltipItems, data) {
                         let label = data.datasets[tooltipItems.datasetIndex].label;
-                        return label + " - $ " + tooltipItems.yLabel.toString();
+                        return label + " - $ " + tooltipItems.xLabel.toString();
                     }
                 }
             },
@@ -70,18 +70,6 @@ function populate_chart(data, thres, price, actual_price) {
                 display: true,
                 text: 'Asset stats'
             },
-            scales: {
-                xAxes: [{
-                    gridLines: {
-                        color: '#888',
-                    }
-                }],
-                yAxes: [{
-                    gridLines: {
-                        color: '#888',
-                    }
-                }]
-            }
         }
     });
 }
