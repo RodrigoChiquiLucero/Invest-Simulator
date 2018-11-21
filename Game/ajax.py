@@ -66,6 +66,7 @@ def ajax_sell(request):
         return HttpResponse(status=400, reason="No GET method")
 
 
+@login_required
 def notify(request):
     """
     Searchs notifications for a given user

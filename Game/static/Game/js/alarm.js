@@ -5,14 +5,24 @@ window.onload = function () {
         $("#quantity-form"),
         $("#accept-form"),
         $("#trans-status"),
+        $("#stats"),
         $(".up-info"),
     ]);
 
+    let quantiles;
+    let prices;
+
     $(".set-alarm").click(
         function () {
-            console.log("Entramos");
             $("#asset-table").hide(400);
             asset = $(this).attr("id");
+            quantiles = $(this).attr("quantiles");
+
+            prices = {
+                "buy" : $(this).attr("buy"),
+                "sell" : $(this).attr("sell"),
+            };
+
             $("#quantity-form").show(500)
                 .find("#qform-title")
                 .html(
@@ -45,17 +55,23 @@ window.onload = function () {
         );
     }
 
-    $("#trans-status").hide();
-
     $("#send-alert").click(function () {
+        $("#quantity-form").hide(400);
+        $("#stats").show(500);
+
+        //what is the threshold?
+        let threshold = $('#quantity').val();
+        let price = $('input:radio[name=price]:checked').val();
+        populate_chart(quantiles, threshold, price, prices[price])
+    });
+
+    $("#accept-set").click(function () {
+        $("#stats").hide(400);
+
         //what is the selected type?
         let type = $('input:radio[name=type]:checked').val();
-        console.log(type);
-
         //what is the price?
         let price = $('input:radio[name=price]:checked').val();
-        console.log(price);
-
         //what is the threshold?
         let threshold = $('#quantity').val();
 
@@ -80,6 +96,13 @@ window.onload = function () {
         });
 
     });
+
+    $("#cancel-set").click(
+        function () {
+            $("#stats").hide(400);
+            $("#quantity-form").show(500);
+        }
+    );
 
     $("#cancel-alert").click(
         function () {
