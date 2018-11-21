@@ -11,6 +11,7 @@ https://docs.djangoproject.com/en/2.1/ref/settings/
 """
 
 import os
+import dj_database_url
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
@@ -22,9 +23,8 @@ BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 SECRET_KEY = 'u2+*zofo&=o=rpx0olmz67=6bb^851&&!c0^3$*#oreb!0le#s'
 
 # SECURITY WARNING: don't run with debug turned on in production!
-DEBUG = True
-
-ALLOWED_HOSTS = ['*']
+DEBUG = False
+ALLOWED_HOSTS = ['127.0.0.1', '.herokuapp.com']
 
 # Redireccion de log in/out.
 # LOGOUT_REDIRECT_URL = '/'
@@ -35,6 +35,7 @@ LOGIN_REDIRECT_URL = '/game/loggedin'
 # Application definition
 
 INSTALLED_APPS = [
+    'whitenoise.runserver_nostatic',
     'Game.apps.GameConfig',
     'User.apps.UserConfig',
     'Home.apps.HomeConfig',
@@ -49,6 +50,7 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
+    'whitenoise.middleware.WhiteNoiseMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
@@ -82,10 +84,17 @@ WSGI_APPLICATION = 'InvestSimulator.wsgi.application'
 
 DATABASES = {
     'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': os.path.join(BASE_DIR, 'db.sqlite3'),
+        'ENGINE': 'django.db.backends.postgresql_psycopg2',
+        'NAME': 'invest_simulator',
+        'USER': 'invest',
+        'PASSWORD': '123qwe',
+        'HOST': 'localhost',
+        'PORT': '',
     }
 }
+
+db_from_env = dj_database_url.config()
+DATABASES['default'].update(db_from_env)
 
 # Password validation
 # https://docs.djangoproject.com/en/2.1/ref/settings/#auth-password-validators
@@ -126,8 +135,10 @@ USE_TZ = True
 # https://docs.djangoproject.com/en/2.1/howto/static-files/
 
 STATIC_URL = '/static/'
+STATIC_ROOT = os.path.join(BASE_DIR, 'staticfiles')
+STATICFILES_STORAGE = 'django.contrib.staticfiles.storage.StaticFilesStorage'
 
-API_URL = 'http://localhost:8000/simulations/'
+API_URL = 'http://invest-simulator-23.herokuapp.com/simulations/'
 
 MEDIA_ROOT = os.path.join(BASE_DIR, 'InvestSimulator/media')
 MEDIA_URL = '/media/'
@@ -138,6 +149,21 @@ EMAIL_HOST_USER = 'invest.simulator.alarms@gmail.com'
 EMAIL_HOST_PASSWORD = 'holaholagg'
 EMAIL_PORT = 587
 
+LOGGING = {
+    'version': 1,
+    'disable_existing_loggers': False,
+    'handlers': {
+        'console': {
+            'class': 'logging.StreamHandler',
+        },
+    },
+    'loggers': {
+        'django': {
+            'handlers': ['console'],
+            'level': os.getenv('DJANGO_LOG_LEVEL', 'ERROR'),
+        },
+    },
+}
 CRONJOBS = [
     ('0 0 * * *', 'Game.periodictasks.search_loans.search_loans')
 ]
