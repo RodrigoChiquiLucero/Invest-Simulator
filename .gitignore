@@ -2,6 +2,8 @@
 venv
 #ignorar la carpeta generada por jetbrains
 .idea
+#ejecutables de python
+*.pyc
 #base de datos
 *.sqlite3
 #iconos
@@ -11,6 +13,3 @@ venv
 .vscode/
 # DS Store
 .DS_store
-#HEROKU
-__pycache__
-local_settings.py
