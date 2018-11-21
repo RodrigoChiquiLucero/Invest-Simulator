@@ -209,7 +209,8 @@ def set_alarm(request):
                                                 atype=request.POST['type']))
     else:
         asset_comunication = ACommunication(settings.API_URL)
-        asset_list = [a.to_dict() for a in asset_comunication.get_assets()]
+        asset_list = [a.to_dict() for a in
+                      asset_comunication.get_assets_with_average()]
         context = {'assets': asset_list}
         return render(request, 'Game/set_alarm.html', context)
 

@@ -10,6 +10,7 @@
 
     {#   JQUERY #}
     <script src="{% static 'Game/lib/jquery.js' %}"></script>
+    <script src="{% static 'Game/lib/chart.min.js' %}"></script>
     {#    NICE NUMBER#}
     <link rel="stylesheet"
           href="{% static 'Game/lib/nicenumber/jquery.nice-number.css' %}">
@@ -21,6 +22,7 @@
     {#    PERSONAL#}
     <link rel="stylesheet" href="{% static 'Game/css/assets.css' %}">
     <link rel="stylesheet" href="{% static 'Game/css/alarm.css' %}">
+    <script src="{% static 'Game/js/asset_stats.js' %}"></script>
 
     {% csrf_token %}
     <script src="{% static 'Game/js/alarm.js' %}"></script>
@@ -40,6 +42,18 @@
                 </div>
 
                 <input id="accept-success" type="submit" value="OK"/>
+            </div>
+
+            <div id="stats" class="dinamic stats overlay">
+                <p class="form-t" id="status-info">Your asset stats</p>
+
+                <div class="stats--chart">
+                    <canvas style="background: white;"
+                            id="myChart" ></canvas>
+                </div>
+
+                <input id="accept-set" class="send-button" type="submit" value="Set alert"/>
+                <input id="cancel-set" class="send-button" type="submit" value="Cancel"/>
             </div>
 
             <div id="quantity-form" class="dinamic not-so-large overlay middle">
@@ -130,7 +144,10 @@
                             <td id="buy">$ {{ a.buy }} </td>
                             <td>
                                 <a class="set-alarm w3-button w3-green w3-round-large "
-                                   href="#" id="{{ a.name }}">
+                                   href="#" id="{{ a.name }}"
+                                   quantiles="{{ a.quantiles }}"
+                                   buy="{{ a.buy }}"
+                                   sell="{{ a.sell }}" >
                                     <i class="fas fa-bullhorn"></i> Set
                                 </a>
                             </td>

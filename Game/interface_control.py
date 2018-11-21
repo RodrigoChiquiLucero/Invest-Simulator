@@ -3,6 +3,8 @@ import json
 import datetime as dt
 from urllib3 import exceptions as urlex
 from Game.periodictasks.search_alarms import AlarmSearch
+import pandas as pn
+import numpy as np
 
 DATE_FORMAT = '%Y-%m-%d'
 
@@ -120,17 +122,58 @@ class AssetComunication:
         assets = self.get_asset_names()
         return self.quote_for_assets(assets)
 
-    def get_asset_history(self, nombre, start_date, end_date):
+    def get_asset_history(self, name, start_date, end_date):
         """
         get all history for given asset
-        :param nombre:
+        :param name:
         :param start_date:
         :param end_date:
         :return dict [{day: DayString, sell: SELL_PRICE, buy: BUY_PRICE}]:
         """
-        url = (self.API_URL + self.GET_HISTORY + nombre + "/" +
+        url = (self.API_URL + self.GET_HISTORY + name + "/" +
                start_date + "/" + end_date)
         prices = self.url_to_json(url)
         if prices == 0:
             prices = {'error': True}
         return prices
+
+    def average_for_asset(self, asset):
+        start_date = dt.date.today() - dt.timedelta(days=365 * 2)
+        end_date = dt.date.today()
+        history = self.get_asset_history(name=asset.name,
+                                         start_date=start_date
+                                         .strftime(DATE_FORMAT),
+                                         end_date=end_date
+                                         .strftime(DATE_FORMAT))
+        try:
+            prices = history['prices']
+
+            sell = [float(p['sell']) for p in prices]
+            sell_df = pn.DataFrame(np.array(sell))
+            sell_data = sell_df.quantile([0.25, 0.5, 0.75]).to_dict()[0]
+            sell_data['first'] = sell_data.pop(0.25)
+            sell_data['avg'] = sell_data.pop(0.5)
+            sell_data['third'] = sell_data.pop(0.75)
+
+            buy = [float(p['buy']) for p in prices]
+            buy_df = pn.DataFrame(np.array(buy))
+            buy_data = buy_df.quantile([0.25, 0.5, 0.75]).to_dict()[0]
+            buy_data['first'] = buy_data.pop(0.25)
+            buy_data['avg'] = buy_data.pop(0.5)
+            buy_data['third'] = buy_data.pop(0.75)
+
+            asset.prices_quantiles = {
+                'buy': buy_data,
+                'sell': sell_data,
+            }
+            return asset
+        except KeyError:
+            return
+
+    def get_assets_with_average(self):
+        """
+        fetches all the available assets with their respective quotes
+        :return asset list:
+        """
+        assets = self.get_assets()
+        return [self.average_for_asset(a) for a in assets if a]

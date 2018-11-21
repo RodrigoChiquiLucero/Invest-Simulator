@@ -11,6 +11,7 @@ class Asset(models.Model):
     buy = -1
     sell = -1
     quantity = -1
+    prices_quantiles = -1
 
     def is_valid(self):
         """
@@ -25,7 +26,8 @@ class Asset(models.Model):
             "type": self.type,
             "buy": self.buy,
             "sell": self.sell,
-            "quantity": self.quantity
+            "quantity": self.quantity,
+            "quantiles": self.prices_quantiles,
         }
 
     @staticmethod
