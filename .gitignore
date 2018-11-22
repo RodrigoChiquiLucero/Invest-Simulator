@@ -10,3 +10,7 @@ venv
 #HEROKU
 __pycache__
 local_settings.py
+#carpeta de visual studio
+.vscode/
+# DS Store
+.DS_store

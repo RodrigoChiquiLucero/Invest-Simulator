@@ -1,0 +1,46 @@
+{% extends 'Game/base.html' %}
+{% load static from staticfiles %}
+
+{% block body %}
+
+    <link rel="stylesheet" href="{% static 'Game/css/transaction-form.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/transactions.css' %}">
+    <link rel="stylesheet" href="{% static 'Game/css/loans.css' %}">
+
+    <div align="center"
+         class="outer w3-container w3-animate-zoom middle assets inner">
+        {% if transactions %}
+            <table>
+                <tr>
+                    <th> Date</th>
+                    <th> Asset</th>
+                    <th> Type</th>
+                    <th> Buy price</th>
+                    <th> Sell price</th>
+                    <th> Quantity</th>
+                </tr>
+                {% for t in transactions %}
+                    <tr>
+                        <td>{{ t.date }}</td>
+                        <td>{{ t.asset.name }} </td>
+                        {% if t.is_purchase %}
+                            <td> bought</td>
+                        {% else %}
+                            <td> sold</td>
+                        {% endif %}
+                        <td>{{ t.asset_price_buy }} </td>
+                        <td>{{ t.asset_price_sell }} </td>
+                        <td>{{ t.quantity }} </td>
+                    </tr>
+                {% endfor %}
+            </table>
+        {% else %}
+            <div class="error_message">
+                <h1> This player won't show any transaction </h1>
+            </div>
+        {% endif %}
+        <ul>
+        </ul>
+    </div>
+
+{% endblock %}

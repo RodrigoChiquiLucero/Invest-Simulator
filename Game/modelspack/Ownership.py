@@ -4,6 +4,10 @@ import datetime
 
 
 class Ownership(models.Model):
+    """
+    Saves the relationship between a wallet and an asset, using the extra
+    field quantity
+    """
     from Game.models import Wallet, Asset
     wallet = models.ForeignKey(Wallet, on_delete=models.CASCADE)
     asset = models.ForeignKey(Asset, on_delete=models.CASCADE)
@@ -31,6 +35,7 @@ class Transaction(models.Model):
     date = models.DateField(default=datetime.date.today)
     quantity = models.FloatField()
     is_purchase = models.BooleanField(null=False)
+    visibility = models.BooleanField(null=False, default=False)
 
     @staticmethod
     def get_info(wallet):

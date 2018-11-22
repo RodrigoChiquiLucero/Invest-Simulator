@@ -15,9 +15,11 @@ urlpatterns = [
     path('loans/', views.get_all_loan_offers, name='all_loans'),
     path('loans/taken/', views.get_taken_loans, name='taken_loans'),
     path('loans/offered', views.get_offered_loans, name='offered_loans'),
+    path('players_list/', views.players_list, name='players_list'),
+    path('players_list/<slug:name>/', views.other_transactions,
+         name='other_transactions'),
 
-
-    path('notify/or/ban', ajax.notify_or_ban, name='notify_or_ban'),
+    path('notify/or/ban', ajax.notify, name='notify_or_ban'),
     path('ajax/quote/<slug:name>/', ajax.ajax_quote, name='ajax_quote'),
     path('ajax/buy/', ajax.ajax_buy, name='ajax_buy'),
     path('ajax/sell/', ajax.ajax_sell, name='ajax_sell'),
