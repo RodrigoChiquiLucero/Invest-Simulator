@@ -15,7 +15,7 @@ class LoanOffer(models.Model):
 
     @property
     def total_earnings(self):
-        return self.offered + (self.offered * self.interest_rate /100)
+        return self.offered + (self.offered * self.interest_rate / 100)
 
     @property
     def to_json(self):

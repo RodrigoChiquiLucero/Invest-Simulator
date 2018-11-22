@@ -320,32 +320,36 @@ class InterfaceControlTest(TestCase):
                          list(Ownership.objects.all()))
 
     def test_alarm_not_exist_asset(self):
-        #get user
+        # get user
         user = User.objects.get(username='test_user')
         wallet = Wallet.objects.get(user=user)
 
-        #create alarm
-        res = Alarm.safe_save(wallet= wallet, aname= None, threshold= 200, atype= 'type', price= 100)
+        # create alarm
+        res = Alarm.safe_save(wallet=wallet, aname=None, threshold=200,
+                              atype='type', price=100)
 
-        self.assertEqual(res, {'error': True, 'message': 'Non existing asset'})
+        self.assertEqual(res, {'error': True,
+                               'message': 'Non existing asset'})
 
     def test_delete_alarm(self):
         # get user
         user = User.objects.get(username='test_user')
         wallet = Wallet.objects.get(user=user)
 
-        #take asset
+        # take asset
         assets = self.asset_communication.get_assets()
         asset = assets[0]
         asset.save()
 
         # create alarm
-        Alarm.safe_save(wallet=wallet, aname=asset.name, threshold=200, atype='down', price="buy")
+        Alarm.safe_save(wallet=wallet, aname=asset.name, threshold=200,
+                        atype='down', price="buy")
         # delete alarm
-        Alarm.safe_delete(wallet=wallet, name=asset.name, atype="down", price="buy")
+        Alarm.safe_delete(wallet=wallet, name=asset.name, atype="down",
+                          price="buy")
 
-        self.assertEqual(None, Alarm.safe_get(wallet=wallet, asset=asset, price="buy", type="down"))
-
+        self.assertEqual(None, Alarm.safe_get(wallet=wallet, asset=asset,
+                                              price="buy", type="down"))
 
     def test_offerloan_regular_values(self):
         # get user
@@ -375,7 +379,8 @@ class InterfaceControlTest(TestCase):
         # record previous money amount
         oldliq = wallet.liquid
         # modify loan
-        res = LoanOffer.safe_modification(lender=wallet, id=str(loanoffer.id),
+        res = LoanOffer.safe_modification(lender=wallet,
+                                          id=str(loanoffer.id),
                                           new_offer=500)
         loanoffer = LoanOffer.objects.get(id=loanoffer.id)
         # check modification.
@@ -422,7 +427,9 @@ class InterfaceControlTest(TestCase):
         res = LoanOffer.safe_save(wallet=wallet1, offered=10001,
                                   interest=2.0, days=10)
 
-        self.assertEqual(res, {'error': True, 'message': 'You have not enough liquid money available'})
+        self.assertEqual(res, {'error': True,
+                               'message': 'You have not enough'
+                                          ' liquid money available'})
 
     def test_offer_loan_but_negative_money(self):
         # get users
@@ -434,7 +441,8 @@ class InterfaceControlTest(TestCase):
                                   interest=2.0, days=10)
 
         self.assertEqual(res, {'error': True,
-                               'message': 'You have not enough liquid money available'})
+                               'message': 'You have not enough'
+                                          ' liquid money available'})
 
     def test_offer_loan_but_invalid_interest(self):
         # get users
@@ -446,7 +454,8 @@ class InterfaceControlTest(TestCase):
                                   interest=101, days=10)
 
         self.assertEqual(res, {'error': True,
-                               'message': 'The interest rate is not a valid percentage'})
+                               'message': 'The interest rate is'
+                                          ' not a valid percentage'})
 
     def test_offer_loan_but_invalid_daysdue(self):
         # get users
@@ -458,8 +467,8 @@ class InterfaceControlTest(TestCase):
                                   interest=2.0, days=0)
 
         self.assertEqual(res, {'error': True,
-                               'message': 'The days amount cannot be negative'})
-
+                               'message': 'The days amount '
+                                          'cannot be negative'})
 
     def test_set_alarm_of_asset(self):
         # get user
@@ -475,9 +484,9 @@ class InterfaceControlTest(TestCase):
         # create and save alarm
 
         Alarm.objects.create(wallet=wallet, asset=asset_a_alarm,
-                                     price='buy',
-                                     old_price=asset_a_alarm.__getattribute__('buy'),
-                                     threshold=200, type='down').save()
+                             price='buy',
+                             old_price=asset_a_alarm.__getattribute__('buy'),
+                             threshold=200, type='down').save()
 
         # check object saves correctly.
 
@@ -488,4 +497,3 @@ class InterfaceControlTest(TestCase):
         self.assertEqual(alarm.price, 'buy')
         self.assertEqual(alarm.threshold, 200)
         self.assertEqual(alarm.type, 'down')
-

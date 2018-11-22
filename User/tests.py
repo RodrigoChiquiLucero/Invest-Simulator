@@ -4,6 +4,7 @@ from selenium import webdriver
 from selenium.webdriver.common.keys import Keys
 from selenium.webdriver.common.action_chains import ActionChains
 
+
 class AccountTestCase(LiveServerTestCase):
 
     def setUp(self):
@@ -30,7 +31,8 @@ class AccountTestCase(LiveServerTestCase):
         submit = selenium.find_element_by_name("signup_submit")
 
         # Fill the form with data
-        element = [avatar, first_name, last_name, username, email, email2, password1,
+        element = [avatar, first_name, last_name, username, email, email2,
+                   password1,
                    password2]
         data = ['Agustín', 'Gómez', 'ZemoG', 'fagugomez1997@gmail.com',
                 'fagugomez1997@gmail.com', 'fedefede', 'fedefede']
@@ -47,12 +49,6 @@ class AccountTestCase(LiveServerTestCase):
 
         # submitting the form
         submit.send_keys(Keys.RETURN)
-
-        expected_result =
-
-        self.assertEqual()
-
-
 
     def test_login(self):
         selenium = self.selenium

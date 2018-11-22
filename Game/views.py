@@ -257,11 +257,14 @@ def get_all_loan_offers(request):
         offer_id = int(request.POST['id'])
         loaned = float(request.POST['loaned'])
         offer = LoanOffer.objects.get(id=offer_id)
-        # Chequeo que la oferta no haya sido acabada antes de tomar un nuevo prestamo sobre esta.
-        if((offer.offered_with_loans - loaned) < 0):
+        # Chequeo que la oferta no haya sido acabada
+        # antes de tomar un nuevo prestamo sobre esta.
+        if (offer.offered_with_loans - loaned) < 0:
             return JsonResponse({"error": True,
-                                "message": "The inserted amount is not valid, please refresh the avaliable offers and try again."
-                                })
+                                 "message": "The inserted amount is not valid,"
+                                            " please refresh the avaliable"
+                                            " offers and try again."
+                                 })
         borrower = Wallet.objects.get(user=request.user)
         Loan.safe_save(borrower=borrower, loaned=loaned, offer=offer)
         return HttpResponse(200, 'Your loan has been taken successfully')
