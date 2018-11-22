@@ -50,8 +50,9 @@
                         <th> Asset name</th>
                         <th> Alert type</th>
                         <th> Asset price to watch </th>
-                        <th> Threshold</th>
-                        <th></th>
+                        <th> Threshold </th>
+                        <th> Date </th>
+                        <th> </th>
                     </tr>
                     {% for a in alarms %}
                         <tr class="dinamic-row">
@@ -60,6 +61,7 @@
                                 {{ a.type }}</td>
                             <td id="price"> {{ a.price }}</td>
                             <td id="threshold">$ {{ a.threshold}}</td>
+                            <td id="date"> {{ a.date }}</td>
                             <td>
                                 <a class="w3-button w3-green w3-round-large alarm-deleter"
                                    href="#" id="{{ a.asset.name }}"

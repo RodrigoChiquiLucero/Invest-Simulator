@@ -1,33 +1,47 @@
 window.onload = function () {
+    let asset = {
+        name: '',
+        type: '',
+        quantity: 1,
+        buy: -1,
+        sell: -1
+    };
+
     prepare_token();
 
     divs_hidden_by_default([
         $("#quantity-form"),
         $("#accept-form"),
         $("#trans-status"),
-        $("#stats"),
         $(".up-info"),
     ]);
 
-    let quantiles;
-    let prices;
-
     $(".set-alarm").click(
         function () {
+            console.log("Entramos");
             $("#asset-table").hide(400);
-            asset = $(this).attr("id");
-            quantiles = $(this).attr("quantiles");
-
-            prices = {
-                "buy" : $(this).attr("buy"),
-                "sell" : $(this).attr("sell"),
-            };
-
+            asset.name = $(this).attr("id");
+            asset.buy = $(this).attr("buy");
+            asset.sell = $(this).attr("sell");
+            console.log(asset);
             $("#quantity-form").show(500)
                 .find("#qform-title")
                 .html(
-                    `Your alarm configuration for ${asset}`
+                    `Your alarm configuration for ${asset.name}`
                 );
+
+            let price_info = $("#price-info");
+            price_info.find('#buy-info')
+                .find('p')
+                .html(
+                    `Buy: ${asset.buy} $`
+                );
+            price_info.find('#sell-info').show(400)
+                .find('p')
+                .html(
+                    `Sell: ${asset.sell} $`
+                );
+
         }
     );
 
@@ -55,23 +69,17 @@ window.onload = function () {
         );
     }
 
+    $("#trans-status").hide();
+
     $("#send-alert").click(function () {
-        $("#quantity-form").hide(400);
-        $("#stats").show(500);
-
-        //what is the threshold?
-        let threshold = $('#quantity').val();
-        let price = $('input:radio[name=price]:checked').val();
-        populate_chart(quantiles, threshold, price, prices[price])
-    });
-
-    $("#accept-set").click(function () {
-        $("#stats").hide(400);
-
         //what is the selected type?
         let type = $('input:radio[name=type]:checked').val();
+        console.log(type);
+
         //what is the price?
         let price = $('input:radio[name=price]:checked').val();
+        console.log(price);
+
         //what is the threshold?
         let threshold = $('#quantity').val();
 
@@ -96,13 +104,6 @@ window.onload = function () {
         });
 
     });
-
-    $("#cancel-set").click(
-        function () {
-            $("#stats").hide(400);
-            $("#quantity-form").show(500);
-        }
-    );
 
     $("#cancel-alert").click(
         function () {
